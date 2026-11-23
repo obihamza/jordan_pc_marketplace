@@ -35,6 +35,16 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    /** Re-sum the cart from its items (quantity x current product price). */
+    public function recalculateTotal(): void
+    {
+        $this->load('items.product');
+
+        $this->update([
+            'total' => $this->items->sum(fn ($item) => $item->quantity * ($item->product?->price ?? 0)),
+        ]);
+    }
+
     public function products(): HasManyThrough
     {
         return $this->hasManyThrough(Product::class, CartItem::class, 'cart_id', 'id', 'id', 'product_id');

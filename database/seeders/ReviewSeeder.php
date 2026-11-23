@@ -10,10 +10,10 @@ use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
 {
-    /** 10 reviews spread across users and products. */
+    /** 10 reviews spread across buyers and products. */
     public function run(): void
     {
-        $userIds = User::orderBy('id')->pluck('id')->all();
+        $userIds = User::buyersOnly()->orderBy('id')->pluck('id')->all();
         $productIds = Product::orderBy('id')->pluck('id')->all();
 
         Review::factory()

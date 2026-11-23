@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -79,8 +80,31 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
+    /* ------------------------------- Roles -------------------------------- */
+    /*
+     * There is no `role` column. Roles are derived:
+     *   admin  -> users.is_admin = 1
+     *   seller -> the user has a row in `sellers`
+     *   buyer  -> every non-admin user (so EVERY SELLER IS ALSO A BUYER,
+     *             but not every buyer is a seller)
+     * In controllers: isAdmin() / isSeller(); anything else is a plain buyer,
+     * and "can act as a buyer" simply means !isAdmin().
+     */
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
+    }
+
+    /** Uses the loaded relation, so repeated calls in one request cost one query. */
     public function isSeller(): bool
     {
-        return $this->seller()->exists();
+        return $this->seller !== null;
+    }
+
+    /** Users that are only buyers (not admins, not sellers). Handy for seeding. */
+    public function scopeBuyersOnly(Builder $query): Builder
+    {
+        return $query->where('is_admin', false)->doesntHave('seller');
     }
 }

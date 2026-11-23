@@ -7,7 +7,11 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /** 10 users: 1 admin + 9 regular. Every account's password is "password". */
+    /**
+     * 21 users: 1 admin + 10 future sellers + 10 buyers.
+     * (The role is derived: sellers are the users that get a `sellers` row in
+     * SellerSeeder; buyers are everyone else.) Every password is "password".
+     */
     public function run(): void
     {
         User::factory()->admin()->create([
@@ -15,6 +19,6 @@ class UserSeeder extends Seeder
             'email' => 'admin@masterpiece.test',
         ]);
 
-        User::factory()->count(9)->create();
+        User::factory()->count(20)->create();
     }
 }
