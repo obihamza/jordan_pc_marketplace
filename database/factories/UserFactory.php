@@ -11,23 +11,24 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * Plain-text default password (hashed by the model's `hashed` cast).
      */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
+            'phone' => '07'.fake()->randomElement([7, 8, 9]).fake()->numerify('#######'),
             'password_hash' => static::$password ??= 'password',
+            'user_img' => null,
             'is_admin' => false,
         ];
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => ['is_admin' => true]);
     }
 }

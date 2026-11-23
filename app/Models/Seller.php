@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Seller extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     // PK is the user's id (1:1 with users), not auto-incrementing, no timestamps.
     protected $primaryKey = 'user_id';
