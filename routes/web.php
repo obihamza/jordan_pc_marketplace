@@ -40,3 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('payments', PaymentController::class)->only(['index', 'update']);
     Route::resource('reviews', ReviewController::class)->except(['show']);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
