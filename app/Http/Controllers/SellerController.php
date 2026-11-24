@@ -18,7 +18,11 @@ class SellerController extends Controller
             ->withCount('products')
             ->paginate(15);
 
-        if ($me->isAdmin()) {
+        if (! $me) {
+
+            return view('guest.sellers.index', compact('sellers'));
+
+        } elseif ($me->isAdmin()) {
 
             return view('admin.sellers.index', compact('sellers'));
 
@@ -91,7 +95,11 @@ class SellerController extends Controller
         $seller = Seller::with(['user', 'products' => fn ($q) => $q->available()])
             ->findOrFail($seller->user_id);
 
-        if ($me->isAdmin()) {
+        if (! $me) {
+
+            return view('guest.sellers.show', compact('seller'));
+
+        } elseif ($me->isAdmin()) {
 
             return view('admin.sellers.show', compact('seller'));
 

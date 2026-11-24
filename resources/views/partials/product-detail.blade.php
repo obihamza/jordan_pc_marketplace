@@ -1,7 +1,7 @@
 {{-- Param: product (with seller, category, images, reviews.user) --}}
 @php
     $me = auth()->user();
-    $canManage = $me->isAdmin() || $product->seller_id == $me->id;
+    $canManage = $me && ($me->isAdmin() || $product->seller_id == $me->id);
     $avgRating = $product->reviews->avg('rating');
     $images = $product->images->sortByDesc('is_primary');
 @endphp
@@ -65,8 +65,10 @@
 
         <p style="white-space: pre-line;">{{ $product->description }}</p>
 
-        {{-- Buying: any non-admin, except on their own product --}}
-        @if(! $me->isAdmin() && ! $canManage && $product->listing_status === 'available' && $product->stock_quantity > 0)
+        {{-- Buying: any logged-in non-admin, except on their own product --}}
+        @if(! $me && $product->listing_status === 'available' && $product->stock_quantity > 0)
+            <a href="{{ route('login') }}" class="btn btn-primary mb-3">Login to buy</a>
+        @elseif($me && ! $me->isAdmin() && ! $canManage && $product->listing_status === 'available' && $product->stock_quantity > 0)
             <form action="{{ route('cart-items.store') }}" method="POST" class="d-flex gap-2 mb-3" style="max-width: 320px;">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -76,7 +78,7 @@
         @endif
 
         <div class="d-flex flex-wrap gap-2">
-            @if(! $me->isAdmin() && ! $canManage)
+            @if($me && ! $me->isAdmin() && ! $canManage)
                 <a href="{{ route('reviews.create', ['product_id' => $product->id]) }}" class="btn btn-outline-secondary">Write a review</a>
             @endif
 

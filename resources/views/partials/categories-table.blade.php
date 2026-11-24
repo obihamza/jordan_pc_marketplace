@@ -1,5 +1,5 @@
 {{-- Params: categories (paginator, withCount products) --}}
-@php($isAdmin = auth()->user()->isAdmin())
+@php($isAdmin = auth()->user()?->isAdmin() ?? false)
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">

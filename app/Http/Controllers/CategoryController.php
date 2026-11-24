@@ -17,7 +17,11 @@ class CategoryController extends Controller
             ->orderBy('name')
             ->paginate(15);
 
-        if ($me->isAdmin()) {
+        if (! $me) {
+
+            return view('guest.categories.index', compact('categories'));
+
+        } elseif ($me->isAdmin()) {
 
             return view('admin.categories.index', compact('categories'));
 
@@ -73,7 +77,11 @@ class CategoryController extends Controller
             ->with('primaryImage')
             ->paginate(15);
 
-        if ($me->isAdmin()) {
+        if (! $me) {
+
+            return view('guest.categories.show', compact('category', 'products'));
+
+        } elseif ($me->isAdmin()) {
 
             return view('admin.categories.show', compact('category', 'products'));
 

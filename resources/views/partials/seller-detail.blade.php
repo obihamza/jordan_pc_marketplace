@@ -1,7 +1,7 @@
 {{-- Param: seller (with user and available products) --}}
 @php
     $me = auth()->user();
-    $canEdit = $me->isAdmin() || $seller->user_id == $me->id;
+    $canEdit = $me && ($me->isAdmin() || $seller->user_id == $me->id);
 @endphp
 
 <div class="card mb-4">

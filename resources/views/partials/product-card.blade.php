@@ -1,7 +1,7 @@
 {{-- Param: product (ideally with primaryImage, category, seller loaded) --}}
 @php
     $me = auth()->user();
-    $isOwn = $product->seller_id == $me->id;
+    $isOwn = $me && $product->seller_id == $me->id;
 @endphp
 <div class="card h-100 shadow-sm">
     @if($product->primaryImage)
@@ -24,6 +24,8 @@
         <div class="mt-auto">
             @if($isOwn)
                 <span class="badge text-bg-info">Your product</span>
+            @elseif(! $me)
+                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary">Login to buy</a>
             @elseif(! $me->isAdmin() && $product->listing_status === 'available' && $product->stock_quantity > 0)
                 <form action="{{ route('cart-items.store') }}" method="POST" class="d-flex gap-2">
                     @csrf

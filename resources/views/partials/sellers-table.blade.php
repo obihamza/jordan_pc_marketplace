@@ -1,5 +1,5 @@
 {{-- Params: sellers (paginator, with user, withCount products) --}}
-@php($isAdmin = auth()->user()->isAdmin())
+@php($isAdmin = auth()->user()?->isAdmin() ?? false)
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -21,7 +21,7 @@
                         <td>{{ $seller->products_count }}</td>
                         <td class="text-end text-nowrap">
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('sellers.show', $seller) }}">View</a>
-                            @if($isAdmin || $seller->user_id == auth()->id())
+                            @if($isAdmin || (auth()->check() && $seller->user_id == auth()->id()))
                                 <a class="btn btn-sm btn-outline-primary" href="{{ route('sellers.edit', $seller) }}">Edit</a>
                             @endif
                             @if($isAdmin)

@@ -50,7 +50,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">Masterpiece</a>
+            @include('partials.brand')
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                     aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,16 +80,40 @@
                         </a>
                     </li>
 
-                    @if(\Illuminate\Support\Facades\Route::has('logout'))
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button class="btn btn-sm btn-outline-light ms-lg-2">Logout</button>
-                            </form>
-                        </li>
-                    @endif
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-sm btn-outline-light ms-lg-2">Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 @endauth
+
+@guest
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            @include('partials.brand')
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#guestNav"
+                    aria-controls="guestNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="guestNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('sellers.*') ? 'active' : '' }}" href="{{ route('sellers.index') }}">Sellers</a></li>
+                </ul>
+
+                <div class="d-flex gap-2 my-2 my-lg-0">
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-light">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-sm btn-warning">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+@endguest

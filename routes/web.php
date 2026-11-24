@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PaymentController;
@@ -15,22 +17,46 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+/*
+|--------------------------------------------------------------------------
+| Landing page (everyone)
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Every controller decides what the user may see/do from auth()->user()
-// (isAdmin() / isSeller(); everyone who isn't an admin can act as a buyer),
-// so the routes only need the "auth" middleware.
-// NOTE: the "auth" middleware redirects guests to a route named "login" -
-// add your login routes when you build authentication.
+/*
+|--------------------------------------------------------------------------
+| Guests only: login + register
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Logged-in users (admin / seller / buyer).
+| Each controller decides what the user may see/do from auth()->user():
+| isAdmin() / isSeller(); everyone who isn't an admin can act as a buyer.
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
 
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
     Route::resource('users', UserController::class);
-    Route::resource('sellers', SellerController::class);
+
+    // Browsing (index/show) is public and registered below; everything else needs a login.
+    // These must come BEFORE the public routes so /products/create isn't read as /products/{product}.
+    Route::resource('sellers', SellerController::class)->except(['index', 'show']);
+    Route::resource('categories', CategoryController::class)->except(['index', 'show']);
+    Route::resource('products', ProductController::class)->except(['index', 'show']);
+
     Route::resource('addresses', AddressController::class)->except(['show']);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
     Route::resource('product-images', ProductImageController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::resource('carts', CartController::class)->only(['index', 'destroy']);
     Route::resource('cart-items', CartItemController::class)->only(['store', 'update', 'destroy']);
@@ -41,6 +67,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('reviews', ReviewController::class)->except(['show']);
 });
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+/*
+|--------------------------------------------------------------------------
+| Public browsing: guests can look at products, categories and sellers.
+| (The controllers return the guest.* views when nobody is logged in.)
+|--------------------------------------------------------------------------
+*/
+Route::resource('products', ProductController::class)->only(['index', 'show']);
+Route::resource('categories', CategoryController::class)->only(['index', 'show']);
+Route::resource('sellers', SellerController::class)->only(['index', 'show']);

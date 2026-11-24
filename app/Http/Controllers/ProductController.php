@@ -13,6 +13,17 @@ class ProductController extends Controller
     {
         $me = auth()->user();
 
+        // Not logged in: the public product list.
+        if (! $me) {
+
+            $products = Product::with(['category', 'primaryImage'])
+                ->available()
+                ->latest()
+                ->paginate(15);
+
+            return view('guest.products.index', compact('products'));
+        }
+
         if ($me->isAdmin()) {
 
             $products = Product::with(['seller', 'category', 'primaryImage'])
@@ -109,6 +120,16 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $me = auth()->user();
+
+        // Not logged in: only available products are visible.
+        if (! $me) {
+
+            $product = Product::with(['seller', 'category', 'images', 'reviews.user'])
+                ->available()
+                ->findOrFail($product->id);
+
+            return view('guest.products.show', compact('product'));
+        }
 
         if ($me->isAdmin()) {
 

@@ -46,6 +46,15 @@ class User extends Authenticatable
         return 'password_hash';
     }
 
+    /**
+     * The users table has no remember_token column. An empty name makes Laravel
+     * skip "remember me" instead of failing with an SQL error.
+     */
+    public function getRememberTokenName(): string
+    {
+        return '';
+    }
+
     public function getAuthPassword(): string
     {
         return $this->password_hash;

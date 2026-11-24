@@ -1,0 +1,235 @@
+/*
+ * JO-Marketplace theme: orange + black, on top of Bootstrap 5.3.
+ * Loaded AFTER the Bootstrap CSS in layouts/app.blade.php, so it only
+ * overrides Bootstrap's colour variables and a few components.
+ */
+
+:root {
+    --jo-orange: #ff6a00;
+    --jo-orange-dark: #e05a00;
+    --jo-orange-darker: #b84a00;
+    --jo-orange-soft: #fff1e6;
+    --jo-black: #111111;
+    --jo-black-soft: #1c1c1c;
+
+    /* Re-point Bootstrap's "primary" and links at the brand orange */
+    --bs-primary: #ff6a00;
+    --bs-primary-rgb: 255, 106, 0;
+    --bs-link-color: #e05a00;
+    --bs-link-color-rgb: 224, 90, 0;
+    --bs-link-hover-color: #b84a00;
+    --bs-link-hover-color-rgb: 184, 74, 0;
+    --bs-body-bg: #f7f6f4;
+}
+
+body {
+    background-color: var(--bs-body-bg);
+}
+
+.text-orange { color: var(--jo-orange) !important; }
+.bg-orange   { background-color: var(--jo-orange) !important; }
+.bg-orange-soft { background-color: var(--jo-orange-soft) !important; }
+
+/* ---------- Buttons ---------- */
+.btn-primary,
+.btn-warning {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--jo-orange);
+    --bs-btn-border-color: var(--jo-orange);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--jo-orange-dark);
+    --bs-btn-hover-border-color: var(--jo-orange-dark);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--jo-orange-darker);
+    --bs-btn-active-border-color: var(--jo-orange-darker);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--jo-orange);
+    --bs-btn-disabled-border-color: var(--jo-orange);
+    --bs-btn-focus-shadow-rgb: 255, 106, 0;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--jo-orange-dark);
+    --bs-btn-border-color: var(--jo-orange);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--jo-orange);
+    --bs-btn-hover-border-color: var(--jo-orange);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--jo-orange-dark);
+    --bs-btn-active-border-color: var(--jo-orange-dark);
+    --bs-btn-focus-shadow-rgb: 255, 106, 0;
+}
+
+.btn-dark {
+    --bs-btn-bg: var(--jo-black);
+    --bs-btn-border-color: var(--jo-black);
+    --bs-btn-hover-bg: #000;
+    --bs-btn-hover-border-color: #000;
+}
+
+.text-bg-primary { background-color: var(--jo-orange) !important; color: #fff !important; }
+
+/* ---------- Black surfaces ---------- */
+.bg-dark { background-color: var(--jo-black) !important; }
+
+.navbar.bg-dark {
+    border-bottom: 3px solid var(--jo-orange);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: var(--jo-orange);
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--jo-orange);
+    font-weight: 600;
+}
+
+/* ---------- Forms, pagination ---------- */
+.form-control:focus,
+.form-select:focus {
+    border-color: #ff9a52;
+    box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
+}
+
+.form-check-input:checked {
+    background-color: var(--jo-orange);
+    border-color: var(--jo-orange);
+}
+
+.form-check-input:focus {
+    border-color: #ff9a52;
+    box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
+}
+
+.page-link { color: var(--jo-orange-dark); }
+.page-link:hover { color: var(--jo-orange-darker); }
+.page-item.active .page-link {
+    background-color: var(--jo-orange);
+    border-color: var(--jo-orange);
+    color: #fff;
+}
+
+.table-light { --bs-table-bg: #fff4ea; }
+
+/* ---------- Brand bits ---------- */
+.jo-logo { height: 36px; width: auto; }
+
+.jo-section-title {
+    position: relative;
+    padding-bottom: .5rem;
+    margin-bottom: 0;
+    font-weight: 700;
+}
+.jo-section-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 48px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--jo-orange);
+}
+
+/* ---------- Landing page ---------- */
+.jo-hero {
+    color: #fff;
+    background:
+        radial-gradient(circle at 85% 10%, rgba(255, 106, 0, .45), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(255, 106, 0, .18), transparent 45%),
+        var(--jo-black);
+}
+
+.jo-pill {
+    background: rgba(255, 106, 0, .15);
+    color: #ffb27a;
+    border: 1px solid rgba(255, 106, 0, .5);
+    font-weight: 500;
+}
+
+.jo-stat strong { display: block; font-size: 1.5rem; color: var(--jo-orange); line-height: 1.1; }
+.jo-stat span   { font-size: .85rem; color: rgba(255, 255, 255, .65); }
+
+.jo-bestsellers .card-header {
+    background: var(--jo-orange);
+    color: #fff;
+    font-weight: 700;
+}
+.jo-bestsellers .card-header a { color: #fff; opacity: .9; }
+
+.jo-rank {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--jo-black);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jo-thumb {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    border-radius: .5rem;
+    object-fit: cover;
+    background: #eee;
+}
+
+.min-w-0 { min-width: 0; }
+
+.jo-category {
+    border: 1px solid #ececec;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.jo-category:hover {
+    transform: translateY(-3px);
+    border-color: var(--jo-orange);
+    box-shadow: 0 .5rem 1rem rgba(255, 106, 0, .15);
+}
+.jo-category-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--jo-orange-soft);
+    color: var(--jo-orange-dark);
+    font-size: 1.4rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jo-why-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--jo-black);
+    color: var(--jo-orange);
+    font-size: 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jo-cta {
+    background: var(--jo-orange);
+    color: #fff;
+}
+
+/* ---------- Footer ---------- */
+.jo-footer {
+    background: var(--jo-black);
+    color: rgba(255, 255, 255, .75);
+    border-top: 4px solid var(--jo-orange);
+}
+.jo-footer h2 { color: #fff; font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; }
+.jo-footer a { color: rgba(255, 255, 255, .75); text-decoration: none; }
+.jo-footer a:hover { color: var(--jo-orange); }
+.jo-footer hr { border-color: rgba(255, 255, 255, .15); }
