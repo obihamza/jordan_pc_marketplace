@@ -109,7 +109,7 @@ class ProductController extends Controller
         if ($me->isAdmin()) {
 
             $categories = Category::all();
-            $sellers = Seller::with('user')->get();
+            $sellers = Seller::approved()->with('user')->get();
 
             return view('admin.products.create', compact('categories', 'sellers'));
 

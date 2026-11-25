@@ -33,26 +33,7 @@
                 </li>
 
                 {{-- Role menus --}}
-                @if($isAdmin)
-                    <li class="nav-item">
-                        <a class="nav-link text-orange fw-semibold" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('users.index') }}">Users</a></li>
-                            <li><a class="dropdown-item" href="{{ route('orders.index') }}">Orders</a></li>
-                            <li><a class="dropdown-item" href="{{ route('order-items.index') }}">Order items</a></li>
-                            <li><a class="dropdown-item" href="{{ route('payments.index') }}">Payments</a></li>
-                            <li><a class="dropdown-item" href="{{ route('coupons.index') }}">Coupons</a></li>
-                            <li><a class="dropdown-item" href="{{ route('reviews.index') }}">Reviews</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ route('product-images.index') }}">Product images</a></li>
-                            <li><a class="dropdown-item" href="{{ route('carts.index') }}">Carts</a></li>
-                            <li><a class="dropdown-item" href="{{ route('addresses.index') }}">Addresses</a></li>
-                        </ul>
-                    </li>
-                @elseif($isSeller)
+                @if($isSeller)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Selling</a>
                         <ul class="dropdown-menu">
@@ -111,7 +92,11 @@
 
                             @unless($isAdmin || $isSeller)
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-orange" href="{{ route('sellers.create') }}">Become a seller</a></li>
+                                @if($me->sellerStatus())
+                                    <li><a class="dropdown-item text-orange" href="{{ route('sellers.show', $me->seller) }}">Seller application ({{ $me->sellerStatus() }})</a></li>
+                                @else
+                                    <li><a class="dropdown-item text-orange" href="{{ route('sellers.create') }}">Become a seller</a></li>
+                                @endif
                             @endunless
 
                             <li><hr class="dropdown-divider"></li>

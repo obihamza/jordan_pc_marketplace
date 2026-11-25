@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,36 @@ class Seller extends Model
         'user_id',
         'national_id',
         'official_name',
+        'national_id_image',
+        'verification_status',
+        'reviewed_at',
     ];
+
+    protected function casts(): array
+    {
+        return ['reviewed_at' => 'datetime'];
+    }
+
+    /** Only approved sellers may sell and are listed publicly. */
+    public function scopeApproved(Builder $query): Builder
+    {
+        return $query->where('verification_status', 'approved');
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->verification_status === 'approved';
+    }
+
+    public function isPending(): bool
+    {
+        return $this->verification_status === 'pending';
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->verification_status === 'rejected';
+    }
 
     public function user(): BelongsTo
     {

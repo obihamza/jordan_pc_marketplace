@@ -23,6 +23,7 @@
             ['Addresses', 'addresses.index', 'addresses.*', 'bi-geo-alt'],
         ],
     ];
+    $pendingSellers = \App\Models\Seller::where('verification_status', 'pending')->count();
 @endphp
 
 <nav class="jo-side-nav" aria-label="Admin menu">
@@ -31,7 +32,7 @@
         <ul class="nav flex-column mb-3">
             @foreach($links as [$label, $route, $pattern, $icon])
                 <li class="nav-item">
-                    <a class="jo-side-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><i class="bi {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span></a>
+                    <a class="jo-side-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><i class="bi {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span>@if($route === 'sellers.index' && $pendingSellers)<span class="badge rounded-pill text-bg-warning ms-auto" title="Applications waiting for approval">{{ $pendingSellers }}</span>@endif</a>
                 </li>
             @endforeach
         </ul>

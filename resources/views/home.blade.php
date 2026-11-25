@@ -33,6 +33,8 @@
                         <a href="{{ route('orders.index') }}" class="btn btn-outline-light btn-lg px-4">Manage orders</a>
                     @elseif($me->isSeller())
                         <a href="{{ route('products.create') }}" class="btn btn-outline-light btn-lg px-4">List a product</a>
+                    @elseif($me->sellerStatus())
+                        <a href="{{ route('sellers.show', $me->seller) }}" class="btn btn-outline-light btn-lg px-4">Seller application ({{ $me->sellerStatus() }})</a>
                     @else
                         <a href="{{ route('sellers.create') }}" class="btn btn-outline-light btn-lg px-4">Become a seller</a>
                     @endif
@@ -198,6 +200,8 @@
         <p class="mb-4">Open a seller profile and reach buyers all over Jordan.</p>
         @guest
             <a href="{{ route('register') }}" class="btn btn-dark btn-lg px-4">Create a free account</a>
+        @elseif($me->sellerStatus())
+            <a href="{{ route('sellers.show', $me->seller) }}" class="btn btn-dark btn-lg px-4">See my seller application ({{ $me->sellerStatus() }})</a>
         @else
             <a href="{{ route('sellers.create') }}" class="btn btn-dark btn-lg px-4">Become a seller</a>
         @endguest

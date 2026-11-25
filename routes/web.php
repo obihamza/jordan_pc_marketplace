@@ -54,6 +54,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users', UserController::class);
 
+    // Seller applications: admin approves / rejects; admin + owner can open the ID picture.
+    Route::patch('sellers/{seller}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
+    Route::patch('sellers/{seller}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
+    Route::get('sellers/{seller}/national-id', [SellerController::class, 'nationalId'])->name('sellers.national-id');
+
     // Browsing (index/show) is public and registered below; everything else needs a login.
     // These must come BEFORE the public routes so /products/create isn't read as /products/{product}.
     Route::resource('sellers', SellerController::class)->except(['index', 'show']);

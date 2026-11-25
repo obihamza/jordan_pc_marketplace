@@ -7,7 +7,7 @@
                 <tr>
                     <th>Seller</th>
                     <th>Owner</th>
-                    @if($isAdmin)<th>National ID</th>@endif
+                    @if($isAdmin)<th>National ID</th><th>Status</th>@endif
                     <th>Products</th>
                     <th class="text-end">Actions</th>
                 </tr>
@@ -17,7 +17,10 @@
                     <tr>
                         <td><a href="{{ route('sellers.show', $seller) }}" class="fw-semibold text-decoration-none">{{ $seller->official_name }}</a></td>
                         <td>{{ $seller->user?->name }}</td>
-                        @if($isAdmin)<td>{{ $seller->national_id }}</td>@endif
+                        @if($isAdmin)
+                            <td>{{ $seller->national_id }}</td>
+                            <td>@include('partials.status-badge', ['status' => $seller->verification_status])</td>
+                        @endif
                         <td>{{ $seller->products_count }}</td>
                         <td class="text-end text-nowrap">
                             <a class="jo-icon-btn" href="{{ route('sellers.show', $seller) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
@@ -25,12 +28,13 @@
                                 <a class="jo-icon-btn" href="{{ route('sellers.edit', $seller) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
                             @endif
                             @if($isAdmin)
+                                @include('partials.seller-review-buttons', ['seller' => $seller, 'icons' => true])
                                 @include('partials.delete-button', ['icon' => true, 'action' => route('sellers.destroy', $seller)])
                             @endif
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="text-center text-muted py-4">No sellers found.</td></tr>
+                    <tr><td colspan="{{ $isAdmin ? 6 : 4 }}" class="text-center text-muted py-4">No sellers found.</td></tr>
                 @endforelse
             </tbody>
         </table>

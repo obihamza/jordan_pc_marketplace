@@ -105,7 +105,7 @@ class ChatbotService
         }
 
         if ($has(['sell', 'selling', 'seller', 'sellers', 'list', 'بيع'])) {
-            return "To sell, log in and choose \"Become a seller\" (you'll need your national ID and a shop name). Then add your products from the Selling menu.";
+            return "To sell, log in and choose \"Become a seller\" (you'll need your national ID, a photo of it and a shop name). An admin reviews your application first; once it is approved you can add products from the Selling menu.";
         }
 
         if ($has(['cancel', 'refund', 'return'])) {

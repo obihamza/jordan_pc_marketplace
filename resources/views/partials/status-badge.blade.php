@@ -5,6 +5,7 @@
         'shipped' => 'primary', 'delivered' => 'success', 'cancelled' => 'danger',
         'available' => 'success', 'sold' => 'secondary', 'hidden' => 'dark', 'reserved' => 'info',
         'active' => 'success', 'abandoned' => 'secondary',
+        'approved' => 'success', 'rejected' => 'danger',
         'authorized' => 'info', 'paid' => 'success', 'failed' => 'danger', 'refunded' => 'secondary',
     ];
 @endphp

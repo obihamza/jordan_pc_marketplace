@@ -26,7 +26,8 @@ class AdminDashboardController extends Controller
 
         $stats = [
             'users' => User::where('is_admin', false)->count(),
-            'sellers' => Seller::count(),
+            'sellers' => Seller::approved()->count(),
+            'pending_sellers' => Seller::where('verification_status', 'pending')->count(),
             'products' => Product::count(),
             'categories' => Category::count(),
             'orders' => Order::count(),

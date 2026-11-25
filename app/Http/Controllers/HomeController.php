@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         $stats = [
             'products' => Product::available()->count(),
-            'sellers' => Seller::count(),
+            'sellers' => Seller::approved()->count(),
             'categories' => Category::count(),
         ];
 

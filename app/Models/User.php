@@ -108,7 +108,14 @@ class User extends Authenticatable
     /** Uses the loaded relation, so repeated calls in one request cost one query. */
     public function isSeller(): bool
     {
-        return $this->seller !== null;
+        // A seller profile only counts once an admin approved it.
+        return $this->seller?->isApproved() ?? false;
+    }
+
+    /** pending / approved / rejected, or null when the user never applied. */
+    public function sellerStatus(): ?string
+    {
+        return $this->seller?->verification_status;
     }
 
     /** Users that are only buyers (not admins, not sellers). Handy for seeding. */

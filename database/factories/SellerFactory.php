@@ -17,6 +17,15 @@ class SellerFactory extends Factory
             'user_id' => User::factory(),
             'national_id' => fake()->unique()->numerify('99########'),
             'official_name' => fake()->unique()->company(),
+            'national_id_image' => null,
+            'verification_status' => 'approved',
+            'reviewed_at' => now(),
         ];
+    }
+
+    /** An application waiting for the admin. */
+    public function pending(): static
+    {
+        return $this->state(['verification_status' => 'pending', 'reviewed_at' => null]);
     }
 }
