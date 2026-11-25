@@ -3,7 +3,7 @@
 @section('title', 'Products')
 
 @section('content')
-@include('partials.page-header', ['title' => 'My products', 'url' => route('products.create'), 'label' => 'New product'])
+@include('partials.page-header', ['title' => 'My products', 'modal' => '#productModal', 'label' => 'New product'])
 @include('partials.product-filters', ['categories' => $categories])
 @include('partials.products-table', ['products' => $products])
 

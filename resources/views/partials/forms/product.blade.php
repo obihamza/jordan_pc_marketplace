@@ -1,7 +1,11 @@
-{{-- Params: product (optional, edit), categories, sellers (optional, admin create) --}}
-@php($product = $product ?? null)
-<form action="{{ $product ? route('products.update', $product) : route('products.store') }}" method="POST" class="card card-body">
+{{-- Params: product (optional, edit), categories, sellers (optional, admin create), modal (optional: inside the pop-up, no card/buttons) --}}
+@php
+    $product = $product ?? null;
+    $modal = $modal ?? false;
+@endphp
+<form action="{{ $product ? route('products.update', $product) : route('products.store') }}" method="POST" @if($modal) id="productCreateForm" @else class="card card-body" @endif>
     @csrf
+    @if($modal)<input type="hidden" name="_modal" value="product">@endif
     @if($product) @method('PUT') @endif
 
     @isset($sellers)
@@ -12,9 +16,14 @@
     @endisset
 
     @include('partials.forms.select', [
-        'name' => 'category_id', 'label' => 'Category', 'required' => true, 'placeholder' => '-- choose category --',
+        'name' => 'category_id', 'label' => 'Category', 'required' => ! $modal, 'placeholder' => '-- choose category --',
         'options' => $categories->pluck('name', 'id'), 'selected' => $product?->category_id,
     ])
+
+    {{-- Not in the list? Type a new category and it is created together with the product. --}}
+    @if($modal)
+        @include('partials.forms.input', ['name' => 'new_category', 'label' => 'Or create a new category'])
+    @endif
 
     @include('partials.forms.input', ['name' => 'name', 'label' => 'Name', 'required' => true, 'value' => $product?->name])
 
@@ -53,5 +62,7 @@
         ])
     @endif
 
-    @include('partials.forms.actions', ['cancel' => route('products.index'), 'submit' => $product ? 'Update product' : 'Create product'])
+    @unless($modal)
+        @include('partials.forms.actions', ['cancel' => route('products.index'), 'submit' => $product ? 'Update product' : 'Create product'])
+    @endunless
 </form>

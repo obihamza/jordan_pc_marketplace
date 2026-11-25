@@ -32,7 +32,7 @@
                     @if($me->isAdmin())
                         <a href="{{ route('orders.index') }}" class="btn btn-outline-light btn-lg px-4">Manage orders</a>
                     @elseif($me->isSeller())
-                        <a href="{{ route('products.create') }}" class="btn btn-outline-light btn-lg px-4">List a product</a>
+                        <a href="{{ route('seller.dashboard', ['add' => 'product']) }}" class="btn btn-outline-light btn-lg px-4">List a product</a>
                     @elseif($me->sellerStatus())
                         <a href="{{ route('sellers.show', $me->seller) }}" class="btn btn-outline-light btn-lg px-4">Seller application ({{ $me->sellerStatus() }})</a>
                     @else

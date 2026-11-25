@@ -92,6 +92,8 @@
         </main>
     </div>
 
+    @include('partials.product-create-modal')
+    @include('partials.category-create-modal')
     @include('partials.chatbot')
 
     <script>

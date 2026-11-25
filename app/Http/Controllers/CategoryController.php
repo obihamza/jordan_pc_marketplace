@@ -39,8 +39,9 @@ class CategoryController extends Controller
     {
         $me = auth()->user();
 
-        if ($me->isAdmin()) {
-            return view('admin.categories.create');
+        // "New category" is a pop-up on the categories page (partials/category-create-modal).
+        if ($me->isAdmin() || $me->isSeller()) {
+            return redirect()->route('categories.index')->with('open_category_modal', true);
         }
 
         abort(403);
@@ -50,7 +51,8 @@ class CategoryController extends Controller
     {
         $me = auth()->user();
 
-        if (! $me->isAdmin()) {
+        // Admins and approved sellers can add categories (a seller may need one for a new product).
+        if (! $me->isAdmin() && ! $me->isSeller()) {
             abort(403);
         }
 

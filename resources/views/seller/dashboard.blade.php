@@ -8,7 +8,7 @@
         <h1 class="h3 mb-0">My shop</h1>
         <div class="text-muted small">{{ auth()->user()->seller->official_name }} &middot; how your business is doing.</div>
     </div>
-    <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Add a product</a>
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productModal"><i class="bi bi-plus-lg"></i> Add a product</button>
 </div>
 
 {{-- ============ Summary cards ============ --}}

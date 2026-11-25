@@ -102,22 +102,20 @@ class ProductController extends Controller
         return $query->orderBy('created_at', $direction)->orderBy('id', $direction);
     }
 
+    /**
+     * "New product" is a pop-up form (partials/product-create-modal), not a page.
+     * Old links to /products/create land on the screen that opens the pop-up.
+     */
     public function create()
     {
         $me = auth()->user();
 
         if ($me->isAdmin()) {
+            return redirect()->route('products.index')->with('open_product_modal', true);
+        }
 
-            $categories = Category::all();
-            $sellers = Seller::approved()->with('user')->get();
-
-            return view('admin.products.create', compact('categories', 'sellers'));
-
-        } elseif ($me->isSeller()) {
-
-            $categories = Category::all();
-
-            return view('seller.products.create', compact('categories'));
+        if ($me->isSeller()) {
+            return redirect()->route('seller.dashboard')->with('open_product_modal', true);
         }
 
         // A plain buyer can't list products.
@@ -133,7 +131,9 @@ class ProductController extends Controller
         }
 
         $rules = [
-            'category_id' => 'required|exists:categories,id',
+            // Pick a category from the list, or type the name of a new one.
+            'category_id' => 'required_without:new_category|nullable|exists:categories,id',
+            'new_category' => 'nullable|string|max:120',
             'name' => 'required|string|max:180',
             'brand' => 'nullable|string|max:100',
             'description' => 'required|string',
@@ -148,6 +148,17 @@ class ProductController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        // A typed category name wins; reuse it if it already exists (case does not matter).
+        if (filled($validated['new_category'] ?? null)) {
+            $name = trim($validated['new_category']);
+
+            $category = Category::whereRaw('LOWER(name) = ?', [mb_strtolower($name)])->first()
+                ?? Category::create(['name' => $name]);
+
+            $validated['category_id'] = $category->id;
+        }
+        unset($validated['new_category']);
 
         Product::create(array_merge($validated, [
             'seller_id' => $me->isAdmin() ? $validated['seller_id'] : $me->id,

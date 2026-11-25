@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\NotificationController;
+use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Seller;
 use Illuminate\Pagination\Paginator;
@@ -33,7 +34,12 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('bellFeed', $user ? NotificationController::payload($user) : ['unread' => 0, 'items' => []]);
 
+            // Data for the "New product" pop-up.
+            if ($user && ($user->isAdmin() || $user->isSeller())) {
+                $view->with('modalCategories', Category::orderBy('name')->get());
+            }
             if ($user?->isAdmin()) {
+                $view->with('modalSellers', Seller::approved()->get());
                 $view->with('pendingSellers', Seller::where('verification_status', 'pending')->count());
             } elseif ($user?->isSeller()) {
                 // Order lines the seller still has to prepare (side bar notice + badge).

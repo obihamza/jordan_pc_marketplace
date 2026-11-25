@@ -40,7 +40,7 @@
                         @if(auth()->user()->isAdmin())
                             <li class="mb-2"><a href="{{ route('sellers.index') }}">Sellers</a></li>
                         @elseif(auth()->user()->isSeller())
-                            <li class="mb-2"><a href="{{ route('products.create') }}">List a product</a></li>
+                            <li class="mb-2"><a href="{{ route('seller.dashboard', ['add' => 'product']) }}">List a product</a></li>
                         @elseif(auth()->user()->sellerStatus())
                             <li class="mb-2"><a href="{{ route('sellers.show', auth()->user()->seller) }}">Seller application ({{ auth()->user()->sellerStatus() }})</a></li>
                         @else

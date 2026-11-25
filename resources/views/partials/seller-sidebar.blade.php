@@ -7,7 +7,6 @@
         ],
         'My shop' => [
             ['My products', 'products.index', ['products.index', 'products.show', 'products.edit'], 'bi-box-seam'],
-            ['Add a product', 'products.create', 'products.create', 'bi-plus-circle'],
             ['Product images', 'product-images.index', 'product-images.*', 'bi-images'],
             ['Sales (order items)', 'order-items.index', 'order-items.*', 'bi-list-check'],
         ],
@@ -48,9 +47,11 @@
     @foreach($groups as $title => $links)
         <div class="jo-side-title">{{ $title }}</div>
         <ul class="nav flex-column mb-3">
-            @foreach($links as [$label, $route, $pattern, $icon])
+            @foreach($links as $link)
+                @php [$label, $route, $pattern, $icon] = $link; $modal = $link[4] ?? null; @endphp
                 <li class="nav-item">
-                    <a class="jo-side-link {{ request()->routeIs(...(array) $pattern) ? 'active' : '' }}" href="{{ $routeFor($route) }}">
+                    <a class="jo-side-link {{ request()->routeIs(...(array) $pattern) ? 'active' : '' }}" href="{{ $modal ? '#' : $routeFor($route) }}"
+                       @if($modal) data-bs-toggle="modal" data-bs-target="{{ $modal }}" role="button" @endif>
                         <i class="bi {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span>
                         @if($route === 'order-items.index' && $pendingSales)<span class="badge rounded-pill text-bg-warning ms-auto" title="Items waiting to be prepared">{{ $pendingSales }}</span>@endif
                     </a>

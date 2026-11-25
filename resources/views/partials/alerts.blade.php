@@ -34,7 +34,7 @@
 @endif
 
 {{-- Validation errors stay inline above the page content --}}
-@if($errors->any())
+@if($errors->any() && ! old('_modal'))
     <div class="alert alert-danger">
         <strong>Please fix the following:</strong>
         <ul class="mb-0">
