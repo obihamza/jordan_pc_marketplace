@@ -83,9 +83,9 @@
             @endif
 
             @if($canManage)
-                <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary">Edit</a>
+                <a class="jo-icon-btn" href="{{ route('products.edit', $product) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
                 <a href="{{ route('product-images.create', ['product_id' => $product->id]) }}" class="btn btn-outline-secondary">Add image</a>
-                @include('partials.delete-button', ['action' => route('products.destroy', $product), 'class' => 'btn-outline-danger'])
+                @include('partials.delete-button', ['icon' => true, 'action' => route('products.destroy', $product), 'class' => 'btn-outline-danger'])
             @endif
 
             <a href="{{ route('products.index') }}" class="btn btn-link">Back to products</a>

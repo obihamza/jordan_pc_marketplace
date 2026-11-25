@@ -19,8 +19,8 @@
                         <td>{{ $address->postal_code }}</td>
                         <td>{{ $address->country }}</td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('addresses.edit', $address) }}">Edit</a>
-                            @include('partials.delete-button', ['action' => route('addresses.destroy', $address)])
+                            <a class="jo-icon-btn" href="{{ route('addresses.edit', $address) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                            @include('partials.delete-button', ['icon' => true, 'action' => route('addresses.destroy', $address)])
                         </td>
                     </tr>
                 @empty

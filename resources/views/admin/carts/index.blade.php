@@ -22,7 +22,7 @@
                         <td>{{ number_format($cart->total, 2) }} JOD</td>
                         <td>@include('partials.status-badge', ['status' => $cart->status])</td>
                         <td>{{ $cart->updated_at?->diffForHumans() }}</td>
-                        <td class="text-end">@include('partials.delete-button', ['action' => route('carts.destroy', $cart)])</td>
+                        <td class="text-end">@include('partials.delete-button', ['icon' => true, 'action' => route('carts.destroy', $cart)])</td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="text-center text-muted py-4">No carts found.</td></tr>

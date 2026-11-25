@@ -8,6 +8,7 @@
     <title>@yield('title', 'Dashboard') - Admin - {{ config('app.name', 'JO-Marketplace') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/jo-logo-mark.svg') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <link href="{{ asset('css/jo-marketplace.css') }}" rel="stylesheet">
     @stack('styles')
@@ -29,14 +30,12 @@
         </div>
 
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-light d-none d-sm-inline-block">View website</a>
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ auth()->user()->name }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}">My profile</a></li>
-                    <li><a class="dropdown-item" href="{{ route('home') }}">View website</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST">

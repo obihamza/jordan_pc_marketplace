@@ -28,10 +28,10 @@
                         <td>{{ ucfirst($product->condition_type) }}</td>
                         <td>@include('partials.status-badge', ['status' => $product->listing_status])</td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('products.show', $product) }}">View</a>
+                            <a class="jo-icon-btn" href="{{ route('products.show', $product) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
                             @if(auth()->user()->isAdmin() || $product->seller_id == auth()->id())
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('products.edit', $product) }}">Edit</a>
-                                @include('partials.delete-button', ['action' => route('products.destroy', $product)])
+                                <a class="jo-icon-btn" href="{{ route('products.edit', $product) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                                @include('partials.delete-button', ['icon' => true, 'action' => route('products.destroy', $product)])
                             @endif
                         </td>
                     </tr>

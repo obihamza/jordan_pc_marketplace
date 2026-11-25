@@ -469,3 +469,17 @@ body {
     background: rgba(255, 106, 0, .15); color: var(--jo-orange-light); font-weight: 700;
 }
 .jo-chart-box { position: relative; height: 280px; }
+
+/* ================= Icon buttons (view / edit / delete) + toasts ================= */
+.jo-icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; padding: 0; margin: 0 .1rem;
+    border: 1px solid var(--jo-line); border-radius: .5rem; background: transparent;
+    color: var(--bs-body-color); font-size: 1rem; line-height: 1; text-decoration: none; cursor: pointer;
+    transition: background-color .15s, color .15s, border-color .15s;
+}
+.jo-icon-btn:hover, .jo-icon-btn:focus-visible { background: rgba(255, 106, 0, .15); border-color: var(--jo-orange); color: var(--jo-orange-light); }
+.jo-icon-btn.jo-icon-danger:hover, .jo-icon-btn.jo-icon-danger:focus-visible { background: rgba(220, 53, 69, .18); border-color: #dc3545; color: #ff6b7a; }
+
+.jo-side-link i { width: 1.25rem; text-align: center; font-size: 1.05rem; }
+.jo-toasts { z-index: 1100; }

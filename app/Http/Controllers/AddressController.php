@@ -139,6 +139,6 @@ class AddressController extends Controller
         $address->delete();
 
         return redirect()->route('addresses.index')
-            ->with('success', 'Address deleted successfully!');
+            ->with('danger', 'Address deleted successfully!');
     }
 }

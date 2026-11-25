@@ -18,10 +18,10 @@
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->products_count }}</td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('categories.show', $category) }}">Browse</a>
+                            <a class="jo-icon-btn" href="{{ route('categories.show', $category) }}" title="Browse" aria-label="Browse"><i class="bi bi-eye"></i></a>
                             @if($isAdmin)
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('categories.edit', $category) }}">Edit</a>
-                                @include('partials.delete-button', ['action' => route('categories.destroy', $category)])
+                                <a class="jo-icon-btn" href="{{ route('categories.edit', $category) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                                @include('partials.delete-button', ['icon' => true, 'action' => route('categories.destroy', $category)])
                             @endif
                         </td>
                     </tr>

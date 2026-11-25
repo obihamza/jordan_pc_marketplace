@@ -18,7 +18,7 @@
                         </td>
                         <td>@if($image->is_primary)<span class="badge text-bg-success">Primary</span>@endif</td>
                         <td>{{ $image->created_at?->format('Y-m-d') }}</td>
-                        <td class="text-end">@include('partials.delete-button', ['action' => route('product-images.destroy', $image)])</td>
+                        <td class="text-end">@include('partials.delete-button', ['icon' => true, 'action' => route('product-images.destroy', $image)])</td>
                     </tr>
                 @empty
                     <tr><td colspan="5" class="text-center text-muted py-4">No images found.</td></tr>

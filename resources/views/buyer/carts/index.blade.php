@@ -37,7 +37,7 @@
                                 </form>
                             </td>
                             <td>{{ number_format($item->quantity * ($item->product?->price ?? 0), 2) }} JOD</td>
-                            <td class="text-end">@include('partials.delete-button', ['action' => route('cart-items.destroy', $item), 'label' => 'Remove', 'confirm' => 'Remove this item?'])</td>
+                            <td class="text-end">@include('partials.delete-button', ['icon' => true, 'action' => route('cart-items.destroy', $item), 'label' => 'Remove', 'confirm' => 'Remove this item?'])</td>
                         </tr>
                     @endforeach
                 </tbody>

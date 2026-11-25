@@ -118,6 +118,6 @@ class ProductImageController extends Controller
         $productImage->delete();
 
         return redirect()->route('product-images.index')
-            ->with('success', 'Image deleted successfully!');
+            ->with('danger', 'Image deleted successfully!');
     }
 }

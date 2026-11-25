@@ -162,7 +162,7 @@ class UserController extends Controller
             $user->delete();
 
             return redirect()->route('users.index')
-                ->with('success', 'User deleted successfully!');
+                ->with('danger', 'User deleted successfully!');
         }
 
         // Anyone else can only delete their own account.
@@ -170,6 +170,6 @@ class UserController extends Controller
         $user->delete();
 
         return redirect('/')
-            ->with('success', 'Your account was deleted.');
+            ->with('danger', 'Your account was deleted.');
     }
 }

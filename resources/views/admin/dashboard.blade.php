@@ -8,7 +8,6 @@
         <h1 class="h3 mb-0">Dashboard</h1>
         <div class="text-muted small">A quick look at the whole website.</div>
     </div>
-    <a href="{{ route('home') }}" class="btn btn-outline-light btn-sm">View website</a>
 </div>
 
 {{-- ============ Summary cards ============ --}}

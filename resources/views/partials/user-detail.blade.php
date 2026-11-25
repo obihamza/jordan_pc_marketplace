@@ -19,8 +19,8 @@
                 </dl>
             </div>
             <div class="card-footer d-flex flex-wrap gap-2">
-                <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary">Edit {{ $isOwn ? 'my profile' : 'user' }}</a>
-                @include('partials.delete-button', [
+                <a class="jo-icon-btn" href="{{ route('users.edit', $user) }}" title="Edit {{ $isOwn ? 'my profile' : 'user' }}" aria-label="Edit {{ $isOwn ? 'my profile' : 'user' }}"><i class="bi bi-pencil-square"></i></a>
+                @include('partials.delete-button', ['icon' => true, 
                     'action' => route('users.destroy', $user),
                     'label' => $isOwn ? 'Delete my account' : 'Delete user',
                     'confirm' => $isOwn ? 'Delete your account?' : 'Delete this user?',

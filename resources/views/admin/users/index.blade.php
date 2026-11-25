@@ -20,9 +20,9 @@
                         <td><span class="badge text-bg-secondary">{{ $user->is_admin ? 'Admin' : ($user->seller ? 'Seller' : 'Buyer') }}</span></td>
                         <td>{{ $user->created_at?->format('Y-m-d') }}</td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('users.show', $user) }}">View</a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('users.edit', $user) }}">Edit</a>
-                            @include('partials.delete-button', ['action' => route('users.destroy', $user)])
+                            <a class="jo-icon-btn" href="{{ route('users.show', $user) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
+                            <a class="jo-icon-btn" href="{{ route('users.edit', $user) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                            @include('partials.delete-button', ['icon' => true, 'action' => route('users.destroy', $user)])
                         </td>
                     </tr>
                 @empty

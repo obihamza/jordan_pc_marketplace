@@ -23,7 +23,7 @@
                         <td>@include('partials.status-badge', ['status' => $order->order_status])</td>
                         <td>@include('partials.status-badge', ['status' => $order->payment?->payment_status])</td>
                         <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('orders.show', $order) }}">View</a>
+                            <a class="jo-icon-btn" href="{{ route('orders.show', $order) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
                         </td>
                     </tr>
                 @empty

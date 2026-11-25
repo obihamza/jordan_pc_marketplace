@@ -20,12 +20,12 @@
                         @if($isAdmin)<td>{{ $seller->national_id }}</td>@endif
                         <td>{{ $seller->products_count }}</td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('sellers.show', $seller) }}">View</a>
+                            <a class="jo-icon-btn" href="{{ route('sellers.show', $seller) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
                             @if($isAdmin || (auth()->check() && $seller->user_id == auth()->id()))
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('sellers.edit', $seller) }}">Edit</a>
+                                <a class="jo-icon-btn" href="{{ route('sellers.edit', $seller) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
                             @endif
                             @if($isAdmin)
-                                @include('partials.delete-button', ['action' => route('sellers.destroy', $seller)])
+                                @include('partials.delete-button', ['icon' => true, 'action' => route('sellers.destroy', $seller)])
                             @endif
                         </td>
                     </tr>

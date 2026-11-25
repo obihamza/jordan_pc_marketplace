@@ -53,6 +53,6 @@ class CartController extends Controller
         }
 
         return redirect()->route('carts.index')
-            ->with('success', 'Cart cleared successfully!');
+            ->with('danger', 'Cart cleared successfully!');
     }
 }

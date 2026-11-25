@@ -281,7 +281,10 @@ class OrderController extends Controller
         });
 
         return redirect()->route('orders.show', $order)
-            ->with('success', 'Order updated successfully!');
+            ->with(
+                $status === 'cancelled' ? 'danger' : 'success',
+                $status === 'cancelled' ? 'Order cancelled.' : 'Order updated successfully!'
+            );
     }
 
     public function destroy(Order $order)
@@ -297,6 +300,6 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('orders.index')
-            ->with('success', 'Order deleted successfully!');
+            ->with('danger', 'Order deleted successfully!');
     }
 }

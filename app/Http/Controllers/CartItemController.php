@@ -108,6 +108,6 @@ class CartItemController extends Controller
         $cart->recalculateTotal();
 
         return redirect()->route('carts.index')
-            ->with('success', 'Item removed from cart!');
+            ->with('danger', 'Item removed from cart!');
     }
 }

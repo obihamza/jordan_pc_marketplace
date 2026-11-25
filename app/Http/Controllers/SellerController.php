@@ -174,6 +174,6 @@ class SellerController extends Controller
         $seller->delete();
 
         return redirect()->route('sellers.index')
-            ->with('success', 'Seller profile deleted successfully!');
+            ->with('danger', 'Seller profile deleted successfully!');
     }
 }

@@ -16,9 +16,9 @@
     </div>
     @if($canEdit)
         <div class="card-footer d-flex gap-2">
-            <a href="{{ route('sellers.edit', $seller) }}" class="btn btn-sm btn-primary">Edit profile</a>
+            <a class="jo-icon-btn" href="{{ route('sellers.edit', $seller) }}" title="Edit profile" aria-label="Edit profile"><i class="bi bi-pencil-square"></i></a>
             @if($me->isAdmin())
-                @include('partials.delete-button', ['action' => route('sellers.destroy', $seller), 'label' => 'Delete seller'])
+                @include('partials.delete-button', ['icon' => true, 'action' => route('sellers.destroy', $seller), 'label' => 'Delete seller'])
             @endif
         </div>
     @endif

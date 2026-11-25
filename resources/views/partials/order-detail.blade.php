@@ -92,7 +92,7 @@
                         </select>
                         <button class="btn btn-primary">Save</button>
                     </form>
-                    @include('partials.delete-button', ['action' => route('orders.destroy', $order), 'label' => 'Delete order'])
+                    @include('partials.delete-button', ['icon' => true, 'action' => route('orders.destroy', $order), 'label' => 'Delete order'])
                 </div>
             </div>
 

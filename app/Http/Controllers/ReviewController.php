@@ -151,6 +151,6 @@ class ReviewController extends Controller
         $review->delete();
 
         return redirect()->route('reviews.index')
-            ->with('success', 'Review deleted successfully!');
+            ->with('danger', 'Review deleted successfully!');
     }
 }

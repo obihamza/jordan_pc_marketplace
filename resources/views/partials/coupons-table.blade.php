@@ -33,9 +33,9 @@
                             <span class="badge text-bg-{{ $coupon->is_active ? 'success' : 'secondary' }}">{{ $coupon->is_active ? 'Yes' : 'No' }}</span>
                         </td>
                         <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('coupons.show', $coupon) }}">View</a>
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('coupons.edit', $coupon) }}">Edit</a>
-                            @include('partials.delete-button', ['action' => route('coupons.destroy', $coupon)])
+                            <a class="jo-icon-btn" href="{{ route('coupons.show', $coupon) }}" title="View" aria-label="View"><i class="bi bi-eye"></i></a>
+                            <a class="jo-icon-btn" href="{{ route('coupons.edit', $coupon) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                            @include('partials.delete-button', ['icon' => true, 'action' => route('coupons.destroy', $coupon)])
                         </td>
                     </tr>
                 @empty

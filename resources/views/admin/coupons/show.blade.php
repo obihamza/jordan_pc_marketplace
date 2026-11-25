@@ -24,8 +24,8 @@
         </dl>
     </div>
     <div class="card-footer d-flex gap-2">
-        <a href="{{ route('coupons.edit', $coupon) }}" class="btn btn-sm btn-primary">Edit</a>
-        @include('partials.delete-button', ['action' => route('coupons.destroy', $coupon)])
+        <a class="jo-icon-btn" href="{{ route('coupons.edit', $coupon) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+        @include('partials.delete-button', ['icon' => true, 'action' => route('coupons.destroy', $coupon)])
     </div>
 </div>
 @endsection

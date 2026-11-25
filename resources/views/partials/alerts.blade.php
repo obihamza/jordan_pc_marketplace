@@ -1,16 +1,35 @@
-{{-- Success messages float at the top of the screen (so they also show over the landing hero) --}}
-@if(session('success'))
-    <div class="jo-flash alert alert-success alert-dismissible fade show shadow" role="alert" id="joFlash">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{{-- Flash messages appear as toasts (top right): green = success, red = danger action (delete, remove, cancel) --}}
+@php
+    $toasts = array_filter([
+        ['type' => 'success', 'icon' => 'bi-check-circle-fill', 'title' => 'Done', 'text' => session('success')],
+        ['type' => 'danger', 'icon' => 'bi-exclamation-octagon-fill', 'title' => 'Removed', 'text' => session('danger')],
+    ], fn ($t) => filled($t['text']));
+@endphp
+
+@if($toasts)
+    <div class="toast-container position-fixed top-0 end-0 p-3 jo-toasts">
+        @foreach($toasts as $t)
+            <div class="toast align-items-center text-bg-{{ $t['type'] }} border-0 jo-toast" role="{{ $t['type'] === 'danger' ? 'alert' : 'status' }}"
+                 aria-live="{{ $t['type'] === 'danger' ? 'assertive' : 'polite' }}" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center gap-2">
+                        <i class="bi {{ $t['icon'] }}" aria-hidden="true"></i>
+                        <span>{{ $t['text'] }}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        @endforeach
     </div>
 
     <script>
-        // Fade the message out by itself after a few seconds.
-        setTimeout(function () {
-            var el = document.getElementById('joFlash');
-            if (el) { el.classList.remove('show'); setTimeout(function () { el.remove(); }, 300); }
-        }, 5000);
+        // Bootstrap's JS is loaded with `defer`, so wait for it before showing the toasts.
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.jo-toast').forEach(function (el) {
+                if (window.bootstrap) { bootstrap.Toast.getOrCreateInstance(el).show(); }
+                else { el.classList.add('show'); }
+            });
+        });
     </script>
 @endif
 

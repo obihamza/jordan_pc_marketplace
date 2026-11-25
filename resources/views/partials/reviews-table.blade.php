@@ -32,10 +32,10 @@
                         <td>{{ $review->created_at?->format('Y-m-d') }}</td>
                         <td class="text-end text-nowrap">
                             @if($isMine && ! $isAdmin)
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('reviews.edit', $review) }}">Edit</a>
+                                <a class="jo-icon-btn" href="{{ route('reviews.edit', $review) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
                             @endif
                             @if($isMine || $isAdmin)
-                                @include('partials.delete-button', ['action' => route('reviews.destroy', $review)])
+                                @include('partials.delete-button', ['icon' => true, 'action' => route('reviews.destroy', $review)])
                             @endif
                         </td>
                     </tr>
