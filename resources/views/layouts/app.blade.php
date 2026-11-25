@@ -30,6 +30,7 @@
     @include('partials.footer')
 
     {{-- Floating chat button (bottom right) on every page --}}
+    @include('partials.confirm-modal')
     @include('partials.chatbot')
 
     <script>

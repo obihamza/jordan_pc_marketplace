@@ -94,6 +94,7 @@
 
     @include('partials.product-create-modal')
     @include('partials.category-create-modal')
+    @include('partials.confirm-modal')
     @include('partials.chatbot')
 
     <script>

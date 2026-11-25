@@ -4,7 +4,7 @@
     $confirmText = $confirm ?? 'Are you sure?';
 @endphp
 <form action="{{ $action }}" method="POST" class="d-inline"
-      onsubmit="return confirm('{{ addslashes($confirmText) }}')">
+      data-confirm="{{ $confirmText }}" data-confirm-title="{{ $label }}" data-confirm-button="{{ $label }}">
     @csrf
     @method('DELETE')
     @if($icon ?? false)

@@ -99,7 +99,7 @@
         {{-- Buyer (or seller as buyer): cancel their own pending order --}}
         @elseif($isMyOrder && $order->order_status === 'pending')
             <form action="{{ route('orders.update', $order) }}" method="POST"
-                  onsubmit="return confirm('Cancel this order?')">
+                  data-confirm="Cancel this order? The items go back to stock." data-confirm-title="Cancel order" data-confirm-button="Yes, cancel order">
                 @csrf
                 @method('PUT')
                 <button class="btn btn-outline-danger w-100">Cancel order</button>

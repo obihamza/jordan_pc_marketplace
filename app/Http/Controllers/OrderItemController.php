@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Order items are created at checkout (OrderController@store), so here we only
@@ -76,7 +79,40 @@ class OrderItemController extends Controller
             'item_status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled',
         ]);
 
-        $orderItem->update($validated);
+        $new = $validated['item_status'];
+
+        DB::transaction(function () use ($orderItem, $new) {
+            $old = $orderItem->item_status;
+            $product = Product::withTrashed()->lockForUpdate()->find($orderItem->product_id);
+
+            if ($old !== 'cancelled' && $new === 'cancelled') {
+
+                // Cancelling a line puts its stock back.
+                $product?->increment('stock_quantity', $orderItem->quantity);
+
+                if ($product && $product->listing_status === 'sold') {
+                    $product->update(['listing_status' => 'available']);
+                }
+
+            } elseif ($old === 'cancelled' && $new !== 'cancelled' && $product) {
+
+                // Re-activating a cancelled line takes the stock again.
+                if ($product->stock_quantity < $orderItem->quantity) {
+                    throw ValidationException::withMessages(['item_status' => 'Not enough stock to re-activate this item.']);
+                }
+
+                $product->decrement('stock_quantity', $orderItem->quantity);
+
+                if ($product->stock_quantity <= 0) {
+                    $product->update(['listing_status' => 'sold']);
+                }
+            }
+
+            $orderItem->update(['item_status' => $new]);
+
+            // The order status follows its lines.
+            $orderItem->order->syncStatusFromItems();
+        });
 
         return redirect()->route('order-items.index')
             ->with('success', 'Item status updated successfully!');
