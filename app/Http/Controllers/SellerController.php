@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Seller;
 use App\Models\User;
+use App\Notifications\AdminEvent;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -109,6 +111,14 @@ class SellerController extends Controller
                 ->with('success', 'Seller profile created successfully!');
         }
 
+        AdminEvent::send(
+            'seller_application',
+            'New seller application',
+            $me->name.' applied to sell as "'.$seller->official_name.'".',
+            route('sellers.show', $seller, false),
+            ['seller_id' => $seller->user_id]
+        );
+
         return redirect()->route('sellers.show', $seller)
             ->with('success', 'Application sent! An admin will review your ID and approve you soon.');
     }
@@ -213,6 +223,16 @@ class SellerController extends Controller
 
         $seller->update($data);
 
+        if ($resubmitted) {
+            AdminEvent::send(
+                'seller_application',
+                'Seller application re-submitted',
+                $me->name.' sent new ID details for "'.$seller->official_name.'".',
+                route('sellers.show', $seller, false),
+                ['seller_id' => $seller->user_id]
+            );
+        }
+
         return redirect()->route('sellers.show', $seller)
             ->with('success', $resubmitted
                 ? 'Sent for review. An admin will check your new ID details.'
@@ -241,6 +261,7 @@ class SellerController extends Controller
         abort_unless(auth()->user()->isAdmin(), 403);
 
         $seller->update(['verification_status' => 'approved', 'reviewed_at' => now()]);
+        $this->clearApplicationNotices($seller);
 
         return back()->with('success', $seller->official_name.' is now an approved seller.');
     }
@@ -251,8 +272,19 @@ class SellerController extends Controller
         abort_unless(auth()->user()->isAdmin(), 403);
 
         $seller->update(['verification_status' => 'rejected', 'reviewed_at' => now()]);
+        $this->clearApplicationNotices($seller);
 
         return back()->with('danger', $seller->official_name.' was rejected.');
+    }
+
+    /** Once reviewed, the bell stops showing this application as new (for every admin). */
+    private function clearApplicationNotices(Seller $seller): void
+    {
+        DatabaseNotification::whereNull('read_at')
+            ->where('type', AdminEvent::class)
+            ->get()
+            ->filter(fn ($n) => ($n->data['seller_id'] ?? null) == $seller->user_id)
+            ->each->markAsRead();
     }
 
     /** The ID picture: only the admin and the owner may open it. */

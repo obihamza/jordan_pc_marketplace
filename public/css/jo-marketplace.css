@@ -484,3 +484,24 @@ body {
 .jo-side-link i { width: 1.25rem; text-align: center; font-size: 1.05rem; }
 .jo-toasts { z-index: 1100; }
 .jo-icon-btn.jo-icon-success:hover, .jo-icon-btn.jo-icon-success:focus-visible { background: rgba(25, 135, 84, .2); border-color: #198754; color: #4cd08a; }
+
+/* ================= Admin notifications ================= */
+.jo-side-alert {
+    display: flex; align-items: center; gap: .75rem; padding: .75rem; margin-bottom: 1rem;
+    border-radius: .6rem; text-decoration: none; color: var(--bs-body-color);
+    background: rgba(255, 193, 7, .12); border: 1px solid rgba(255, 193, 7, .45);
+}
+.jo-side-alert:hover { background: rgba(255, 193, 7, .2); color: #fff; }
+.jo-side-alert i:first-child { color: #ffc107; }
+
+.jo-bell-menu { width: min(92vw, 360px); }
+.jo-bell-list { max-height: 360px; overflow-y: auto; }
+.jo-bell-item {
+    display: flex; gap: .75rem; padding: .65rem 1rem; text-decoration: none; color: var(--bs-body-color);
+    border-bottom: 1px solid var(--jo-line);
+}
+.jo-bell-item:hover { background: var(--jo-surface-2); color: #fff; }
+.jo-bell-item i { font-size: 1.25rem; color: var(--bs-secondary-color); margin-top: .1rem; }
+.jo-bell-item.unread { background: rgba(255, 106, 0, .08); border-left: 3px solid var(--jo-orange); }
+.jo-bell-item.unread i { color: var(--jo-orange-light); }
+.jo-bell-time { font-size: .72rem; }

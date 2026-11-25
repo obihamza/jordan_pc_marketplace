@@ -23,10 +23,22 @@
             ['Addresses', 'addresses.index', 'addresses.*', 'bi-geo-alt'],
         ],
     ];
-    $pendingSellers = \App\Models\Seller::where('verification_status', 'pending')->count();
+    $pendingSellers = $pendingSellers ?? 0;
 @endphp
 
 <nav class="jo-side-nav" aria-label="Admin menu">
+    {{-- Notice: seller applications are waiting for the admin --}}
+    @if($pendingSellers)
+        <a href="{{ route('sellers.index') }}" class="jo-side-alert">
+            <i class="bi bi-person-badge-fill fs-4" aria-hidden="true"></i>
+            <span>
+                <strong>{{ $pendingSellers }} seller {{ Str::plural('application', $pendingSellers) }}</strong>
+                <small class="d-block">waiting for your approval</small>
+            </span>
+            <i class="bi bi-chevron-right ms-auto" aria-hidden="true"></i>
+        </a>
+    @endif
+
     @foreach($groups as $title => $links)
         <div class="jo-side-title">{{ $title }}</div>
         <ul class="nav flex-column mb-3">

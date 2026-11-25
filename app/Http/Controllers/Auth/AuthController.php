@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\AdminEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -64,6 +65,8 @@ class AuthController extends Controller
             'phone' => $validated['phone'] ?? null,
             'password_hash' => $validated['password'], // hashed by the model cast
         ]);
+
+        AdminEvent::send('user', 'New user', $user->name.' just joined JO-Marketplace.', route('users.show', $user, false));
 
         Auth::login($user);
         $request->session()->regenerate();

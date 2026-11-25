@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Notifications\AdminEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -193,6 +194,13 @@ class OrderController extends Controller
 
             return $order;
         });
+
+        AdminEvent::send(
+            'order',
+            'New order '.$order->order_number,
+            $me->name.' placed an order of '.number_format($order->fresh()->total_amount, 2).' JOD.',
+            route('orders.show', $order, false)
+        );
 
         return redirect()->route('orders.show', $order)
             ->with('success', 'Order placed successfully!');

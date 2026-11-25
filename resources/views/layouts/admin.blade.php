@@ -30,6 +30,25 @@
         </div>
 
         <div class="d-flex align-items-center gap-2">
+            {{-- Notification bell: new events for the admin --}}
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary position-relative jo-bell" type="button" id="joBell"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Notifications">
+                    <i class="bi bi-bell-fill" aria-hidden="true"></i>
+                    <span class="badge rounded-pill text-bg-danger position-absolute top-0 start-100 translate-middle jo-bell-count" id="joBellCount" style="display:none"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-0 jo-bell-menu" aria-labelledby="joBell">
+                    <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                        <strong>Notifications</strong>
+                        <form action="{{ route('notifications.read-all') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none">Mark all as read</button>
+                        </form>
+                    </div>
+                    <div id="joBellList" class="jo-bell-list"></div>
+                </div>
+            </div>
+
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ auth()->user()->name }}
@@ -67,6 +86,62 @@
     </div>
 
     @include('partials.chatbot')
+
+    <script>
+        // Bell: draws the list and re-checks for new events every 30 seconds.
+        (function () {
+            var icons = { seller_application: 'bi-person-badge', order: 'bi-bag-check', user: 'bi-person-plus' };
+            var feedUrl = @json(route('notifications.feed'));
+            var count = document.getElementById('joBellCount');
+            var list = document.getElementById('joBellList');
+
+            function render(feed) {
+                if (feed.unread > 0) {
+                    count.textContent = feed.unread > 9 ? '9+' : feed.unread;
+                    count.style.display = '';
+                } else {
+                    count.style.display = 'none';
+                }
+
+                list.innerHTML = '';
+                if (! feed.items.length) {
+                    var empty = document.createElement('div');
+                    empty.className = 'text-muted text-center py-4 small';
+                    empty.textContent = 'No notifications yet.';
+                    list.appendChild(empty);
+                    return;
+                }
+
+                feed.items.forEach(function (n) {
+                    var a = document.createElement('a');
+                    a.href = n.url;
+                    a.className = 'jo-bell-item' + (n.read ? '' : ' unread');
+
+                    var i = document.createElement('i');
+                    i.className = 'bi ' + (icons[n.kind] || 'bi-info-circle');
+
+                    var box = document.createElement('div');
+                    var t = document.createElement('div'); t.className = 'fw-semibold small'; t.textContent = n.title;
+                    var m = document.createElement('div'); m.className = 'small'; m.textContent = n.message;
+                    var w = document.createElement('div'); w.className = 'text-muted jo-bell-time'; w.textContent = n.time;
+                    box.appendChild(t); box.appendChild(m); box.appendChild(w);
+
+                    a.appendChild(i); a.appendChild(box);
+                    list.appendChild(a);   // textContent only: never inject HTML
+                });
+            }
+
+            render(@json($bellFeed));
+
+            setInterval(function () {
+                if (document.hidden) { return; }
+                fetch(feedUrl, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (feed) { if (feed) { render(feed); } })
+                    .catch(function () {});
+            }, 30000);
+        })();
+    </script>
     @stack('scripts')
 </body>
 </html>
