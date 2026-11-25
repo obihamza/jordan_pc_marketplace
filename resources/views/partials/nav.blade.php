@@ -34,6 +34,9 @@
 
                 {{-- Role menus --}}
                 @if($isAdmin)
+                    <li class="nav-item">
+                        <a class="nav-link text-orange fw-semibold" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
                         <ul class="dropdown-menu">
@@ -94,6 +97,9 @@
                             {{ $me->name }} <span class="badge text-bg-primary">{{ $roleLabel }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
+                            @if($isAdmin)
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin dashboard</a></li>
+                            @endif
                             <li><a class="dropdown-item" href="{{ route('users.show', $me) }}">My profile</a></li>
 
                             @unless($isAdmin)

@@ -430,3 +430,42 @@ body {
     font-size: .72rem;
     color: #8d8d95;
 }
+
+/* ================= Admin area (side bar + dashboard) ================= */
+.jo-admin-top { min-height: 56px; border-bottom: 1px solid var(--jo-line); }
+.jo-admin-shell { display: flex; align-items: flex-start; }
+.jo-admin-main { flex: 1 1 auto; min-width: 0; padding: 1.5rem; }
+
+.jo-admin-side { flex: 0 0 250px; width: 250px; }
+@media (min-width: 992px) {
+    .jo-admin-side {
+        position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
+        background: var(--jo-surface); border-right: 1px solid var(--jo-line);
+    }
+}
+@media (max-width: 991.98px) {
+    .jo-admin-side { background: var(--jo-surface); }
+    .jo-admin-main { padding: 1rem; }
+}
+
+.jo-side-nav { padding: 1rem .75rem; }
+.jo-side-title {
+    font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--bs-secondary-color); padding: 0 .75rem; margin-bottom: .35rem;
+}
+.jo-side-link {
+    display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; border-radius: .5rem;
+    color: var(--bs-body-color); text-decoration: none; border-left: 3px solid transparent;
+}
+.jo-side-link:hover { background: var(--jo-surface-2); color: #fff; }
+.jo-side-link.active { background: rgba(255, 106, 0, .14); color: var(--jo-orange-light); border-left-color: var(--jo-orange); font-weight: 600; }
+.jo-side-view { color: var(--jo-orange-light); }
+
+.jo-stat { height: 100%; }
+.jo-stat .jo-stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
+.jo-stat .jo-stat-label { color: var(--bs-secondary-color); font-size: .85rem; }
+.jo-stat .jo-stat-icon {
+    width: 42px; height: 42px; border-radius: .6rem; display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 106, 0, .15); color: var(--jo-orange-light); font-weight: 700;
+}
+.jo-chart-box { position: relative; height: 280px; }

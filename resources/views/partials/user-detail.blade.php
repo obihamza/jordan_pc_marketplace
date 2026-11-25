@@ -6,7 +6,7 @@
 @endphp
 
 <div class="row g-3">
-    <div class="col-lg-6">
+    <div class="{{ $user->seller ? 'col-lg-6' : 'col-12' }}">
         <div class="card h-100">
             <div class="card-header fw-semibold">Account</div>
             <div class="card-body">
@@ -25,29 +25,28 @@
                     'label' => $isOwn ? 'Delete my account' : 'Delete user',
                     'confirm' => $isOwn ? 'Delete your account?' : 'Delete this user?',
                 ])
+                @if($isOwn && ! $user->is_admin && ! $user->seller)
+                    <a href="{{ route('sellers.create') }}" class="btn btn-sm btn-warning ms-auto">Become a seller</a>
+                @endif
             </div>
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="card h-100">
-            <div class="card-header fw-semibold">Seller profile</div>
-            <div class="card-body">
-                @if($user->seller)
+    {{-- Seller profile: only shown when this user really is a seller --}}
+    @if($user->seller)
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Seller profile</div>
+                <div class="card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-4">Shop name</dt>
                         <dd class="col-sm-8"><a href="{{ route('sellers.show', $user->seller) }}" class="text-decoration-none">{{ $user->seller->official_name }}</a></dd>
                         <dt class="col-sm-4">National ID</dt><dd class="col-sm-8">{{ $user->seller->national_id }}</dd>
                     </dl>
-                @else
-                    <p class="text-muted mb-2">This account is not a seller.</p>
-                    @if($isOwn && ! $me->isAdmin())
-                        <a href="{{ route('sellers.create') }}" class="btn btn-sm btn-warning">Become a seller</a>
-                    @endif
-                @endif
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>
 
 <div class="card mt-3">

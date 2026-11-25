@@ -39,7 +39,8 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home'))
+        // Admins land on their dashboard; everyone else on the home page.
+        return redirect()->intended($user->isAdmin() ? route('admin.dashboard') : route('home'))
             ->with('success', 'Welcome back, '.$user->name.'!');
     }
 
