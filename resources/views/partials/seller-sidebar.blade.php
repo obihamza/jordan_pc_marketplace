@@ -20,15 +20,13 @@
             ['My addresses', 'addresses.index', 'addresses.*', 'bi-geo-alt'],
         ],
         'Account' => [
-            ['My profile', 'users.show', 'users.*', 'bi-person-circle'],
-            ['Seller profile', 'sellers.show', 'sellers.*', 'bi-shop'],
+            ['My profile', 'users.show', ['users.*', 'sellers.edit'], 'bi-person-circle'],
         ],
     ];
     $routeFor = function (string $name) {
         $me = auth()->user();
         return match ($name) {
             'users.show' => route('users.show', $me),
-            'sellers.show' => route('sellers.show', $me->seller),
             default => route($name),
         };
     };

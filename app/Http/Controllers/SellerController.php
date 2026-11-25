@@ -233,7 +233,8 @@ class SellerController extends Controller
             );
         }
 
-        return redirect()->route('sellers.show', $seller)
+        // Sellers manage their shop details from "My profile"; the admin returns to the seller's page.
+        return redirect()->route($me->isAdmin() ? 'sellers.show' : 'users.show', $me->isAdmin() ? $seller : $me)
             ->with('success', $resubmitted
                 ? 'Sent for review. An admin will check your new ID details.'
                 : 'Seller profile updated successfully!');

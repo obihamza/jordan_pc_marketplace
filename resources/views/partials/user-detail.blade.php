@@ -32,18 +32,58 @@
         </div>
     </div>
 
-    {{-- Seller profile: only shown when this user really is a seller --}}
+    {{-- Seller profile: only shown when this user really is a seller (or applied to be one) --}}
     @if($user->seller)
+        @php $seller = $user->seller; @endphp
         <div class="col-lg-6">
             <div class="card h-100">
-                <div class="card-header fw-semibold">Seller profile</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Seller profile</span>
+                    @include('partials.status-badge', ['status' => $seller->verification_status])
+                </div>
                 <div class="card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-4">Shop name</dt>
-                        <dd class="col-sm-8"><a href="{{ route('sellers.show', $user->seller) }}" class="text-decoration-none">{{ $user->seller->official_name }}</a></dd>
-                        <dt class="col-sm-4">National ID</dt><dd class="col-sm-8">{{ $user->seller->national_id }}</dd>
+                        <dd class="col-sm-8">
+                            @if($seller->isApproved())
+                                <a href="{{ route('sellers.show', $seller) }}" class="text-decoration-none">{{ $seller->official_name }}</a>
+                            @else
+                                {{ $seller->official_name }}
+                            @endif
+                        </dd>
+                        @if($isOwn || $me->isAdmin())
+                            <dt class="col-sm-4">National ID</dt><dd class="col-sm-8">{{ $seller->national_id }}</dd>
+                            <dt class="col-sm-4">ID picture</dt>
+                            <dd class="col-sm-8">
+                                @if($seller->national_id_image)
+                                    <a href="{{ route('sellers.national-id', $seller) }}" target="_blank" rel="noopener">
+                                        <img src="{{ route('sellers.national-id', $seller) }}" alt="National ID" class="img-thumbnail" style="max-height: 120px;">
+                                    </a>
+                                @else
+                                    <span class="text-muted">No picture uploaded.</span>
+                                @endif
+                            </dd>
+                        @endif
                     </dl>
+
+                    @if($isOwn && ! $seller->isApproved())
+                        <div class="alert alert-{{ $seller->isRejected() ? 'danger' : 'warning' }} py-2 small mt-3 mb-0">
+                            @if($seller->isRejected())
+                                Your application was rejected. Edit your details and upload a new ID picture to apply again.
+                            @else
+                                Pending review: an admin is checking your ID. You can list products once you are approved.
+                            @endif
+                        </div>
+                    @endif
                 </div>
+                @if($isOwn || $me->isAdmin())
+                    <div class="card-footer d-flex flex-wrap align-items-center gap-2">
+                        <a class="jo-icon-btn" href="{{ route('sellers.edit', $seller) }}" title="Edit seller profile" aria-label="Edit seller profile"><i class="bi bi-pencil-square"></i></a>
+                        @if($seller->isApproved())
+                            <a href="{{ route('sellers.show', $seller) }}" class="btn btn-sm btn-outline-secondary ms-auto"><i class="bi bi-shop"></i> Public shop page</a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     @endif

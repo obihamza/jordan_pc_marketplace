@@ -31,19 +31,6 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('sellers.*') ? 'active' : '' }}" href="{{ route('sellers.index') }}">Sellers</a>
                 </li>
-
-                {{-- Role menus --}}
-                @if($isSeller)
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Selling</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="{{ route('products.create') }}">List a product</a></li>
-                            <li><a class="dropdown-item" href="{{ route('product-images.index') }}">My product images</a></li>
-                            <li><a class="dropdown-item" href="{{ route('order-items.index') }}">Order items</a></li>
-                        </ul>
-                    </li>
-                @endif
             </ul>
 
             {{-- ============ Search bar ============ --}}
