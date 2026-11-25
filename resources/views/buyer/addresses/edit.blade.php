@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->user()?->isSeller() ? 'layouts.seller' : 'layouts.app')
 
 @section('title', 'Edit address')
 

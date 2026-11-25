@@ -263,6 +263,16 @@ class SellerController extends Controller
         $seller->update(['verification_status' => 'approved', 'reviewed_at' => now()]);
         $this->clearApplicationNotices($seller);
 
+        if ($seller->user) {
+            AdminEvent::sendTo(
+                $seller->user,
+                'seller_approved',
+                'You are now a seller!',
+                'Your application was approved. You can list your products now.',
+                route('seller.dashboard', [], false)
+            );
+        }
+
         return back()->with('success', $seller->official_name.' is now an approved seller.');
     }
 

@@ -37,6 +37,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Selling</a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}">Dashboard</a></li>
                             <li><a class="dropdown-item" href="{{ route('products.create') }}">List a product</a></li>
                             <li><a class="dropdown-item" href="{{ route('product-images.index') }}">My product images</a></li>
                             <li><a class="dropdown-item" href="{{ route('order-items.index') }}">Order items</a></li>
@@ -80,6 +81,8 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             @if($isAdmin)
                                 <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin dashboard</a></li>
+                            @elseif($isSeller)
+                                <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}">Seller dashboard</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('users.show', $me) }}">My profile</a></li>
 

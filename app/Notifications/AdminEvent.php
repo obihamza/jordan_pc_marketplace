@@ -7,8 +7,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 /**
- * Something the admin should know about (seller application, new order, new user).
- * Stored in the `notifications` table and shown in the bell of the admin top bar.
+ * Something an admin or seller should know about (seller application, new order, new user, approval...).
+ * Stored in the `notifications` table and shown in the bell of the dashboard top bar.
  */
 class AdminEvent extends Notification
 {
@@ -27,6 +27,12 @@ class AdminEvent extends Notification
         $admins = User::where('is_admin', true)->get();
 
         NotificationFacade::send($admins, new static($kind, $title, $message, $url, $extra));
+    }
+
+    /** Tell one specific user (for example a seller about a new order). */
+    public static function sendTo(User $user, string $kind, string $title, string $message, string $url, array $extra = []): void
+    {
+        NotificationFacade::send($user, new static($kind, $title, $message, $url, $extra));
     }
 
     public function via(object $notifiable): array

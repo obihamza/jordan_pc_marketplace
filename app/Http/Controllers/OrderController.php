@@ -202,6 +202,22 @@ class OrderController extends Controller
             route('orders.show', $order, false)
         );
 
+        // Each seller whose products are in the order hears about it.
+        $order->load('items.seller.user');
+        $order->items->groupBy('seller_id')->each(function ($lines) use ($order, $me) {
+            $sellerUser = $lines->first()->seller?->user;
+
+            if ($sellerUser && $sellerUser->id !== $me->id) {
+                AdminEvent::sendTo(
+                    $sellerUser,
+                    'order',
+                    'New order '.$order->order_number,
+                    $me->name.' ordered '.$lines->sum('quantity').' of your item(s).',
+                    route('order-items.index', [], false)
+                );
+            }
+        });
+
         return redirect()->route('orders.show', $order)
             ->with('success', 'Order placed successfully!');
     }

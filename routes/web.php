@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Seller home (approved sellers only)
+    Route::get('/seller', [SellerDashboardController::class, 'index'])->name('seller.dashboard');
 
     // Admin bell
     Route::get('/notifications/feed', [NotificationController::class, 'feed'])->name('notifications.feed');

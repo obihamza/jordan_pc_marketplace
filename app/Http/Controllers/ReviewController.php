@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Notifications\AdminEvent;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -90,6 +91,18 @@ class ReviewController extends Controller
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
         ]);
+
+        // Tell the seller about the new review.
+        $sellerUser = $product->seller?->user;
+        if ($sellerUser) {
+            AdminEvent::sendTo(
+                $sellerUser,
+                'review',
+                'New review on '.$product->name,
+                $me->name.' gave '.$validated['rating'].'/5.',
+                route('reviews.index', [], false)
+            );
+        }
 
         return redirect()->route('reviews.index')
             ->with('success', 'Review added successfully!');

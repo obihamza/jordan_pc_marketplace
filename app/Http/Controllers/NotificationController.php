@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
-/** The admin's bell: list, open (marks as read) and "mark all as read". */
+/** The bell of admins and sellers: list, open (marks as read) and "mark all as read". */
 class NotificationController extends Controller
 {
     /** What the bell shows (also used for the first render of the page). */
@@ -28,24 +28,24 @@ class NotificationController extends Controller
     /** Polled by the bell so new events show up without reloading. */
     public function feed(): JsonResponse
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin() || auth()->user()->isSeller(), 403);
 
         return response()->json(self::payload(auth()->user()));
     }
 
     public function open(string $id)
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin() || auth()->user()->isSeller(), 403);
 
         $notification = auth()->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return redirect($notification->data['url'] ?? route('admin.dashboard'));
+        return redirect($notification->data['url'] ?? route('home'));
     }
 
     public function readAll()
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin() || auth()->user()->isSeller(), 403);
 
         auth()->user()->unreadNotifications->markAsRead();
 
