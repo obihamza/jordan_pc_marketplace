@@ -2,12 +2,13 @@
 
 @section('title', 'Welcome')
 
-@section('content')
+@section('hero')
 @php($me = auth()->user())
 
 {{-- ============================== HERO + BEST SELLERS ============================== --}}
-<section class="jo-hero rounded-4 p-4 p-lg-5 mb-5">
-    <div class="row align-items-center g-4 g-lg-5">
+<section class="jo-hero">
+    <div class="container jo-hero-inner">
+    <div class="row align-items-center g-4 g-lg-5 w-100">
 
         {{-- Left: greeting --}}
         <div class="col-lg-7">
@@ -70,7 +71,7 @@
 
                             <div class="flex-grow-1 min-w-0">
                                 <a href="{{ route('products.show', $product) }}"
-                                   class="fw-semibold text-dark text-decoration-none text-truncate d-block">{{ $product->name }}</a>
+                                   class="fw-semibold text-body text-decoration-none text-truncate d-block">{{ $product->name }}</a>
                                 <div class="small text-muted text-truncate">
                                     {{ $product->category?->name }}
                                     @if($product->sold_count)
@@ -88,10 +89,17 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <a href="#categories" class="jo-scroll d-none d-lg-flex" aria-label="Scroll to categories">&darr;</a>
 </section>
+@endsection
+
+@section('content')
+@php($me = auth()->user())
 
 {{-- ============================== SHOP BY CATEGORY ============================== --}}
-<section class="mb-5">
+<section class="mb-5" id="categories">
     <div class="d-flex justify-content-between align-items-end mb-4">
         <h2 class="h3 jo-section-title">Shop by category</h2>
         <a href="{{ route('categories.index') }}" class="text-decoration-none">All categories &rarr;</a>
@@ -104,7 +112,7 @@
                     <div class="card jo-category h-100 text-center">
                         <div class="card-body py-4">
                             <div class="jo-category-icon mb-3">{{ mb_strtoupper(mb_substr($category->name, 0, 1)) }}</div>
-                            <div class="fw-semibold text-dark">{{ $category->name }}</div>
+                            <div class="fw-semibold text-body">{{ $category->name }}</div>
                             <div class="small text-muted">
                                 {{ $category->products_count }} {{ \Illuminate\Support\Str::plural('item', $category->products_count) }}
                             </div>

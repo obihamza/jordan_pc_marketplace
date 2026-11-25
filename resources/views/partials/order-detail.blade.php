@@ -53,7 +53,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between"><span>Subtotal</span><span>{{ number_format($order->subtotal, 2) }} JOD</span></li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span>Discount @if($order->coupon)<span class="badge text-bg-light border">{{ $order->coupon->code }}</span>@endif</span>
+                    <span>Discount @if($order->coupon)<span class="badge text-bg-secondary">{{ $order->coupon->code }}</span>@endif</span>
                     <span>- {{ number_format($order->discount_amount, 2) }} JOD</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between"><span>Shipping</span><span>{{ number_format($order->shipping_cost, 2) }} JOD</span></li>

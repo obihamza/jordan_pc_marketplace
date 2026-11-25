@@ -9,56 +9,97 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $me = auth()->user();
+
+        // For the category dropdown in the filter bar.
+        $categories = Category::orderBy('name')->get();
 
         // Not logged in: the public product list.
         if (! $me) {
 
-            $products = Product::with(['category', 'primaryImage'])
-                ->available()
-                ->latest()
-                ->paginate(15);
+            $products = $this->applyFilters(
+                Product::with(['category', 'primaryImage'])->available(),
+                $request
+            )->paginate(15)->withQueryString();
 
-            return view('guest.products.index', compact('products'));
+            return view('guest.products.index', compact('products', 'categories'));
         }
 
         if ($me->isAdmin()) {
 
-            $products = Product::with(['seller', 'category', 'primaryImage'])
-                ->latest()
-                ->paginate(15);
+            $products = $this->applyFilters(
+                Product::with(['seller', 'category', 'primaryImage']),
+                $request
+            )->paginate(15)->withQueryString();
 
-            return view('admin.products.index', compact('products'));
+            return view('admin.products.index', compact('products', 'categories'));
 
         } elseif ($me->isSeller()) {
 
             // The seller's own listings...
-            $products = Product::with(['category', 'primaryImage'])
-                ->where('seller_id', $me->id)
-                ->latest()
-                ->paginate(15);
+            $products = $this->applyFilters(
+                Product::with(['category', 'primaryImage'])->where('seller_id', $me->id),
+                $request
+            )->paginate(15)->withQueryString();
 
             // ...and, because a seller is also a buyer, the marketplace
-            // (other sellers' available products).
-            $marketplace = Product::with(['category', 'primaryImage'])
-                ->available()
-                ->where('seller_id', '!=', $me->id)
-                ->latest()
-                ->paginate(15, ['*'], 'market_page');
+            // (other sellers' available products). Same filters apply.
+            $marketplace = $this->applyFilters(
+                Product::with(['category', 'primaryImage'])
+                    ->available()
+                    ->where('seller_id', '!=', $me->id),
+                $request
+            )->paginate(15, ['*'], 'market_page')->withQueryString();
 
-            return view('seller.products.index', compact('products', 'marketplace'));
+            return view('seller.products.index', compact('products', 'marketplace', 'categories'));
 
         } else {
 
-            $products = Product::with(['category', 'primaryImage'])
-                ->available()
-                ->latest()
-                ->paginate(15);
+            $products = $this->applyFilters(
+                Product::with(['category', 'primaryImage'])->available(),
+                $request
+            )->paginate(15)->withQueryString();
 
-            return view('buyer.products.index', compact('products'));
+            return view('buyer.products.index', compact('products', 'categories'));
         }
+    }
+
+    /**
+     * The product filter bar (?q=, ?category_id=, ?min_price=, ?max_price=, ?sort=).
+     * Used by every role's product list, so they all filter the same way.
+     */
+    private function applyFilters($query, Request $request)
+    {
+        // Search by name
+        if ($request->filled('q')) {
+            $query->where('name', 'like', '%'.trim($request->input('q')).'%');
+        }
+
+        // Category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // Price range (ignored when not a number; swapped if min > max)
+        $min = is_numeric($request->input('min_price')) ? (float) $request->input('min_price') : null;
+        $max = is_numeric($request->input('max_price')) ? (float) $request->input('max_price') : null;
+
+        if ($min !== null && $max !== null && $min > $max) {
+            [$min, $max] = [$max, $min];
+        }
+        if ($min !== null) {
+            $query->where('price', '>=', $min);
+        }
+        if ($max !== null) {
+            $query->where('price', '<=', $max);
+        }
+
+        // Newest (default) or oldest first
+        $direction = $request->input('sort') === 'oldest' ? 'asc' : 'desc';
+
+        return $query->orderBy('created_at', $direction)->orderBy('id', $direction);
     }
 
     public function create()

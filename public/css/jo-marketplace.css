@@ -1,25 +1,37 @@
 /*
- * JO-Marketplace theme: orange + black, on top of Bootstrap 5.3.
- * Loaded AFTER the Bootstrap CSS in layouts/app.blade.php, so it only
- * overrides Bootstrap's colour variables and a few components.
+ * JO-Marketplace theme: DARK, orange + black, on top of Bootstrap 5.3.
+ *
+ * The page sets <html data-bs-theme="dark">, so Bootstrap's own dark palette is
+ * active. This file is loaded AFTER the Bootstrap CSS and only tunes it to the
+ * brand: near-black surfaces, orange accent, black text on orange buttons.
  */
 
-:root {
+:root,
+[data-bs-theme="dark"] {
     --jo-orange: #ff6a00;
+    --jo-orange-light: #ff8a3d;
     --jo-orange-dark: #e05a00;
     --jo-orange-darker: #b84a00;
-    --jo-orange-soft: #fff1e6;
-    --jo-black: #111111;
-    --jo-black-soft: #1c1c1c;
+    --jo-black: #0a0a0a;
 
-    /* Re-point Bootstrap's "primary" and links at the brand orange */
+    /* Surfaces */
+    --jo-surface: #17171a;
+    --jo-surface-2: #202024;
+    --jo-line: #2b2b30;
+
+    --bs-body-bg: #0e0e10;
+    --bs-body-color: #e8e8ea;
+    --bs-secondary-bg: var(--jo-surface-2);
+    --bs-tertiary-bg: var(--jo-surface);
+    --bs-border-color: var(--jo-line);
+
+    /* Bootstrap "primary" and links -> brand orange (light enough to read on dark) */
     --bs-primary: #ff6a00;
     --bs-primary-rgb: 255, 106, 0;
-    --bs-link-color: #e05a00;
-    --bs-link-color-rgb: 224, 90, 0;
-    --bs-link-hover-color: #b84a00;
-    --bs-link-hover-color-rgb: 184, 74, 0;
-    --bs-body-bg: #f7f6f4;
+    --bs-link-color: var(--jo-orange-light);
+    --bs-link-color-rgb: 255, 138, 61;
+    --bs-link-hover-color: #ffa766;
+    --bs-link-hover-color-rgb: 255, 167, 102;
 }
 
 body {
@@ -28,68 +40,104 @@ body {
 
 .text-orange { color: var(--jo-orange) !important; }
 .bg-orange   { background-color: var(--jo-orange) !important; }
-.bg-orange-soft { background-color: var(--jo-orange-soft) !important; }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons: orange with BLACK text (best contrast) ---------- */
 .btn-primary,
 .btn-warning {
-    --bs-btn-color: #fff;
+    --bs-btn-color: #111;
     --bs-btn-bg: var(--jo-orange);
     --bs-btn-border-color: var(--jo-orange);
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: var(--jo-orange-dark);
-    --bs-btn-hover-border-color: var(--jo-orange-dark);
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: var(--jo-orange-darker);
-    --bs-btn-active-border-color: var(--jo-orange-darker);
-    --bs-btn-disabled-color: #fff;
+    --bs-btn-hover-color: #111;
+    --bs-btn-hover-bg: var(--jo-orange-light);
+    --bs-btn-hover-border-color: var(--jo-orange-light);
+    --bs-btn-active-color: #111;
+    --bs-btn-active-bg: var(--jo-orange-dark);
+    --bs-btn-active-border-color: var(--jo-orange-dark);
+    --bs-btn-disabled-color: #111;
     --bs-btn-disabled-bg: var(--jo-orange);
     --bs-btn-disabled-border-color: var(--jo-orange);
     --bs-btn-focus-shadow-rgb: 255, 106, 0;
+    font-weight: 600;
 }
 
 .btn-outline-primary {
-    --bs-btn-color: var(--jo-orange-dark);
+    --bs-btn-color: var(--jo-orange-light);
     --bs-btn-border-color: var(--jo-orange);
-    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-color: #111;
     --bs-btn-hover-bg: var(--jo-orange);
     --bs-btn-hover-border-color: var(--jo-orange);
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: var(--jo-orange-dark);
-    --bs-btn-active-border-color: var(--jo-orange-dark);
+    --bs-btn-active-color: #111;
+    --bs-btn-active-bg: var(--jo-orange-light);
+    --bs-btn-active-border-color: var(--jo-orange-light);
     --bs-btn-focus-shadow-rgb: 255, 106, 0;
 }
 
 .btn-dark {
-    --bs-btn-bg: var(--jo-black);
-    --bs-btn-border-color: var(--jo-black);
-    --bs-btn-hover-bg: #000;
-    --bs-btn-hover-border-color: #000;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #000;
+    --bs-btn-border-color: #000;
+    --bs-btn-hover-bg: #1a1a1a;
+    --bs-btn-hover-border-color: #1a1a1a;
 }
 
-.text-bg-primary { background-color: var(--jo-orange) !important; color: #fff !important; }
+.text-bg-primary { background-color: var(--jo-orange) !important; color: #111 !important; }
 
-/* ---------- Black surfaces ---------- */
-.bg-dark { background-color: var(--jo-black) !important; }
-
-.navbar.bg-dark {
-    border-bottom: 3px solid var(--jo-orange);
+/* ---------- Cards, lists, tables, dropdowns on dark ---------- */
+.card {
+    --bs-card-bg: var(--jo-surface);
+    --bs-card-border-color: var(--jo-line);
+    --bs-card-cap-bg: rgba(255, 255, 255, .04);
 }
 
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
-    color: var(--jo-orange);
+.list-group {
+    --bs-list-group-bg: transparent;
+    --bs-list-group-border-color: var(--jo-line);
 }
 
-.navbar-dark .navbar-nav .nav-link.active {
-    color: var(--jo-orange);
-    font-weight: 600;
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--jo-line);
 }
 
-/* ---------- Forms, pagination ---------- */
+/* Table headers use class="table-light" in the views; make them a dark header row */
+.table-light {
+    --bs-table-color: #f1f1f2;
+    --bs-table-bg: var(--jo-surface-2);
+    --bs-table-border-color: var(--jo-line);
+    --bs-table-striped-bg: #26262b;
+    --bs-table-striped-color: #f1f1f2;
+    --bs-table-active-bg: #2a2a2f;
+    --bs-table-active-color: #f1f1f2;
+    --bs-table-hover-bg: #2a2a2f;
+    --bs-table-hover-color: #f1f1f2;
+    color: var(--bs-table-color);
+    border-color: var(--bs-table-border-color);
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-bg-state: rgba(255, 106, 0, .08);
+    --bs-table-color-state: var(--bs-body-color);
+}
+
+.dropdown-menu {
+    --bs-dropdown-bg: var(--jo-surface);
+    --bs-dropdown-border-color: var(--jo-line);
+    --bs-dropdown-link-hover-bg: rgba(255, 106, 0, .15);
+    --bs-dropdown-link-active-bg: var(--jo-orange);
+    --bs-dropdown-link-active-color: #111;
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+    background-color: #101013;
+    border-color: #34343a;
+}
+
 .form-control:focus,
 .form-select:focus {
-    border-color: #ff9a52;
+    background-color: #101013;
+    border-color: var(--jo-orange-light);
     box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
 }
 
@@ -99,23 +147,52 @@ body {
 }
 
 .form-check-input:focus {
-    border-color: #ff9a52;
+    border-color: var(--jo-orange-light);
     box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
 }
 
-.page-link { color: var(--jo-orange-dark); }
-.page-link:hover { color: var(--jo-orange-darker); }
-.page-item.active .page-link {
-    background-color: var(--jo-orange);
-    border-color: var(--jo-orange);
-    color: #fff;
+/* ---------- Pagination ---------- */
+.pagination {
+    --bs-pagination-color: var(--jo-orange-light);
+    --bs-pagination-hover-color: #ffa766;
+    --bs-pagination-active-bg: var(--jo-orange);
+    --bs-pagination-active-border-color: var(--jo-orange);
+    --bs-pagination-active-color: #111;
 }
 
-.table-light { --bs-table-bg: #fff4ea; }
+/* ---------- Black surfaces / navbar ---------- */
+.bg-dark { background-color: var(--jo-black) !important; }
 
-/* ---------- Brand bits ---------- */
+.navbar.bg-dark {
+    border-bottom: 3px solid var(--jo-orange);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: var(--jo-orange-light);
+}
+
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .show > .nav-link {
+    color: var(--jo-orange);
+    font-weight: 600;
+}
+
 .jo-logo { height: 36px; width: auto; }
 
+.jo-nav-search input { min-width: 190px; }
+
+/* ---------- Flash message (floats over any page, including the hero) ---------- */
+.jo-flash {
+    position: fixed;
+    top: calc(var(--jo-nav-h, 64px) + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92vw, 520px);
+    z-index: 1080;
+}
+
+/* ---------- Headings ---------- */
 .jo-section-title {
     position: relative;
     padding-bottom: .5rem;
@@ -134,12 +211,48 @@ body {
 }
 
 /* ---------- Landing page ---------- */
+
+/* The hero fills the whole first screen: viewport height minus the navbar.
+   --jo-nav-h is measured by a small script in the layout. */
 .jo-hero {
+    position: relative;
+    min-height: calc(100vh - var(--jo-nav-h, 64px));
+    min-height: calc(100svh - var(--jo-nav-h, 64px));
+    display: flex;
+    align-items: center;
     color: #fff;
     background:
-        radial-gradient(circle at 85% 10%, rgba(255, 106, 0, .45), transparent 55%),
-        radial-gradient(circle at 0% 100%, rgba(255, 106, 0, .18), transparent 45%),
-        var(--jo-black);
+        radial-gradient(circle at 85% 15%, rgba(255, 106, 0, .40), transparent 55%),
+        radial-gradient(circle at 5% 95%, rgba(255, 106, 0, .16), transparent 45%),
+        #050505;
+}
+
+.jo-hero-inner {
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
+}
+
+.jo-scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 106, 0, .6);
+    color: var(--jo-orange);
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    animation: jo-bounce 1.8s ease-in-out infinite;
+}
+.jo-scroll:hover { background: var(--jo-orange); color: #111; }
+
+@keyframes jo-bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, 6px); }
 }
 
 .jo-pill {
@@ -154,18 +267,18 @@ body {
 
 .jo-bestsellers .card-header {
     background: var(--jo-orange);
-    color: #fff;
+    color: #111;
     font-weight: 700;
 }
-.jo-bestsellers .card-header a { color: #fff; opacity: .9; }
+.jo-bestsellers .card-header a { color: #111; }
 
 .jo-rank {
     flex: 0 0 auto;
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: var(--jo-black);
-    color: #fff;
+    background: var(--jo-orange);
+    color: #111;
     font-size: .8rem;
     font-weight: 700;
     display: inline-flex;
@@ -179,26 +292,25 @@ body {
     height: 56px;
     border-radius: .5rem;
     object-fit: cover;
-    background: #eee;
+    background: #2a2a2e;
 }
 
 .min-w-0 { min-width: 0; }
 
 .jo-category {
-    border: 1px solid #ececec;
     transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 .jo-category:hover {
     transform: translateY(-3px);
     border-color: var(--jo-orange);
-    box-shadow: 0 .5rem 1rem rgba(255, 106, 0, .15);
+    box-shadow: 0 .5rem 1.25rem rgba(255, 106, 0, .18);
 }
 .jo-category-icon {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: var(--jo-orange-soft);
-    color: var(--jo-orange-dark);
+    background: rgba(255, 106, 0, .15);
+    color: var(--jo-orange-light);
     font-size: 1.4rem;
     font-weight: 800;
     display: inline-flex;
@@ -210,8 +322,8 @@ body {
     width: 56px;
     height: 56px;
     border-radius: 14px;
-    background: var(--jo-black);
-    color: var(--jo-orange);
+    background: rgba(255, 106, 0, .15);
+    color: var(--jo-orange-light);
     font-size: 1.6rem;
     display: inline-flex;
     align-items: center;
@@ -220,16 +332,101 @@ body {
 
 .jo-cta {
     background: var(--jo-orange);
-    color: #fff;
+    color: #111;
 }
 
 /* ---------- Footer ---------- */
 .jo-footer {
     background: var(--jo-black);
-    color: rgba(255, 255, 255, .75);
+    color: rgba(255, 255, 255, .7);
     border-top: 4px solid var(--jo-orange);
 }
 .jo-footer h2 { color: #fff; font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; }
-.jo-footer a { color: rgba(255, 255, 255, .75); text-decoration: none; }
+.jo-footer a { color: rgba(255, 255, 255, .7); text-decoration: none; }
 .jo-footer a:hover { color: var(--jo-orange); }
 .jo-footer hr { border-color: rgba(255, 255, 255, .15); }
+
+/* ---------- Chat widget (bottom right, every page) ---------- */
+.jo-chat-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 58px;
+    height: 58px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--jo-orange);
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 .5rem 1.25rem rgba(255, 106, 0, .45);
+    z-index: 1090;
+    transition: transform .15s ease, background .15s ease;
+}
+.jo-chat-fab:hover { background: var(--jo-orange-light); transform: scale(1.06); }
+.jo-chat-fab:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+.jo-chat-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 92px;
+    width: 360px;
+    max-width: calc(100vw - 40px);
+    height: 480px;
+    max-height: calc(100vh - 120px);
+    display: none;
+    flex-direction: column;
+    background: var(--jo-surface);
+    border: 1px solid var(--jo-line);
+    border-radius: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .6);
+    overflow: hidden;
+    z-index: 1090;
+}
+.jo-chat-panel.open { display: flex; }
+
+.jo-chat-head {
+    background: var(--jo-orange);
+    color: #111;
+    padding: .75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+.jo-chat-head img { width: 32px; height: 32px; }
+.jo-chat-head .btn-close { margin-left: auto; filter: none; opacity: .8; }
+
+.jo-chat-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.jo-chat-msg {
+    max-width: 85%;
+    padding: .5rem .8rem;
+    border-radius: 1rem;
+    font-size: .92rem;
+    line-height: 1.35;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+.jo-chat-msg.bot  { align-self: flex-start; background: var(--jo-surface-2); border-bottom-left-radius: .25rem; }
+.jo-chat-msg.user { align-self: flex-end; background: var(--jo-orange); color: #111; border-bottom-right-radius: .25rem; }
+.jo-chat-msg.typing { color: #9a9aa2; font-style: italic; }
+
+.jo-chat-form {
+    display: flex;
+    gap: .5rem;
+    padding: .75rem;
+    border-top: 1px solid var(--jo-line);
+}
+.jo-chat-note {
+    padding: 0 .75rem .6rem;
+    font-size: .72rem;
+    color: #8d8d95;
+}

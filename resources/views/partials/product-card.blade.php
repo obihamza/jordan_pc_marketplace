@@ -17,7 +17,7 @@
         </h2>
         <div class="small text-muted mb-2">
             {{ $product->category?->name }}
-            <span class="badge text-bg-light border">{{ ucfirst($product->condition_type) }}</span>
+            <span class="badge text-bg-secondary">{{ ucfirst($product->condition_type) }}</span>
         </div>
         <div class="fw-bold mb-2">{{ number_format($product->price, 2) }} JOD</div>
 

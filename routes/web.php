@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -76,3 +77,12 @@ Route::middleware('auth')->group(function () {
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 Route::resource('categories', CategoryController::class)->only(['index', 'show']);
 Route::resource('sellers', SellerController::class)->only(['index', 'show']);
+
+/*
+|--------------------------------------------------------------------------
+| Chat widget endpoint (open to guests too; see config/chatbot.php)
+|--------------------------------------------------------------------------
+*/
+Route::post('/chatbot/message', [ChatbotController::class, 'message'])
+    ->middleware('throttle:20,1')
+    ->name('chatbot.message');

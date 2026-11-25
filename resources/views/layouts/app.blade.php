@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+{{-- The whole project uses Bootstrap's dark theme --}}
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +17,9 @@
 
     @include('partials.nav')
 
+    {{-- Full-width section shown before the page content (the landing page hero uses it) --}}
+    @yield('hero')
+
     <main class="container py-4 flex-grow-1">
         @include('partials.alerts')
 
@@ -24,6 +28,23 @@
 
     @include('partials.footer')
 
+    {{-- Floating chat button (bottom right) on every page --}}
+    @include('partials.chatbot')
+
+    <script>
+        // Let the hero fill exactly the first screen: viewport height minus the navbar height.
+        (function () {
+            function setNavHeight() {
+                var nav = document.querySelector('.navbar');
+                if (nav) {
+                    document.documentElement.style.setProperty('--jo-nav-h', nav.offsetHeight + 'px');
+                }
+            }
+            setNavHeight();
+            window.addEventListener('load', setNavHeight);
+            window.addEventListener('resize', setNavHeight);
+        })();
+    </script>
     @stack('scripts')
 </body>
 </html>

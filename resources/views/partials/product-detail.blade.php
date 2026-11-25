@@ -29,8 +29,8 @@
         <h1 class="h3">{{ $product->name }}</h1>
 
         <div class="mb-2">
-            <span class="badge text-bg-light border">{{ $product->category?->name }}</span>
-            <span class="badge text-bg-light border">{{ ucfirst($product->condition_type) }}</span>
+            <span class="badge text-bg-secondary">{{ $product->category?->name }}</span>
+            <span class="badge text-bg-secondary">{{ ucfirst($product->condition_type) }}</span>
             @include('partials.status-badge', ['status' => $product->listing_status])
         </div>
 
