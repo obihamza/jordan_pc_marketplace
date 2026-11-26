@@ -3,7 +3,7 @@
     $me = auth()->user();
     $isOwn = $me && $product->seller_id == $me->id;
 @endphp
-<div class="card h-100 shadow-sm">
+<div class="card h-100 jo-product">
     @if($product->primaryImage)
         <img src="{{ asset('storage/'.$product->primaryImage->image_path) }}" class="card-img-top"
              alt="{{ $product->name }}" style="height: 180px; object-fit: cover;">

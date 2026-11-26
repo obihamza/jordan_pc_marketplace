@@ -1,45 +1,42 @@
 /*
- * JO-Marketplace theme: DARK, orange + black, on top of Bootstrap 5.3.
- *
- * The page sets <html data-bs-theme="dark">, so Bootstrap's own dark palette is
- * active. This file is loaded AFTER the Bootstrap CSS and only tunes it to the
- * brand: near-black surfaces, orange accent, black text on orange buttons.
+ * JO-Marketplace theme: LIGHT storefront + dashboards with a black side bar,
+ * orange accents, on top of Bootstrap 5.3 (data-bs-theme="light").
+ * Loaded AFTER the Bootstrap CSS; it only tunes Bootstrap to the brand.
  */
 
 :root,
-[data-bs-theme="dark"] {
+[data-bs-theme="light"] {
     --jo-orange: #ff6a00;
     --jo-orange-light: #ff8a3d;
     --jo-orange-dark: #e05a00;
-    --jo-orange-darker: #b84a00;
-    --jo-black: #0a0a0a;
+    --jo-orange-text: #c24d00;          /* orange that is readable as text on white */
+    --jo-orange-soft: #fff1e6;
+    --jo-black: #0e0e10;
 
-    /* Surfaces */
-    --jo-surface: #17171a;
-    --jo-surface-2: #202024;
-    --jo-line: #2b2b30;
+    --jo-bg: #f6f5f2;
+    --jo-surface: #ffffff;
+    --jo-surface-2: #f3f1ed;
+    --jo-line: #e8e5df;
 
-    --bs-body-bg: #0e0e10;
-    --bs-body-color: #e8e8ea;
-    --bs-secondary-bg: var(--jo-surface-2);
-    --bs-tertiary-bg: var(--jo-surface);
+    --bs-body-bg: var(--jo-bg);
+    --bs-body-color: #1d1d21;
+    --bs-secondary-color: #6c6c75;
     --bs-border-color: var(--jo-line);
 
-    /* Bootstrap "primary" and links -> brand orange (light enough to read on dark) */
     --bs-primary: #ff6a00;
     --bs-primary-rgb: 255, 106, 0;
-    --bs-link-color: var(--jo-orange-light);
-    --bs-link-color-rgb: 255, 138, 61;
-    --bs-link-hover-color: #ffa766;
-    --bs-link-hover-color-rgb: 255, 167, 102;
+    --bs-link-color: var(--jo-orange-text);
+    --bs-link-color-rgb: 194, 77, 0;
+    --bs-link-hover-color: #962f00;
+    --bs-link-hover-color-rgb: 150, 47, 0;
 }
 
-body {
-    background-color: var(--bs-body-bg);
-}
+body { background-color: var(--jo-bg); }
 
 .text-orange { color: var(--jo-orange) !important; }
 .bg-orange   { background-color: var(--jo-orange) !important; }
+.min-w-0     { min-width: 0; }
+.jo-logo     { height: 36px; width: auto; }
 
 /* ---------- Buttons: orange with BLACK text (best contrast) ---------- */
 .btn-primary,
@@ -61,7 +58,7 @@ body {
 }
 
 .btn-outline-primary {
-    --bs-btn-color: var(--jo-orange-light);
+    --bs-btn-color: var(--jo-orange-text);
     --bs-btn-border-color: var(--jo-orange);
     --bs-btn-hover-color: #111;
     --bs-btn-hover-bg: var(--jo-orange);
@@ -74,434 +71,300 @@ body {
 
 .btn-dark {
     --bs-btn-color: #fff;
-    --bs-btn-bg: #000;
-    --bs-btn-border-color: #000;
-    --bs-btn-hover-bg: #1a1a1a;
-    --bs-btn-hover-border-color: #1a1a1a;
+    --bs-btn-bg: #111;
+    --bs-btn-border-color: #111;
+    --bs-btn-hover-bg: #2a2a2e;
+    --bs-btn-hover-border-color: #2a2a2e;
 }
 
 .text-bg-primary { background-color: var(--jo-orange) !important; color: #111 !important; }
 
-/* ---------- Cards, lists, tables, dropdowns on dark ---------- */
+/* ---------- Cards, lists, tables, dropdowns ---------- */
 .card {
     --bs-card-bg: var(--jo-surface);
     --bs-card-border-color: var(--jo-line);
-    --bs-card-cap-bg: rgba(255, 255, 255, .04);
+    --bs-card-cap-bg: var(--jo-surface);
+    --bs-card-border-radius: 14px;
+    --bs-card-inner-border-radius: 13px;
+    box-shadow: 0 1px 2px rgba(20, 20, 20, .04), 0 4px 14px rgba(20, 20, 20, .04);
 }
+.card-header { font-weight: 600; border-bottom-color: var(--jo-line); }
+.card-footer { background: var(--jo-surface); border-top-color: var(--jo-line); }
 
-.list-group {
-    --bs-list-group-bg: transparent;
-    --bs-list-group-border-color: var(--jo-line);
-}
+.list-group { --bs-list-group-border-color: var(--jo-line); }
 
-.table {
-    --bs-table-bg: transparent;
-    --bs-table-border-color: var(--jo-line);
-}
-
-/* Table headers use class="table-light" in the views; make them a dark header row */
+.table { --bs-table-bg: transparent; --bs-table-border-color: var(--jo-line); }
 .table-light {
-    --bs-table-color: #f1f1f2;
+    --bs-table-color: #4a4a52;
     --bs-table-bg: var(--jo-surface-2);
     --bs-table-border-color: var(--jo-line);
-    --bs-table-striped-bg: #26262b;
-    --bs-table-striped-color: #f1f1f2;
-    --bs-table-active-bg: #2a2a2f;
-    --bs-table-active-color: #f1f1f2;
-    --bs-table-hover-bg: #2a2a2f;
-    --bs-table-hover-color: #f1f1f2;
-    color: var(--bs-table-color);
-    border-color: var(--bs-table-border-color);
+    --bs-table-hover-bg: var(--jo-surface-2);
+    --bs-table-hover-color: #4a4a52;
+    font-size: .85rem;
 }
-
 .table-hover > tbody > tr:hover > * {
-    --bs-table-bg-state: rgba(255, 106, 0, .08);
-    --bs-table-color-state: var(--bs-body-color);
+    --bs-table-bg-state: var(--jo-orange-soft);
 }
+.card > .table-responsive > .table { margin-bottom: 0; }
 
 .dropdown-menu {
-    --bs-dropdown-bg: var(--jo-surface);
     --bs-dropdown-border-color: var(--jo-line);
-    --bs-dropdown-link-hover-bg: rgba(255, 106, 0, .15);
+    --bs-dropdown-border-radius: 12px;
+    --bs-dropdown-link-hover-bg: var(--jo-orange-soft);
     --bs-dropdown-link-active-bg: var(--jo-orange);
     --bs-dropdown-link-active-color: #111;
+    box-shadow: 0 10px 30px rgba(20, 20, 20, .12);
 }
 
 /* ---------- Forms ---------- */
 .form-control,
 .form-select {
-    background-color: #101013;
-    border-color: #34343a;
+    background-color: #fff;
+    border-color: #dcd9d3;
 }
-
 .form-control:focus,
 .form-select:focus {
-    background-color: #101013;
-    border-color: var(--jo-orange-light);
-    box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
-}
-
-.form-check-input:checked {
-    background-color: var(--jo-orange);
     border-color: var(--jo-orange);
+    box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .2);
 }
-
-.form-check-input:focus {
-    border-color: var(--jo-orange-light);
-    box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .25);
-}
+.form-check-input:checked { background-color: var(--jo-orange); border-color: var(--jo-orange); }
+.form-check-input:focus { border-color: var(--jo-orange); box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .2); }
 
 /* ---------- Pagination ---------- */
 .pagination {
-    --bs-pagination-color: var(--jo-orange-light);
-    --bs-pagination-hover-color: #ffa766;
+    --bs-pagination-color: var(--jo-orange-text);
+    --bs-pagination-hover-color: #962f00;
     --bs-pagination-active-bg: var(--jo-orange);
     --bs-pagination-active-border-color: var(--jo-orange);
     --bs-pagination-active-color: #111;
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .2);
 }
 
-/* ---------- Black surfaces / navbar ---------- */
-.bg-dark { background-color: var(--jo-black) !important; }
-
-.navbar.bg-dark {
-    border-bottom: 3px solid var(--jo-orange);
-}
-
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
-    color: var(--jo-orange-light);
-}
-
-.navbar-dark .navbar-nav .nav-link.active,
-.navbar-dark .navbar-nav .show > .nav-link {
-    color: var(--jo-orange);
-    font-weight: 600;
-}
-
-.jo-logo { height: 36px; width: auto; }
-
-.jo-nav-search input { min-width: 190px; }
-
-/* ---------- Flash message (floats over any page, including the hero) ---------- */
-.jo-flash {
-    position: fixed;
-    top: calc(var(--jo-nav-h, 64px) + 12px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(92vw, 520px);
-    z-index: 1080;
-}
+/* ---------- Modals ---------- */
+.modal-content { border: 0; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, .25); }
 
 /* ---------- Headings ---------- */
-.jo-section-title {
-    position: relative;
-    padding-bottom: .5rem;
-    margin-bottom: 0;
-    font-weight: 700;
-}
+.jo-section-title { position: relative; padding-bottom: .55rem; font-weight: 700; }
 .jo-section-title::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 48px;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--jo-orange);
+    content: ""; position: absolute; left: 0; bottom: 0;
+    width: 100%; height: 3px; border-radius: 2px; background: var(--jo-orange);
+}
+.jo-section-head { border-bottom: 1px solid var(--jo-line); }
+.jo-section-head .jo-section-title { width: auto; }
+.jo-section-head .jo-section-title::after { bottom: -1px; }
+
+/* =====================================================================
+   STOREFRONT HEADER: logo + search + account, then a row of pills
+   ===================================================================== */
+.jo-site-header { background: #fff; border-bottom: 1px solid var(--jo-line); z-index: 1030; }
+
+.jo-search {
+    position: relative; align-items: center; gap: .5rem;
+    background: var(--jo-surface-2); border: 1px solid var(--jo-line); border-radius: 999px;
+    padding: .2rem .25rem .2rem 1rem; max-width: 640px;
+}
+.jo-search:focus-within { border-color: var(--jo-orange); box-shadow: 0 0 0 .2rem rgba(255, 106, 0, .15); }
+.jo-search > i { color: var(--bs-secondary-color); }
+.jo-search .form-control { background: transparent; border: 0; box-shadow: none; padding-left: 0; }
+.jo-search .btn { border-radius: 999px; padding-left: 1.2rem; padding-right: 1.2rem; }
+
+.jo-head-icon {
+    width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--jo-line); background: #fff; color: var(--bs-body-color); font-size: 1.15rem; text-decoration: none;
+}
+.jo-head-icon:hover, .jo-head-icon.active { background: var(--jo-orange-soft); border-color: var(--jo-orange); color: var(--jo-orange-text); }
+
+.jo-user { display: inline-flex; align-items: center; gap: .6rem; color: var(--bs-body-color); text-decoration: none; }
+.jo-user::after { margin-left: .2rem; }
+.jo-avatar {
+    width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--jo-orange); color: #111; font-weight: 700;
 }
 
-/* ---------- Landing page ---------- */
+.jo-pillbar { border-top: 1px solid var(--jo-line); background: #fff; }
+.jo-pillbar nav { overflow-x: auto; padding: .55rem 0; scrollbar-width: none; }
+.jo-pillbar nav::-webkit-scrollbar { display: none; }
+.jo-pill-link {
+    flex: 0 0 auto; padding: .3rem .95rem; border-radius: 999px; font-size: .85rem; font-weight: 500;
+    color: var(--bs-body-color); background: var(--jo-surface-2); border: 1px solid transparent; text-decoration: none; white-space: nowrap;
+}
+.jo-pill-link:hover { background: var(--jo-orange-soft); color: var(--jo-orange-text); }
+.jo-pill-link.active { background: var(--jo-orange); color: #111; font-weight: 600; }
+.jo-pill-more { background: transparent; border-color: var(--jo-line); }
+.jo-pill-sep { flex: 0 0 1px; align-self: stretch; background: var(--jo-line); margin: .2rem .25rem; }
 
-/* The hero fills the whole first screen: viewport height minus the navbar.
-   --jo-nav-h is measured by a small script in the layout. */
-.jo-hero {
-    position: relative;
-    min-height: calc(100vh - var(--jo-nav-h, 64px));
-    min-height: calc(100svh - var(--jo-nav-h, 64px));
-    display: flex;
-    align-items: center;
-    color: #fff;
+/* =====================================================================
+   LANDING PAGE
+   ===================================================================== */
+.jo-banner {
+    color: #fff; border-radius: 20px; padding: 2.5rem 2rem;
     background:
-        radial-gradient(circle at 85% 15%, rgba(255, 106, 0, .40), transparent 55%),
-        radial-gradient(circle at 5% 95%, rgba(255, 106, 0, .16), transparent 45%),
-        #050505;
+        radial-gradient(circle at 88% 10%, rgba(255, 106, 0, .45), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(255, 106, 0, .18), transparent 45%),
+        #0b0b0d;
 }
-
-.jo-hero-inner {
-    padding-top: 2.5rem;
-    padding-bottom: 3.5rem;
-}
-
-.jo-scroll {
-    position: absolute;
-    left: 50%;
-    bottom: 1rem;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 106, 0, .6);
-    color: var(--jo-orange);
-    text-decoration: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    animation: jo-bounce 1.8s ease-in-out infinite;
-}
-.jo-scroll:hover { background: var(--jo-orange); color: #111; }
-
-@keyframes jo-bounce {
-    0%, 100% { transform: translate(-50%, 0); }
-    50%      { transform: translate(-50%, 6px); }
-}
+@media (min-width: 992px) { .jo-banner { padding: 3.25rem 3rem; } }
 
 .jo-pill {
-    background: rgba(255, 106, 0, .15);
-    color: #ffb27a;
-    border: 1px solid rgba(255, 106, 0, .5);
-    font-weight: 500;
+    background: rgba(255, 106, 0, .16); color: #ffb27a; border: 1px solid rgba(255, 106, 0, .5); font-weight: 500;
 }
-
 .jo-stat strong { display: block; font-size: 1.5rem; color: var(--jo-orange); line-height: 1.1; }
 .jo-stat span   { font-size: .85rem; color: rgba(255, 255, 255, .65); }
 
-.jo-bestsellers .card-header {
-    background: var(--jo-orange);
-    color: #111;
-    font-weight: 700;
-}
+.jo-bestsellers .card-header { background: var(--jo-orange); color: #111; font-weight: 700; border: 0; }
 .jo-bestsellers .card-header a { color: #111; }
 
 .jo-rank {
-    flex: 0 0 auto;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--jo-orange);
-    color: #111;
-    font-size: .8rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--jo-orange); color: #111;
+    font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
 }
+.jo-thumb { flex: 0 0 auto; width: 56px; height: 56px; border-radius: .6rem; object-fit: cover; background: var(--jo-surface-2); }
 
-.jo-thumb {
-    flex: 0 0 auto;
-    width: 56px;
-    height: 56px;
-    border-radius: .5rem;
-    object-fit: cover;
-    background: #2a2a2e;
+/* Round category icons */
+.jo-cat-row { display: flex; gap: 1.25rem; overflow-x: auto; padding: .5rem .25rem 1rem; scrollbar-width: thin; }
+.jo-cat-item { flex: 0 0 auto; width: 104px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: .3rem; color: var(--bs-body-color); }
+.jo-cat-circle {
+    width: 84px; height: 84px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; border: 2px solid var(--jo-line); color: var(--jo-orange-text); font-size: 1.9rem; font-weight: 800;
+    box-shadow: 0 4px 14px rgba(20, 20, 20, .06); transition: transform .15s ease, border-color .15s ease, background .15s ease;
 }
+.jo-cat-item:hover .jo-cat-circle, .jo-cat-circle.active { border-color: var(--jo-orange); background: var(--jo-orange-soft); transform: translateY(-3px); }
+.jo-cat-name { font-size: .88rem; font-weight: 600; line-height: 1.2; }
 
-.min-w-0 { min-width: 0; }
-
-.jo-category {
-    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-.jo-category:hover {
-    transform: translateY(-3px);
-    border-color: var(--jo-orange);
-    box-shadow: 0 .5rem 1.25rem rgba(255, 106, 0, .18);
-}
-.jo-category-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: rgba(255, 106, 0, .15);
-    color: var(--jo-orange-light);
-    font-size: 1.4rem;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
+/* Product cards */
+.jo-product { overflow: hidden; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.jo-product:hover { transform: translateY(-3px); border-color: var(--jo-orange); box-shadow: 0 10px 24px rgba(255, 106, 0, .15); }
 
 .jo-why-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: rgba(255, 106, 0, .15);
-    color: var(--jo-orange-light);
-    font-size: 1.6rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    width: 56px; height: 56px; border-radius: 14px; background: var(--jo-orange-soft); color: var(--jo-orange-text);
+    font-size: 1.6rem; display: inline-flex; align-items: center; justify-content: center;
 }
+.jo-cta { background: var(--jo-orange); color: #111; }
 
-.jo-cta {
-    background: var(--jo-orange);
-    color: #111;
-}
-
-/* ---------- Footer ---------- */
+/* ---------- Footer (black block, orange top edge) ---------- */
 .jo-footer {
-    background: var(--jo-black);
-    color: rgba(255, 255, 255, .7);
-    border-top: 4px solid var(--jo-orange);
+    background: var(--jo-black); color: rgba(255, 255, 255, .7);
+    border-top: 4px solid var(--jo-orange); border-radius: 24px 24px 0 0;
 }
 .jo-footer h2 { color: #fff; font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; }
 .jo-footer a { color: rgba(255, 255, 255, .7); text-decoration: none; }
 .jo-footer a:hover { color: var(--jo-orange); }
 .jo-footer hr { border-color: rgba(255, 255, 255, .15); }
 
-/* ---------- Chat widget (bottom right, every page) ---------- */
-.jo-chat-fab {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 58px;
-    height: 58px;
-    border: 0;
-    border-radius: 50%;
-    background: var(--jo-orange);
-    color: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 .5rem 1.25rem rgba(255, 106, 0, .45);
-    z-index: 1090;
-    transition: transform .15s ease, background .15s ease;
-}
-.jo-chat-fab:hover { background: var(--jo-orange-light); transform: scale(1.06); }
-.jo-chat-fab:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+/* =====================================================================
+   DASHBOARDS (admin + seller): black side bar, light content
+   ===================================================================== */
+.jo-dash-body { background: var(--jo-bg); }
 
-.jo-chat-panel {
-    position: fixed;
-    right: 20px;
-    bottom: 92px;
-    width: 360px;
-    max-width: calc(100vw - 40px);
-    height: 480px;
-    max-height: calc(100vh - 120px);
-    display: none;
-    flex-direction: column;
-    background: var(--jo-surface);
-    border: 1px solid var(--jo-line);
-    border-radius: 1rem;
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .6);
-    overflow: hidden;
-    z-index: 1090;
+.jo-sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; z-index: 1030; }
+.jo-offcanvas { width: 280px; background: #111113; border: 0; }
+.jo-sidebar-inner { height: 100%; display: flex; flex-direction: column; background: #111113; color: #cfcfd4; }
+.jo-sidebar-brand { display: flex; align-items: center; padding: 1.4rem 1.25rem 1rem; }
+.jo-sidebar-scroll { flex: 1 1 auto; overflow-y: auto; }
+.jo-sidebar-foot { padding: 1rem 1.25rem 1.25rem; }
+.jo-logout {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: .6rem;
+    padding: .7rem 1rem; border: 0; border-radius: 12px; background: #2a2a2f; color: #fff; font-weight: 500;
+    transition: background .15s;
 }
-.jo-chat-panel.open { display: flex; }
+.jo-logout:hover { background: #3a3a40; }
 
-.jo-chat-head {
-    background: var(--jo-orange);
-    color: #111;
-    padding: .75rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-}
-.jo-chat-head img { width: 32px; height: 32px; }
-.jo-chat-head .btn-close { margin-left: auto; filter: none; opacity: .8; }
+.jo-dash-main { min-height: 100vh; }
+@media (min-width: 992px) { .jo-dash-main { margin-left: 260px; } }
 
-.jo-chat-body {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: .6rem;
+.jo-dash-top {
+    position: sticky; top: 0; z-index: 1020; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1rem 1.5rem; background: rgba(246, 245, 242, .92); backdrop-filter: blur(6px);
 }
+.jo-dash-content { padding: .5rem 1.5rem 2.5rem; }
+@media (max-width: 991.98px) { .jo-dash-top { padding: .75rem 1rem; } .jo-dash-content { padding: .5rem 1rem 2rem; } }
 
-.jo-chat-msg {
-    max-width: 85%;
-    padding: .5rem .8rem;
-    border-radius: 1rem;
-    font-size: .92rem;
-    line-height: 1.35;
-    white-space: pre-line;
-    word-wrap: break-word;
-}
-.jo-chat-msg.bot  { align-self: flex-start; background: var(--jo-surface-2); border-bottom-left-radius: .25rem; }
-.jo-chat-msg.user { align-self: flex-end; background: var(--jo-orange); color: #111; border-bottom-right-radius: .25rem; }
-.jo-chat-msg.typing { color: #9a9aa2; font-style: italic; }
-
-.jo-chat-form {
-    display: flex;
-    gap: .5rem;
-    padding: .75rem;
-    border-top: 1px solid var(--jo-line);
-}
-.jo-chat-note {
-    padding: 0 .75rem .6rem;
-    font-size: .72rem;
-    color: #8d8d95;
-}
-
-/* ================= Admin area (side bar + dashboard) ================= */
-.jo-admin-top { min-height: 56px; border-bottom: 1px solid var(--jo-line); }
-.jo-admin-shell { display: flex; align-items: flex-start; }
-.jo-admin-main { flex: 1 1 auto; min-width: 0; padding: 1.5rem; }
-
-.jo-admin-side { flex: 0 0 250px; width: 250px; }
-@media (min-width: 992px) {
-    .jo-admin-side {
-        position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
-        background: var(--jo-surface); border-right: 1px solid var(--jo-line);
-    }
-}
-@media (max-width: 991.98px) {
-    .jo-admin-side { background: var(--jo-surface); }
-    .jo-admin-main { padding: 1rem; }
-}
-
-.jo-side-nav { padding: 1rem .75rem; }
-.jo-side-title {
-    font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
-    color: var(--bs-secondary-color); padding: 0 .75rem; margin-bottom: .35rem;
-}
+/* Side bar links (the side bar is dark) */
+.jo-side-nav { padding: .5rem 1rem; }
+.jo-side-title { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: #7d7d86; padding: 0 .85rem; margin: .75rem 0 .35rem; }
 .jo-side-link {
-    display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; border-radius: .5rem;
-    color: var(--bs-body-color); text-decoration: none; border-left: 3px solid transparent;
+    display: flex; align-items: center; gap: .75rem; padding: .6rem .85rem; margin-bottom: 2px; border-radius: 10px;
+    color: #cfcfd4; text-decoration: none; font-size: .95rem;
 }
-.jo-side-link:hover { background: var(--jo-surface-2); color: #fff; }
-.jo-side-link.active { background: rgba(255, 106, 0, .14); color: var(--jo-orange-light); border-left-color: var(--jo-orange); font-weight: 600; }
+.jo-side-link i { width: 1.25rem; text-align: center; font-size: 1.1rem; }
+.jo-side-link:hover { background: #1f1f23; color: #fff; }
+.jo-side-link.active { background: var(--jo-orange); color: #111; font-weight: 600; }
 .jo-side-view { color: var(--jo-orange-light); }
 
-.jo-stat { height: 100%; }
-.jo-stat .jo-stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
-.jo-stat .jo-stat-label { color: var(--bs-secondary-color); font-size: .85rem; }
-.jo-stat .jo-stat-icon {
-    width: 42px; height: 42px; border-radius: .6rem; display: flex; align-items: center; justify-content: center;
-    background: rgba(255, 106, 0, .15); color: var(--jo-orange-light); font-weight: 700;
-}
-.jo-chart-box { position: relative; height: 280px; }
-
-/* ================= Icon buttons (view / edit / delete) + toasts ================= */
-.jo-icon-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 32px; height: 32px; padding: 0; margin: 0 .1rem;
-    border: 1px solid var(--jo-line); border-radius: .5rem; background: transparent;
-    color: var(--bs-body-color); font-size: 1rem; line-height: 1; text-decoration: none; cursor: pointer;
-    transition: background-color .15s, color .15s, border-color .15s;
-}
-.jo-icon-btn:hover, .jo-icon-btn:focus-visible { background: rgba(255, 106, 0, .15); border-color: var(--jo-orange); color: var(--jo-orange-light); }
-.jo-icon-btn.jo-icon-danger:hover, .jo-icon-btn.jo-icon-danger:focus-visible { background: rgba(220, 53, 69, .18); border-color: #dc3545; color: #ff6b7a; }
-
-.jo-side-link i { width: 1.25rem; text-align: center; font-size: 1.05rem; }
-.jo-toasts { z-index: 1100; }
-.jo-icon-btn.jo-icon-success:hover, .jo-icon-btn.jo-icon-success:focus-visible { background: rgba(25, 135, 84, .2); border-color: #198754; color: #4cd08a; }
-
-/* ================= Admin notifications ================= */
 .jo-side-alert {
-    display: flex; align-items: center; gap: .75rem; padding: .75rem; margin-bottom: 1rem;
-    border-radius: .6rem; text-decoration: none; color: var(--bs-body-color);
-    background: rgba(255, 193, 7, .12); border: 1px solid rgba(255, 193, 7, .45);
+    display: flex; align-items: center; gap: .75rem; padding: .75rem; margin: .5rem 0 .75rem;
+    border-radius: 12px; text-decoration: none; color: #e8e8ea;
+    background: rgba(255, 193, 7, .12); border: 1px solid rgba(255, 193, 7, .4);
 }
 .jo-side-alert:hover { background: rgba(255, 193, 7, .2); color: #fff; }
 .jo-side-alert i:first-child { color: #ffc107; }
 
+/* Header: bell + account */
+.jo-bell {
+    position: relative; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--jo-line); background: #fff;
+    color: var(--bs-body-color); font-size: 1.15rem; display: inline-flex; align-items: center; justify-content: center;
+}
+.jo-bell:hover { border-color: var(--jo-orange); color: var(--jo-orange-text); }
+.jo-bell-dot { position: absolute; top: 9px; right: 11px; width: 10px; height: 10px; border-radius: 50%; background: #e5302f; border: 2px solid #fff; }
+
 .jo-bell-menu { width: min(92vw, 360px); }
 .jo-bell-list { max-height: 360px; overflow-y: auto; }
 .jo-bell-item {
-    display: flex; gap: .75rem; padding: .65rem 1rem; text-decoration: none; color: var(--bs-body-color);
+    display: flex; gap: .75rem; padding: .7rem 1rem; text-decoration: none; color: var(--bs-body-color);
     border-bottom: 1px solid var(--jo-line);
 }
-.jo-bell-item:hover { background: var(--jo-surface-2); color: #fff; }
+.jo-bell-item:hover { background: var(--jo-surface-2); color: var(--bs-body-color); }
 .jo-bell-item i { font-size: 1.25rem; color: var(--bs-secondary-color); margin-top: .1rem; }
-.jo-bell-item.unread { background: rgba(255, 106, 0, .08); border-left: 3px solid var(--jo-orange); }
-.jo-bell-item.unread i { color: var(--jo-orange-light); }
+.jo-bell-item.unread { background: var(--jo-orange-soft); border-left: 3px solid var(--jo-orange); }
+.jo-bell-item.unread i { color: var(--jo-orange-text); }
 .jo-bell-time { font-size: .72rem; }
+
+/* Summary cards + charts */
+.jo-stat { height: 100%; }
+.jo-stat .jo-stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
+.jo-stat .jo-stat-label { color: var(--bs-secondary-color); font-size: .85rem; }
+.jo-stat .jo-stat-icon {
+    width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    background: var(--jo-orange-soft); color: var(--jo-orange-text); font-weight: 700;
+}
+.jo-chart-box { position: relative; height: 280px; }
+
+/* ---------- Icon buttons (view / edit / delete) + toasts ---------- */
+.jo-icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; padding: 0; margin: 0 .1rem;
+    border: 1px solid var(--jo-line); border-radius: 9px; background: #fff;
+    color: var(--bs-body-color); font-size: 1rem; line-height: 1; text-decoration: none; cursor: pointer;
+    transition: background-color .15s, color .15s, border-color .15s;
+}
+.jo-icon-btn:hover, .jo-icon-btn:focus-visible { background: var(--jo-orange-soft); border-color: var(--jo-orange); color: var(--jo-orange-text); }
+.jo-icon-btn.jo-icon-danger:hover, .jo-icon-btn.jo-icon-danger:focus-visible { background: #fdecee; border-color: #dc3545; color: #b02a37; }
+.jo-icon-btn.jo-icon-success:hover, .jo-icon-btn.jo-icon-success:focus-visible { background: #e8f6ee; border-color: #198754; color: #146c43; }
+.jo-toasts { z-index: 1100; }
+
+/* ---------- Chat widget (bottom right, every page) ---------- */
+.jo-chat-fab {
+    position: fixed; right: 20px; bottom: 20px; width: 58px; height: 58px; border: 0; border-radius: 50%;
+    background: var(--jo-orange); color: #111; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 .5rem 1.25rem rgba(255, 106, 0, .45); z-index: 1090; transition: transform .15s ease, background .15s ease;
+}
+.jo-chat-fab:hover { background: var(--jo-orange-light); transform: scale(1.06); }
+.jo-chat-fab:focus-visible { outline: 3px solid #111; outline-offset: 2px; }
+
+.jo-chat-panel {
+    position: fixed; right: 20px; bottom: 92px; width: 360px; max-width: calc(100vw - 40px);
+    height: 480px; max-height: calc(100vh - 120px); display: none; flex-direction: column;
+    background: #fff; border: 1px solid var(--jo-line); border-radius: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .2); overflow: hidden; z-index: 1090;
+}
+.jo-chat-panel.open { display: flex; }
+.jo-chat-head { background: var(--jo-orange); color: #111; padding: .75rem 1rem; display: flex; align-items: center; gap: .75rem; }
+.jo-chat-head img { width: 32px; height: 32px; }
+.jo-chat-head .btn-close { margin-left: auto; opacity: .8; }
+.jo-chat-body { flex: 1 1 auto; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; background: var(--jo-bg); }
+.jo-chat-msg { max-width: 85%; padding: .5rem .8rem; border-radius: 1rem; font-size: .92rem; line-height: 1.35; white-space: pre-line; word-wrap: break-word; }
+.jo-chat-msg.bot  { align-self: flex-start; background: #fff; border: 1px solid var(--jo-line); border-bottom-left-radius: .25rem; }
+.jo-chat-msg.user { align-self: flex-end; background: var(--jo-orange); color: #111; border-bottom-right-radius: .25rem; }
+.jo-chat-msg.typing { color: #8a8a92; font-style: italic; }
+.jo-chat-form { display: flex; gap: .5rem; padding: .75rem; border-top: 1px solid var(--jo-line); background: #fff; }
+.jo-chat-note { padding: 0 .75rem .6rem; font-size: .72rem; color: #8a8a92; background: #fff; }

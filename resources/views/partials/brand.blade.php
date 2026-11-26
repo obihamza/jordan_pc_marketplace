@@ -1,7 +1,5 @@
-{{-- Navbar brand: full logo on desktop (xl and up), compact mark + name on smaller screens --}}
-<a class="navbar-brand d-flex align-items-center gap-2 py-1 me-xl-4" href="{{ route('home') }}">
-    <img src="{{ asset('images/jo-logo.svg') }}" alt="JO-Marketplace" class="jo-logo d-none d-xl-block">
-
-    <img src="{{ asset('images/jo-logo-mark.svg') }}" alt="" class="jo-logo d-xl-none" style="height: 32px;">
-    <span class="fw-bold d-xl-none">JO-<span class="text-orange">Marketplace</span></span>
+{{-- Site brand: logo mark + name (dark text for the light header) --}}
+<a class="jo-brand d-flex align-items-center gap-2 text-decoration-none" href="{{ route('home') }}">
+    <img src="{{ asset('images/jo-logo-mark.svg') }}" alt="" style="height: 38px;">
+    <span class="fw-bold fs-4 text-body">JO-<span class="text-orange">Marketplace</span></span>
 </a>

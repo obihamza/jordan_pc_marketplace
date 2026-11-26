@@ -39,8 +39,20 @@ class HomeController extends Controller
             ->withAvg(['reviews' => fn ($query) => $query->approved()], 'rating')
             ->orderByDesc('reviews_avg_rating')
             ->latest()
-            ->take(8)
+            ->take(10)
             ->get();
+
+        // "Grab the best deal on ..." rows: the two busiest categories, 5 newest products each.
+        $categoryRows = $categories->take(2)->map(function ($category) {
+            $category->setRelation('latestProducts', Product::with(['category', 'primaryImage'])
+                ->available()
+                ->where('category_id', $category->id)
+                ->latest()
+                ->take(5)
+                ->get());
+
+            return $category;
+        })->filter(fn ($category) => $category->latestProducts->isNotEmpty());
 
         $stats = [
             'products' => Product::available()->count(),
@@ -48,6 +60,6 @@ class HomeController extends Controller
             'categories' => Category::count(),
         ];
 
-        return view('home', compact('bestSellers', 'categories', 'selected', 'stats'));
+        return view('home', compact('bestSellers', 'categories', 'categoryRows', 'selected', 'stats'));
     }
 }

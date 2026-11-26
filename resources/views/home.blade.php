@@ -2,19 +2,18 @@
 
 @section('title', 'Welcome')
 
-@section('hero')
+@section('content')
 @php($me = auth()->user())
 
 {{-- ============================== HERO + BEST SELLERS ============================== --}}
-<section class="jo-hero">
-    <div class="container jo-hero-inner">
-    <div class="row align-items-center g-4 g-lg-5 w-100">
+<section class="jo-banner mb-5">
+    <div class="row align-items-center g-4 g-lg-5">
 
         {{-- Left: greeting --}}
         <div class="col-lg-7">
             <span class="badge rounded-pill jo-pill px-3 py-2 mb-3">Jordan's marketplace for new &amp; used</span>
 
-            <h1 class="display-4 fw-bold mb-3">
+            <h1 class="display-5 fw-bold mb-3">
                 Hello to <span class="text-orange">JO-Marketplace</span>
             </h1>
 
@@ -54,7 +53,7 @@
 
         {{-- Right: best sellers card --}}
         <div class="col-lg-5">
-            <div class="card jo-bestsellers border-0 shadow-lg overflow-hidden">
+            <div class="card jo-bestsellers border-0 shadow-lg overflow-hidden text-body">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
                     <span>Best sellers</span>
                     <a href="{{ route('products.index') }}" class="small text-decoration-none">View all &rarr;</a>
@@ -91,51 +90,45 @@
             </div>
         </div>
     </div>
-    </div>
-
-    <a href="#categories" class="jo-scroll d-none d-lg-flex" aria-label="Scroll to categories">&darr;</a>
 </section>
-@endsection
 
-@section('content')
-@php($me = auth()->user())
-
-{{-- ============================== SHOP BY CATEGORY ============================== --}}
+{{-- ============================== SHOP FROM TOP CATEGORIES ============================== --}}
 <section class="mb-5" id="categories">
-    <div class="d-flex justify-content-between align-items-end mb-4">
-        <h2 class="h3 jo-section-title">Shop by category</h2>
-        <a href="{{ route('categories.index') }}" class="text-decoration-none">All categories &rarr;</a>
-    </div>
+    @include('partials.section-head', ['titleHtml' => 'Shop from <span class="text-orange">top categories</span>', 'url' => route('categories.index')])
 
-    <div class="row row-cols-2 row-cols-md-4 g-3">
+    <div class="jo-cat-row">
         @forelse($categories as $category)
-            <div class="col">
-                <a href="{{ route('categories.show', $category) }}" class="text-decoration-none">
-                    <div class="card jo-category h-100 text-center">
-                        <div class="card-body py-4">
-                            <div class="jo-category-icon mb-3">{{ mb_strtoupper(mb_substr($category->name, 0, 1)) }}</div>
-                            <div class="fw-semibold text-body">{{ $category->name }}</div>
-                            <div class="small text-muted">
-                                {{ $category->products_count }} {{ \Illuminate\Support\Str::plural('item', $category->products_count) }}
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            <a href="{{ route('categories.show', $category) }}" class="jo-cat-item text-decoration-none">
+                <span class="jo-cat-circle {{ $loop->first ? 'active' : '' }}">{{ mb_strtoupper(mb_substr($category->name, 0, 1)) }}</span>
+                <span class="jo-cat-name">{{ $category->name }}</span>
+                <span class="small text-muted">{{ $category->products_count }} {{ \Illuminate\Support\Str::plural('item', $category->products_count) }}</span>
+            </a>
         @empty
-            <div class="col-12"><div class="alert alert-info mb-0">No categories yet.</div></div>
+            <div class="alert alert-info mb-0 w-100">No categories yet.</div>
         @endforelse
     </div>
 </section>
 
+{{-- ============================== "GRAB THE BEST DEAL ON ..." ROWS ============================== --}}
+@foreach($categoryRows as $category)
+    <section class="mb-5">
+        @include('partials.section-head', [
+            'titleHtml' => 'Grab the best deal on <span class="text-orange">'.e($category->name).'</span>',
+            'url' => route('products.index', ['category_id' => $category->id]),
+        ])
+        <div class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3">
+            @foreach($category->latestProducts as $product)
+                <div class="col">@include('partials.product-card', ['product' => $product])</div>
+            @endforeach
+        </div>
+    </section>
+@endforeach
+
 {{-- ============================== SELECTED ITEMS ============================== --}}
 <section class="mb-5">
-    <div class="d-flex justify-content-between align-items-end mb-4">
-        <h2 class="h3 jo-section-title">Selected items</h2>
-        <a href="{{ route('products.index') }}" class="text-decoration-none">See all products &rarr;</a>
-    </div>
+    @include('partials.section-head', ['titleHtml' => 'Selected <span class="text-orange">items</span>', 'url' => route('products.index'), 'label' => 'See all products'])
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3">
         @forelse($selected as $product)
             <div class="col">
                 @include('partials.product-card', ['product' => $product])

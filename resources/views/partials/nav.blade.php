@@ -3,67 +3,41 @@
     $isAdmin = $me?->isAdmin() ?? false;
     $isSeller = $me?->isSeller() ?? false;
     $roleLabel = $isAdmin ? 'Admin' : ($isSeller ? 'Seller' : 'Buyer');
+    $navCategories = $navCategories ?? collect();
 @endphp
 
-<nav class="navbar navbar-expand-xl navbar-dark bg-dark sticky-top">
-    <div class="container-fluid px-3 px-xl-4">
+{{-- Header: logo + search + account on top, a row of pills (pages and categories) underneath --}}
+<header class="jo-site-header sticky-top">
+    <div class="container py-2">
+        <div class="d-flex align-items-center gap-3">
 
-        @include('partials.brand')
+            @include('partials.brand')
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainNav">
-
-            {{-- ============ Centre: main links ============ --}}
-            <ul class="navbar-nav mx-xl-auto align-items-xl-center">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('sellers.*') ? 'active' : '' }}" href="{{ route('sellers.index') }}">Sellers</a>
-                </li>
-            </ul>
-
-            {{-- ============ Search bar ============ --}}
-            <form action="{{ route('products.index') }}" method="GET" role="search"
-                  class="d-flex jo-nav-search my-3 my-xl-0 me-xl-3">
-                <input type="search" name="q" value="{{ request('q') }}" class="form-control form-control-sm"
-                       placeholder="Search products..." aria-label="Search products">
-                <button type="submit" class="btn btn-sm btn-primary ms-1" aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
-                </button>
+            {{-- Search bar --}}
+            <form action="{{ route('products.index') }}" method="GET" role="search" class="jo-search flex-grow-1 d-none d-md-flex">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search for products..." aria-label="Search products">
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
-            {{-- ============ Right: account ============ --}}
-            <ul class="navbar-nav align-items-xl-center">
+            <div class="d-flex align-items-center gap-2 ms-auto ms-md-0">
                 @guest
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-light me-2 my-1">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('register') }}" class="btn btn-sm btn-primary my-1">Register</a>
-                    </li>
+                    <a href="{{ route('login') }}" class="btn btn-outline-secondary">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
                 @else
                     @unless($isAdmin)
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('carts.*') ? 'active' : '' }}" href="{{ route('carts.index') }}">Cart</a>
-                        </li>
+                        <a class="jo-head-icon {{ request()->routeIs('carts.*') ? 'active' : '' }}" href="{{ route('carts.index') }}" title="Cart" aria-label="Cart">
+                            <i class="bi bi-cart3" aria-hidden="true"></i>
+                        </a>
                     @endunless
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ $me->name }} <span class="badge text-bg-primary">{{ $roleLabel }}</span>
+                    <div class="dropdown">
+                        <a class="jo-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="jo-avatar">{{ mb_strtoupper(mb_substr($me->name, 0, 1)) }}</span>
+                            <span class="d-none d-lg-block lh-sm text-start">
+                                <span class="d-block fw-semibold">{{ $me->name }}</span>
+                                <span class="d-block small text-muted">{{ $roleLabel }}</span>
+                            </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             @if($isAdmin)
@@ -97,9 +71,36 @@
                                 </form>
                             </li>
                         </ul>
-                    </li>
+                    </div>
                 @endguest
-            </ul>
+            </div>
+        </div>
+
+        {{-- Search on small screens --}}
+        <form action="{{ route('products.index') }}" method="GET" role="search" class="jo-search d-flex d-md-none mt-2">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search for products..." aria-label="Search products">
+            <button type="submit" class="btn btn-primary">Go</button>
+        </form>
+    </div>
+
+    {{-- Pill bar: pages, then categories (scrolls sideways on small screens) --}}
+    <div class="jo-pillbar">
+        <div class="container">
+            <nav class="d-flex align-items-center gap-2" aria-label="Main">
+                <a class="jo-pill-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                <a class="jo-pill-link {{ request()->routeIs('products.*') && ! request('category_id') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a>
+                <a class="jo-pill-link {{ request()->routeIs('sellers.*') ? 'active' : '' }}" href="{{ route('sellers.index') }}">Sellers</a>
+
+                @if($navCategories->isNotEmpty())
+                    <span class="jo-pill-sep" aria-hidden="true"></span>
+                    @foreach($navCategories as $navCategory)
+                        <a class="jo-pill-link {{ request('category_id') == $navCategory->id ? 'active' : '' }}"
+                           href="{{ route('products.index', ['category_id' => $navCategory->id]) }}">{{ $navCategory->name }}</a>
+                    @endforeach
+                    <a class="jo-pill-link jo-pill-more {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">All categories <i class="bi bi-arrow-right"></i></a>
+                @endif
+            </nav>
         </div>
     </div>
-</nav>
+</header>

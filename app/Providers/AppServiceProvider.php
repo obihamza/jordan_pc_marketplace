@@ -29,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         // The views use Bootstrap 5, so render pagination links with Bootstrap markup.
         Paginator::useBootstrapFive();
 
+        // Header pills: the first few categories.
+        View::composer('partials.nav', function ($view) {
+            $view->with('navCategories', Category::orderBy('name')->take(8)->get(['id', 'name']));
+        });
+
         // Dashboard layout (admin + seller): the bell (notifications) and the number of seller applications waiting.
         View::composer('layouts.dashboard', function ($view) {
             $user = auth()->user();

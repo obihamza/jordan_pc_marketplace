@@ -137,9 +137,9 @@
         if (typeof Chart === 'undefined') { return; }   // CDN unreachable: the cards and lists still work
 
         var data = @json($charts);
-        var orange = '#ff6a00', orangeSoft = 'rgba(255,106,0,.35)', grey = '#8a8a93', grid = 'rgba(255,255,255,.08)';
+        var orange = '#ff6a00', orangeSoft = 'rgba(255,106,0,.35)', grey = '#8a8a93', grid = 'rgba(0,0,0,.07)';
 
-        Chart.defaults.color = '#b5b5bd';
+        Chart.defaults.color = '#5b5b63';
         Chart.defaults.borderColor = grid;
         Chart.defaults.maintainAspectRatio = false;
 
@@ -149,7 +149,7 @@
                 labels: data.months,
                 datasets: [
                     { type: 'bar', label: 'Revenue (JOD)', data: data.revenue, backgroundColor: orangeSoft, borderColor: orange, borderWidth: 1, yAxisID: 'y' },
-                    { type: 'line', label: 'Orders', data: data.orders, borderColor: '#ffffff', backgroundColor: '#ffffff', tension: .3, yAxisID: 'y1' }
+                    { type: 'line', label: 'Orders', data: data.orders, borderColor: '#111111', backgroundColor: '#111111', tension: .3, yAxisID: 'y1' }
                 ]
             },
             options: {
@@ -168,7 +168,7 @@
                 datasets: [{
                     data: data.statuses.map(function (s) { return s.value; }),
                     backgroundColor: ['#6c757d', '#0dcaf0', '#6f42c1', '#ffc107', '#198754', '#dc3545'],
-                    borderColor: '#17171a'
+                    borderColor: '#ffffff'
                 }]
             },
             options: { plugins: { legend: { position: 'bottom' } } }
