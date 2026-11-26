@@ -107,7 +107,6 @@
     @include('partials.product-create-modal')
     @include('partials.category-create-modal')
     @include('partials.confirm-modal')
-    @include('partials.chatbot')
 
     <script>
         // Bell: draws the list and re-checks for new events every 30 seconds.

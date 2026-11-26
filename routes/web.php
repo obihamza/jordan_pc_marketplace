@@ -57,6 +57,9 @@ Route::middleware('auth')->group(function () {
     // Seller home (approved sellers only)
     Route::get('/seller', [SellerDashboardController::class, 'index'])->name('seller.dashboard');
 
+    // Assistant page (dashboards)
+    Route::get('/assistant', [ChatbotController::class, 'page'])->name('assistant');
+
     // Admin bell
     Route::get('/notifications/feed', [NotificationController::class, 'feed'])->name('notifications.feed');
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');

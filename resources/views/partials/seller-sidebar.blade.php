@@ -4,6 +4,7 @@
     $groups = [
         'Overview' => [
             ['Dashboard', 'seller.dashboard', 'seller.dashboard', 'bi-speedometer2'],
+            ['Assistant', 'assistant', 'assistant', 'bi-chat-dots'],
         ],
         'My shop' => [
             ['My products', 'products.index', ['products.index', 'products.show', 'products.edit'], 'bi-box-seam'],

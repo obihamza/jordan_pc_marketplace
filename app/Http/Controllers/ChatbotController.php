@@ -12,6 +12,14 @@ use Illuminate\Http\Request;
  */
 class ChatbotController extends Controller
 {
+    /** Full-page assistant for the admin and seller dashboards (they have no floating chat button). */
+    public function page()
+    {
+        abort_unless(auth()->user()->isAdmin() || auth()->user()->isSeller(), 403);
+
+        return view('assistant');
+    }
+
     public function message(Request $request, ChatbotService $chatbot): JsonResponse
     {
         $validated = $request->validate([

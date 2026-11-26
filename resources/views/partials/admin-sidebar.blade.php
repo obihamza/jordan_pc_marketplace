@@ -3,6 +3,7 @@
     $groups = [
         'Overview' => [
             ['Dashboard', 'admin.dashboard', 'admin.dashboard', 'bi-speedometer2'],
+            ['Assistant', 'assistant', 'assistant', 'bi-chat-dots'],
         ],
         'Marketplace' => [
             ['Users', 'users.index', 'users.*', 'bi-people'],
