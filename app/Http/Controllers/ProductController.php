@@ -176,7 +176,7 @@ class ProductController extends Controller
         // Not logged in: only available products are visible.
         if (! $me) {
 
-            $product = Product::with(['seller', 'category', 'images', 'reviews.user'])
+            $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->available()
                 ->findOrFail($product->id);
 
@@ -185,7 +185,7 @@ class ProductController extends Controller
 
         if ($me->isAdmin()) {
 
-            $product = Product::with(['seller', 'category', 'images', 'reviews.user'])
+            $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->findOrFail($product->id);
 
             return view('admin.products.show', compact('product'));
@@ -193,7 +193,7 @@ class ProductController extends Controller
         } elseif ($me->isSeller()) {
 
             // Own products (any status) or anyone's available product.
-            $product = Product::with(['seller', 'category', 'images', 'reviews.user'])
+            $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->where(function ($query) use ($me) {
                     $query->where('seller_id', $me->id)
                         ->orWhere('listing_status', 'available');
@@ -204,7 +204,7 @@ class ProductController extends Controller
 
         } else {
 
-            $product = Product::with(['seller', 'category', 'images', 'reviews.user'])
+            $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->available()
                 ->findOrFail($product->id);
 

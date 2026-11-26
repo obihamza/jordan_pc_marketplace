@@ -66,30 +66,4 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
-
-    /**
-     * Keep the order status in step with its lines (each seller updates only their own lines).
-     * The order is only as far along as its slowest active line; it is cancelled when every line is.
-     */
-    public function syncStatusFromItems(): void
-    {
-        $statuses = $this->items()->pluck('item_status');
-
-        if ($statuses->isEmpty()) {
-            return;
-        }
-
-        $active = $statuses->reject(fn ($status) => $status === 'cancelled');
-
-        if ($active->isEmpty()) {
-            $status = 'cancelled';
-        } else {
-            $rank = ['pending' => 0, 'confirmed' => 1, 'processing' => 2, 'shipped' => 3, 'delivered' => 4];
-            $status = $active->sortBy(fn ($s) => $rank[$s] ?? 0)->first();
-        }
-
-        if ($this->order_status !== $status) {
-            $this->update(['order_status' => $status]);
-        }
-    }
 }

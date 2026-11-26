@@ -2,7 +2,9 @@
 @php
     $me = auth()->user();
     $canManage = $me && ($me->isAdmin() || $product->seller_id == $me->id);
-    $avgRating = $product->reviews->avg('rating');
+    $avgRating = $product->reviews->avg('rating');   // only approved reviews are loaded
+    $canReview = $me && ! $me->isAdmin() && ! $canManage
+        && \App\Models\Product::reviewableBy($me)->whereKey($product->id)->exists();
     $images = $product->images->sortByDesc('is_primary');
 @endphp
 
@@ -78,7 +80,7 @@
         @endif
 
         <div class="d-flex flex-wrap gap-2">
-            @if($me && ! $me->isAdmin() && ! $canManage)
+            @if($canReview)
                 <a href="{{ route('reviews.create', ['product_id' => $product->id]) }}" class="btn btn-outline-secondary">Write a review</a>
             @endif
 

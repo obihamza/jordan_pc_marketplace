@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Controllers\NotificationController;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\Review;
 use App\Models\Seller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
             if ($user?->isAdmin()) {
                 $view->with('modalSellers', Seller::approved()->get());
                 $view->with('pendingSellers', Seller::where('verification_status', 'pending')->count());
+                $view->with('pendingReviews', Review::where('status', 'pending')->count());
             } elseif ($user?->isSeller()) {
                 // Order lines the seller still has to prepare (side bar notice + badge).
                 $view->with('pendingSales', OrderItem::where('seller_id', $user->id)->whereIn('item_status', ['pending', 'confirmed'])->count());

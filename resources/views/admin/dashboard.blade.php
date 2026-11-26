@@ -20,7 +20,7 @@
         ['Seller applications', $stats['pending_sellers'], 'Waiting for approval', 'ID'],
         ['Categories', $stats['categories'], 'Product groups', 'C'],
         ['Pending payments', $stats['pending_payments'], 'Cash on delivery', '$'],
-        ['Reviews', $stats['reviews'], 'Average '.($stats['avg_rating'] ?: '-').' / 5', '★'],
+        ['Reviews', $stats['reviews'], $stats['pending_reviews'].' waiting for approval · avg '.($stats['avg_rating'] ?: '-').' / 5', '★'],
     ];
 @endphp
 <div class="row g-3 mb-3">

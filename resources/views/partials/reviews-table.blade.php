@@ -1,4 +1,4 @@
-{{-- Params: reviews (paginator, with product loaded), showUser (optional) --}}
+{{-- Params: reviews (paginator, with product loaded), showUser (optional), showStatus (optional: approval status + admin approve/reject) --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -8,6 +8,7 @@
                     @if($showUser ?? false)<th>Reviewer</th>@endif
                     <th>Rating</th>
                     <th>Comment</th>
+                    @if($showStatus ?? false)<th>Status</th>@endif
                     <th>Date</th>
                     <th class="text-end">Actions</th>
                 </tr>
@@ -29,8 +30,12 @@
                         @if($showUser ?? false)<td>{{ $review->user?->name }}</td>@endif
                         <td class="text-warning text-nowrap">{{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}</td>
                         <td style="max-width: 360px;">{{ \Illuminate\Support\Str::limit($review->comment, 120) }}</td>
+                        @if($showStatus ?? false)<td>@include('partials.status-badge', ['status' => $review->status])</td>@endif
                         <td>{{ $review->created_at?->format('Y-m-d') }}</td>
                         <td class="text-end text-nowrap">
+                            @if($isAdmin)
+                                @include('partials.review-moderation-buttons', ['review' => $review])
+                            @endif
                             @if($isMine && ! $isAdmin)
                                 <a class="jo-icon-btn" href="{{ route('reviews.edit', $review) }}" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
                             @endif
@@ -40,7 +45,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-muted py-4">No reviews found.</td></tr>
+                    <tr><td colspan="{{ 6 + (($showUser ?? false) ? 1 : 0) + (($showStatus ?? false) ? 1 : 0) - 1 }}" class="text-center text-muted py-4">No reviews found.</td></tr>
                 @endforelse
             </tbody>
         </table>

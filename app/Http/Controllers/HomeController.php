@@ -36,7 +36,7 @@ class HomeController extends Controller
         $selected = Product::with(['category', 'primaryImage'])
             ->available()
             ->whereNotIn('id', $bestSellers->pluck('id'))
-            ->withAvg('reviews', 'rating')
+            ->withAvg(['reviews' => fn ($query) => $query->approved()], 'rating')
             ->orderByDesc('reviews_avg_rating')
             ->latest()
             ->take(8)

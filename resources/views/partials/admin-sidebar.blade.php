@@ -24,6 +24,7 @@
         ],
     ];
     $pendingSellers = $pendingSellers ?? 0;
+    $pendingReviews = $pendingReviews ?? 0;
 @endphp
 
 <nav class="jo-side-nav" aria-label="Admin menu">
@@ -39,12 +40,35 @@
         </a>
     @endif
 
+    @if($pendingReviews)
+        <a href="{{ route('reviews.index') }}" class="jo-side-alert">
+            <i class="bi bi-star-fill fs-4" aria-hidden="true"></i>
+            <span>
+                <strong>{{ $pendingReviews }} {{ Str::plural('review', $pendingReviews) }}</strong>
+                <small class="d-block">waiting for your approval</small>
+            </span>
+            <i class="bi bi-chevron-right ms-auto" aria-hidden="true"></i>
+        </a>
+    @endif
+
     @foreach($groups as $title => $links)
         <div class="jo-side-title">{{ $title }}</div>
         <ul class="nav flex-column mb-3">
             @foreach($links as [$label, $route, $pattern, $icon])
                 <li class="nav-item">
-                    <a class="jo-side-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><i class="bi {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span>@if($route === 'sellers.index' && $pendingSellers)<span class="badge rounded-pill text-bg-warning ms-auto" title="Applications waiting for approval">{{ $pendingSellers }}</span>@endif</a>
+                    <a class="jo-side-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}">
+                        <i class="bi {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span>
+                        @php
+                            $badge = match ($route) {
+                                'reviews.index' => $pendingReviews,
+                                'sellers.index' => $pendingSellers,
+                                default => 0,
+                            };
+                        @endphp
+                        @if($badge)
+                            <span class="badge rounded-pill text-bg-warning ms-auto" title="Waiting for your approval">{{ $badge }}</span>
+                        @endif
+                    </a>
                 </li>
             @endforeach
         </ul>

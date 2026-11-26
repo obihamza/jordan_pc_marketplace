@@ -34,8 +34,9 @@ class AdminDashboardController extends Controller
             'pending_orders' => Order::where('order_status', 'pending')->count(),
             'revenue' => $revenue,
             'pending_payments' => Payment::where('payment_status', 'pending')->count(),
-            'reviews' => Review::count(),
-            'avg_rating' => round((float) Review::avg('rating'), 1),
+            'reviews' => Review::approved()->count(),
+            'pending_reviews' => Review::where('status', 'pending')->count(),
+            'avg_rating' => round((float) Review::approved()->avg('rating'), 1),
             'low_stock' => Product::where('stock_quantity', '<=', 5)->count(),
         ];
 

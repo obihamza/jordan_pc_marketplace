@@ -83,6 +83,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class)->except(['edit']);
     Route::resource('order-items', OrderItemController::class)->only(['index', 'update']);
     Route::resource('payments', PaymentController::class)->only(['index', 'update']);
+    Route::patch('reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
+    Route::patch('reviews/{review}/reject', [ReviewController::class, 'reject'])->name('reviews.reject');
     Route::resource('reviews', ReviewController::class)->except(['show']);
 });
 

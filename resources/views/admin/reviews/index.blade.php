@@ -4,5 +4,5 @@
 
 @section('content')
 @include('partials.page-header', ['title' => 'Reviews'])
-@include('partials.reviews-table', ['reviews' => $reviews, 'showUser' => true])
+@include('partials.reviews-table', ['reviews' => $reviews, 'showUser' => true, 'showStatus' => true])
 @endsection

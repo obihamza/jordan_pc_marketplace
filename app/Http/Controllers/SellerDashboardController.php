@@ -23,7 +23,7 @@ class SellerDashboardController extends Controller
         $live = fn () => $mine()->where('item_status', '!=', 'cancelled');   // cancelled lines don't count
 
         // ---- Summary cards ----
-        $reviews = Review::whereHas('product', fn ($q) => $q->where('seller_id', $me->id));
+        $reviews = Review::approved()->whereHas('product', fn ($q) => $q->where('seller_id', $me->id));
 
         $stats = [
             'revenue' => (float) $live()->sum('subtotal'),
@@ -89,7 +89,7 @@ class SellerDashboardController extends Controller
             ->take(5)
             ->get();
 
-        $latestReviews = Review::with(['user', 'product'])
+        $latestReviews = Review::approved()->with(['user', 'product'])
             ->whereHas('product', fn ($q) => $q->where('seller_id', $me->id))
             ->latest()
             ->take(4)

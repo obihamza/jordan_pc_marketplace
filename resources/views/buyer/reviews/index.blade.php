@@ -4,5 +4,5 @@
 
 @section('content')
 @include('partials.page-header', ['title' => 'My reviews', 'url' => route('reviews.create'), 'label' => 'Write a review'])
-@include('partials.reviews-table', ['reviews' => $reviews])
+@include('partials.reviews-table', ['reviews' => $reviews, 'showStatus' => true])
 @endsection

@@ -71,6 +71,23 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    /**
+     * Products this user may review: bought from someone else, the line is delivered,
+     * the order is paid, and they haven't reviewed it yet.
+     */
+    public function scopeReviewableBy(Builder $query, User $user): Builder
+    {
+        return $query->where('seller_id', '!=', $user->id)
+            ->whereHas('orderItems', function ($items) use ($user) {
+                $items->where('item_status', 'delivered')
+                    ->whereHas('order', function ($order) use ($user) {
+                        $order->where('user_id', $user->id)
+                            ->whereHas('payment', fn ($payment) => $payment->where('payment_status', 'paid'));
+                    });
+            })
+            ->whereDoesntHave('reviews', fn ($reviews) => $reviews->where('user_id', $user->id));
+    }
+
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->where('listing_status', 'available');
