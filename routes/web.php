@@ -112,3 +112,4 @@ Route::resource('sellers', SellerController::class)->only(['index', 'show']);
 Route::post('/chatbot/message', [ChatbotController::class, 'message'])
     ->middleware('throttle:20,1')
     ->name('chatbot.message');
+

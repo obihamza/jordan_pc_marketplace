@@ -14,7 +14,7 @@
 |
 |   CHATBOT_PROVIDER=gemini
 |   CHATBOT_API_KEY=your-key-from-aistudio.google.com/apikey
-|   CHATBOT_MODEL=gemini-3.5-flash
+|   CHATBOT_MODEL=gemini-3.6-flash
 |
 | If Gemini is unreachable or errors, the placeholder answers are used and
 | the reason is written to storage/logs/laravel.log.
@@ -28,10 +28,16 @@ return [
 
     'api_key' => env('CHATBOT_API_KEY'),
 
-    'model' => env('CHATBOT_MODEL', 'gemini-3.5-flash'),
+    'model' => env('CHATBOT_MODEL', 'gemini-3.6-flash'),
+
+    // Used in order when the main model is busy or too slow (comma separated).
+    'fallback_models' => env('CHATBOT_FALLBACK_MODELS', 'gemini-3.5-flash,gemini-2.5-flash'),
+
+    // Gemini 3 thinking level: minimal, low, medium or high. Lower = faster. Empty = model default.
+    'thinking' => env('CHATBOT_THINKING', 'low'),
 
     // Seconds to wait for the AI before falling back to the built-in answers.
-    'timeout' => (int) env('CHATBOT_TIMEOUT', 25),
+    'timeout' => (int) env('CHATBOT_TIMEOUT', 20),
 
     // How many previous messages the widget sends along, for conversation context.
     'max_history' => 10,
@@ -41,6 +47,8 @@ return [
         'CHATBOT_SYSTEM_PROMPT',
         'You are the friendly shopping assistant of JO-Marketplace, an online marketplace in Jordan '.
         'where people buy and sell new and used items. Payment is cash on delivery (JOD). '.
+        'ONLY talk about JO-Marketplace: how to use it, products, orders, selling and, for sellers and admins, insight about their sales data. '.
+        'If asked about anything unrelated to this website, politely say you can only help with JO-Marketplace. '.
         'Help with finding products, orders, selling on the site and account questions, and, for sellers and admins, '.
         'give business insight and analysis from the live data you are given. '.
         'Reply in the language the user writes in (Arabic or English). Keep answers short and practical; '.

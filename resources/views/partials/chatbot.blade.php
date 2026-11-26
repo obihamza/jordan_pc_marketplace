@@ -25,6 +25,8 @@
 
     <div class="jo-chat-body" id="joChatBody" aria-live="polite"></div>
 
+    <div class="jo-chat-chips" id="joChatChips"></div>
+
     <form class="jo-chat-form" id="joChatForm" autocomplete="off">
         <input type="text" id="joChatInput" class="form-control" placeholder="Type your message..." maxlength="1000" required aria-label="Your message">
         <button type="submit" class="btn btn-primary">Send</button>
@@ -33,41 +35,27 @@
 </section>
 
 <script src="{{ asset('js/jo-markdown.js') }}"></script>
+<script src="{{ asset('js/jo-chat.js') }}"></script>
 <script>
     (function () {
-        var endpoint = @json(route('chatbot.message'));
-        var storageKey = 'jo_chat_history';
-        var maxHistory = {{ (int) config('chatbot.max_history', 10) }};
-        var greeting = 'Hi! I\'m the JO-Marketplace assistant. How can I help you today?';
-
         var toggle = document.getElementById('joChatToggle');
         var panel = document.getElementById('joChatPanel');
         var body = document.getElementById('joChatBody');
-        var form = document.getElementById('joChatForm');
         var input = document.getElementById('joChatInput');
         var iconOpen = document.getElementById('joChatIconOpen');
         var iconClose = document.getElementById('joChatIconClose');
-        var csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Conversation kept for this browser tab only (survives page changes).
-        var history = [];
-        try { history = JSON.parse(sessionStorage.getItem(storageKey) || '[]'); } catch (e) { history = []; }
-        function save() { try { sessionStorage.setItem(storageKey, JSON.stringify(history.slice(-30))); } catch (e) {} }
-
-        function addMessage(role, text, extraClass) {
-            var el = document.createElement('div');
-            el.className = 'jo-chat-msg ' + (role === 'user' ? 'user' : 'bot') + (extraClass ? ' ' + extraClass : '');
-            if (role === 'user' || extraClass) { el.textContent = text; } else { joRenderMarkdown(el, text); }   // safe renderer: builds DOM nodes, never HTML
-            body.appendChild(el);
-            body.scrollTop = body.scrollHeight;
-            return el;
-        }
-
-        function render() {
-            body.innerHTML = '';
-            addMessage('assistant', greeting);
-            history.forEach(function (m) { addMessage(m.role, m.content); });
-        }
+        joChat({
+            endpoint: @json(route('chatbot.message')),
+            storageKey: 'jo_chat_history',
+            maxHistory: {{ (int) config('chatbot.max_history', 10) }},
+            greeting: 'Hi! I\'m the JO-Marketplace assistant. How can I help you today?',
+            suggestions: @json(\App\Services\ChatbotInsights::suggestions(auth()->user())),
+            body: body,
+            form: document.getElementById('joChatForm'),
+            input: input,
+            chips: document.getElementById('joChatChips')
+        });
 
         function setOpen(open) {
             panel.classList.toggle('open', open);
@@ -81,45 +69,5 @@
         toggle.addEventListener('click', function () { setOpen(! panel.classList.contains('open')); });
         document.getElementById('joChatClose').addEventListener('click', function () { setOpen(false); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setOpen(false); } });
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var text = input.value.trim();
-            if (! text) { return; }
-
-            input.value = '';
-            addMessage('user', text);
-            var context = history.slice(-maxHistory);   // earlier messages only
-            history.push({ role: 'user', content: text });
-
-            var typing = addMessage('assistant', 'Typing...', 'typing');
-
-            fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrf
-                },
-                body: JSON.stringify({ message: text, history: context })
-            })
-            .then(function (res) {
-                return res.json().then(function (data) { return { ok: res.ok, data: data }; });
-            })
-            .then(function (r) {
-                typing.remove();
-                var reply = r.ok && r.data.reply ? r.data.reply : 'Sorry, something went wrong. Please try again.';
-                addMessage('assistant', reply);
-                history.push({ role: 'assistant', content: reply });
-                save();
-            })
-            .catch(function () {
-                typing.remove();
-                addMessage('assistant', 'Sorry, I could not reach the server. Please try again.');
-                history.pop();   // drop the unanswered question from the context
-            });
-        });
-
-        render();
     })();
 </script>

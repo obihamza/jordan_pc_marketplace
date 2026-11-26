@@ -20,14 +20,19 @@ class ChatbotController extends Controller
         return view('assistant');
     }
 
-    public function message(Request $request, ChatbotService $chatbot): JsonResponse
+    private function validateMessage(Request $request): array
     {
-        $validated = $request->validate([
+        return $request->validate([
             'message' => 'required|string|max:1000',
             'history' => 'nullable|array|max:'.(int) config('chatbot.max_history', 10),
             'history.*.role' => 'required_with:history|in:user,assistant',
             'history.*.content' => 'required_with:history|string|max:2000',
         ]);
+    }
+
+    public function message(Request $request, ChatbotService $chatbot): JsonResponse
+    {
+        $validated = $this->validateMessage($request);
 
         $reply = $chatbot->reply(
             $validated['message'],

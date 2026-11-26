@@ -26,6 +26,38 @@ use Illuminate\Support\Facades\Cache;
  */
 class ChatbotInsights
 {
+    /** Ready-made questions shown as tap-to-send chips in the chat. */
+    public static function suggestions(?User $user): array
+    {
+        if (! $user) {
+            return ['How do I place an order?', 'How can I become a seller?', 'How does payment work?', 'How do coupons work?'];
+        }
+
+        if ($user->isAdmin()) {
+            return [
+                'How much revenue has the website earned?',
+                'Analyze revenue for the last 6 months',
+                'Who are the top sellers and best products?',
+                'Which orders and payments need attention?',
+                'Which products are low on stock?',
+                'Give me a full business summary',
+            ];
+        }
+
+        if ($user->isSeller()) {
+            return [
+                'How much have I earned so far?',
+                'Analyze my sales over the last 6 months',
+                'What are my best-selling products?',
+                'Which products should I restock?',
+                'Which orders should I prepare now?',
+                'How can I sell more?',
+            ];
+        }
+
+        return ['Where are my orders?', 'How do coupons work?', 'How can I become a seller?', 'How do I cancel an order?'];
+    }
+
     public function for(?User $user): string
     {
         if (! $user) {

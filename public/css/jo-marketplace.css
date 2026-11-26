@@ -379,3 +379,11 @@ body { background-color: var(--jo-bg); }
 .jo-chat-msg.bot ul, .jo-chat-msg.bot ol { margin: .25rem 0; padding-left: 1.2rem; white-space: normal; }
 .jo-chat-msg.bot li { margin: .1rem 0; }
 .jo-chat-msg.bot code { background: #f3f3f5; padding: 0 .25rem; border-radius: .25rem; font-size: .85em; }
+
+/* Suggested questions */
+.jo-chat-chips { display: flex; gap: .4rem; overflow-x: auto; padding: .5rem .75rem; border-top: 1px solid var(--jo-line); scrollbar-width: thin; }
+.jo-chat-chips:empty { display: none; }
+.jo-chat-chip { flex: 0 0 auto; border: 1px solid var(--jo-line); background: #fff; color: #333; border-radius: 999px; padding: .3rem .75rem; font-size: .82rem; white-space: nowrap; transition: background .15s, border-color .15s; }
+.jo-chat-chip:hover { background: #fff4ea; border-color: var(--jo-orange); }
+.jo-chat-msg.typing { animation: joPulse 1.2s ease-in-out infinite; }
+@keyframes joPulse { 50% { opacity: .45; } }
