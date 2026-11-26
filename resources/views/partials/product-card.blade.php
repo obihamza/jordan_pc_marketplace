@@ -6,7 +6,7 @@
 <div class="card h-100 jo-product">
     @if($product->primaryImage)
         <img src="{{ $product->primaryImage->url() }}" class="card-img-top"
-             alt="{{ $product->name }}" style="height: 180px; object-fit: cover;">
+             alt="{{ $product->name }}" loading="lazy" decoding="async" style="height: 180px; object-fit: cover;">
     @else
         <div class="bg-secondary-subtle text-muted d-flex align-items-center justify-content-center" style="height: 180px;">No image</div>
     @endif

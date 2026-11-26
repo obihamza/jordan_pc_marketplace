@@ -14,7 +14,7 @@
                         <td>
                             {{-- Click the picture to open its settings --}}
                             <button type="button" class="btn p-0 border-0 bg-transparent" {!! $settingsData !!} title="Picture settings" aria-label="Open picture settings">
-                                <img src="{{ $image->url() }}" alt="" class="rounded border" loading="lazy" style="width: 64px; height: 64px; object-fit: cover;">
+                                <img src="{{ $image->url() }}" alt="" class="rounded border" loading="lazy" decoding="async" style="width: 64px; height: 64px; object-fit: cover;">
                             </button>
                         </td>
                         <td>

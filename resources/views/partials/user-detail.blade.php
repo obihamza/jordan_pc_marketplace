@@ -57,7 +57,7 @@
                             <dd class="col-sm-8">
                                 @if($seller->national_id_image)
                                     <a href="{{ route('sellers.national-id', $seller) }}" target="_blank" rel="noopener">
-                                        <img src="{{ route('sellers.national-id', $seller) }}" alt="National ID" class="img-thumbnail" style="max-height: 120px;">
+                                        <img src="{{ route('sellers.national-id', $seller) }}" alt="National ID" class="img-thumbnail" loading="lazy" decoding="async" style="max-height: 120px;">
                                     </a>
                                 @else
                                     <span class="text-muted">No picture uploaded.</span>

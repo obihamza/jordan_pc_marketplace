@@ -17,7 +17,7 @@
             @if($images->count() > 1)
                 <div class="d-flex flex-wrap gap-2">
                     @foreach($images->skip(1) as $image)
-                        <img src="{{ $image->url() }}" alt="" class="rounded border"
+                        <img src="{{ $image->url() }}" alt="" class="rounded border" loading="lazy" decoding="async"
                              style="width: 80px; height: 80px; object-fit: cover;">
                     @endforeach
                 </div>
