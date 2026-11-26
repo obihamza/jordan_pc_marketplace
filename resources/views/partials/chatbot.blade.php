@@ -29,9 +29,10 @@
         <input type="text" id="joChatInput" class="form-control" placeholder="Type your message..." maxlength="1000" required aria-label="Your message">
         <button type="submit" class="btn btn-primary">Send</button>
     </form>
-    <div class="jo-chat-note">Basic answers for now. AI-powered replies are coming soon.</div>
+    <div class="jo-chat-note">Powered by AI. Answers may contain mistakes.</div>
 </section>
 
+<script src="{{ asset('js/jo-markdown.js') }}"></script>
 <script>
     (function () {
         var endpoint = @json(route('chatbot.message'));
@@ -56,7 +57,7 @@
         function addMessage(role, text, extraClass) {
             var el = document.createElement('div');
             el.className = 'jo-chat-msg ' + (role === 'user' ? 'user' : 'bot') + (extraClass ? ' ' + extraClass : '');
-            el.textContent = text;          // textContent: never inject HTML from replies
+            if (role === 'user' || extraClass) { el.textContent = text; } else { joRenderMarkdown(el, text); }   // safe renderer: builds DOM nodes, never HTML
             body.appendChild(el);
             body.scrollTop = body.scrollHeight;
             return el;

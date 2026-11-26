@@ -374,3 +374,8 @@ body { background-color: var(--jo-bg); }
 .jo-assistant-body { flex: 1 1 auto; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: .7rem; background: var(--jo-bg); }
 .jo-assistant-body .jo-chat-msg { max-width: min(75%, 640px); font-size: 1rem; }
 .jo-assistant-form { display: flex; gap: .6rem; padding: .85rem 1rem; border-top: 1px solid var(--jo-line); }
+
+/* Chatbot markdown replies */
+.jo-chat-msg.bot ul, .jo-chat-msg.bot ol { margin: .25rem 0; padding-left: 1.2rem; white-space: normal; }
+.jo-chat-msg.bot li { margin: .1rem 0; }
+.jo-chat-msg.bot code { background: #f3f3f5; padding: 0 .25rem; border-radius: .25rem; font-size: .85em; }
