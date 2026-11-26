@@ -53,7 +53,8 @@ class Product extends Model
 
     public function primaryImage(): HasOne
     {
-        return $this->hasOne(ProductImage::class)->where('is_primary', true);
+        // The primary picture; when none is marked primary, the oldest picture is used.
+        return $this->hasOne(ProductImage::class)->ofMany(['is_primary' => 'max', 'id' => 'min']);
     }
 
     public function reviews(): HasMany

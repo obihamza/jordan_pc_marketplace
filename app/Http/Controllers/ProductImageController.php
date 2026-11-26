@@ -95,6 +95,59 @@ class ProductImageController extends Controller
             ->with('success', 'Image uploaded successfully!');
     }
 
+    /** Streams the picture to anyone (guests included): product pictures are public. */
+    public function file(ProductImage $productImage)
+    {
+        $disk = Storage::disk('public');
+
+        abort_unless($disk->exists($productImage->image_path), 404);
+
+        return $disk->response($productImage->image_path, null, ['Cache-Control' => 'public, max-age=86400']);
+    }
+
+    /** Picture settings (the pop-up): primary or not. */
+    public function update(Request $request, ProductImage $productImage)
+    {
+        $me = auth()->user();
+
+        if ($me->isAdmin()) {
+
+            $productImage = ProductImage::findOrFail($productImage->id);
+
+        } elseif ($me->isSeller()) {
+
+            $productImage = ProductImage::whereHas('product', function ($query) use ($me) {
+                $query->where('seller_id', $me->id);
+            })->findOrFail($productImage->id);
+
+        } else {
+            abort(403);
+        }
+
+        $makePrimary = $request->boolean('is_primary');
+
+        if ($makePrimary) {
+
+            // Only one primary picture per product.
+            $productImage->product->images()->update(['is_primary' => false]);
+            $productImage->update(['is_primary' => true]);
+
+        } elseif ($productImage->is_primary) {
+
+            // A product always keeps a primary picture: hand the role to another one.
+            $other = $productImage->product->images()->where('id', '!=', $productImage->id)->orderBy('id')->first();
+
+            if (! $other) {
+                return back()->with('danger', 'This is the only picture of the product, so it stays primary. Upload another picture first.');
+            }
+
+            $productImage->update(['is_primary' => false]);
+            $other->update(['is_primary' => true]);
+        }
+
+        return back()->with('success', 'Picture settings saved.');
+    }
+
     public function destroy(ProductImage $productImage)
     {
         $me = auth()->user();

@@ -65,7 +65,7 @@
                             <span class="jo-rank">{{ $loop->iteration }}</span>
 
                             @if($product->primaryImage)
-                                <img src="{{ asset('storage/'.$product->primaryImage->image_path) }}" alt="" class="jo-thumb">
+                                <img src="{{ $product->primaryImage->url() }}" alt="" class="jo-thumb">
                             @else
                                 <div class="jo-thumb d-flex align-items-center justify-content-center text-muted small">No image</div>
                             @endif

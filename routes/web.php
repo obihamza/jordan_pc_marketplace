@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class)->except(['index', 'show']);
 
     Route::resource('addresses', AddressController::class)->except(['show']);
-    Route::resource('product-images', ProductImageController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('product-images', ProductImageController::class)->only(['index', 'create', 'store', 'update', 'destroy']);
     Route::resource('carts', CartController::class)->only(['index', 'destroy']);
     Route::resource('cart-items', CartItemController::class)->only(['store', 'update', 'destroy']);
     Route::resource('coupons', CouponController::class);
@@ -94,6 +94,9 @@ Route::middleware('auth')->group(function () {
 | (The controllers return the guest.* views when nobody is logged in.)
 |--------------------------------------------------------------------------
 */
+// Product pictures are public (served through a route, so no storage:link is needed).
+Route::get('/product-images/{productImage}/file', [ProductImageController::class, 'file'])->name('product-images.file');
+
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 Route::resource('categories', CategoryController::class)->only(['index', 'show']);
 Route::resource('sellers', SellerController::class)->only(['index', 'show']);

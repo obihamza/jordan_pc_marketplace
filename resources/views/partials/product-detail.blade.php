@@ -11,13 +11,13 @@
 <div class="row g-4">
     <div class="col-md-5">
         @if($images->isNotEmpty())
-            <img src="{{ asset('storage/'.$images->first()->image_path) }}" alt="{{ $product->name }}"
+            <img src="{{ $images->first()->url() }}" alt="{{ $product->name }}"
                  class="img-fluid rounded border mb-2 w-100" style="max-height: 380px; object-fit: cover;">
 
             @if($images->count() > 1)
                 <div class="d-flex flex-wrap gap-2">
                     @foreach($images->skip(1) as $image)
-                        <img src="{{ asset('storage/'.$image->image_path) }}" alt="" class="rounded border"
+                        <img src="{{ $image->url() }}" alt="" class="rounded border"
                              style="width: 80px; height: 80px; object-fit: cover;">
                     @endforeach
                 </div>

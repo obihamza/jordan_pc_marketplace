@@ -26,6 +26,15 @@ class ProductImage extends Model
         ];
     }
 
+    /**
+     * Public address of the picture. It goes through a route (not public/storage), so it works
+     * even when `php artisan storage:link` was never run (for example on Windows/XAMPP).
+     */
+    public function url(): string
+    {
+        return route('product-images.file', $this);
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
