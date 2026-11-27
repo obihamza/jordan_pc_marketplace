@@ -387,3 +387,8 @@ body { background-color: var(--jo-bg); }
 .jo-chat-chip:hover { background: #fff4ea; border-color: var(--jo-orange); }
 .jo-chat-msg.typing { animation: joPulse 1.2s ease-in-out infinite; }
 @keyframes joPulse { 50% { opacity: .45; } }
+
+/* Profile photos */
+.jo-avatar { overflow: hidden; flex: 0 0 auto; }
+.jo-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.jo-avatar-lg { width: 72px; height: 72px; font-size: 1.6rem; }

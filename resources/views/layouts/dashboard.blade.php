@@ -78,7 +78,7 @@
                 {{-- Account --}}
                 <div class="dropdown">
                     <a class="jo-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="jo-avatar">{{ $panelInitial }}</span>
+                        <span class="jo-avatar">@if($panelUser->avatarUrl())<img src="{{ $panelUser->avatarUrl() }}" alt="">@else{{ $panelInitial }}@endif</span>
                         <span class="d-none d-sm-block lh-sm text-start">
                             <span class="d-block fw-semibold">{{ $panelUser->name }}</span>
                             <span class="d-block small text-muted">{{ $panelRole }}</span>

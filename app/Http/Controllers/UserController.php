@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -49,13 +50,15 @@ class UserController extends Controller
             'email' => 'required|email|max:180|unique:users,email',
             'password' => 'required|string|min:8',
             'phone' => 'nullable|string|max:30',
-            'user_img' => 'nullable|string',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_admin' => 'boolean',
         ]);
 
         // The column is `password_hash` (hashed by the model cast).
         $validated['password_hash'] = $validated['password'];
         unset($validated['password']);
+
+        $validated = $this->withAvatar($request, $validated);
 
         User::create($validated);
 
@@ -131,7 +134,8 @@ class UserController extends Controller
             'email' => ['required', 'email', 'max:180', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => 'nullable|string|min:8',
             'phone' => 'nullable|string|max:30',
-            'user_img' => 'nullable|string',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_avatar' => 'nullable|boolean',
         ];
 
         // Only an admin can change the admin flag.
@@ -146,10 +150,50 @@ class UserController extends Controller
         }
         unset($validated['password']);
 
+        $validated = $this->withAvatar($request, $validated, $user);
+
         $user->update($validated);
 
         return redirect()->route('users.show', $user)
             ->with('success', 'User updated successfully!');
+    }
+
+    /** Streams a profile photo to logged-in users (the files live on the public disk, no storage:link needed). */
+    public function avatar(User $user)
+    {
+        $disk = Storage::disk('public');
+
+        abort_unless($user->user_img && ! str_starts_with($user->user_img, 'http') && $disk->exists($user->user_img), 404);
+
+        return $disk->response($user->user_img, null, ['Cache-Control' => 'private, max-age=3600']);
+    }
+
+    /**
+     * Turns the uploaded "avatar" file (or the "remove photo" tick) into the user_img column,
+     * and deletes the old stored photo when it is replaced or removed.
+     */
+    private function withAvatar(Request $request, array $validated, ?User $user = null): array
+    {
+        unset($validated['avatar'], $validated['remove_avatar']);
+
+        $old = $user?->user_img;
+        $oldStored = $old && str_starts_with($old, 'avatars/');
+
+        if ($request->hasFile('avatar')) {
+            $validated['user_img'] = $request->file('avatar')->store('avatars', 'public');
+
+            if ($oldStored) {
+                Storage::disk('public')->delete($old);
+            }
+        } elseif ($request->boolean('remove_avatar') && $old) {
+            $validated['user_img'] = null;
+
+            if ($oldStored) {
+                Storage::disk('public')->delete($old);
+            }
+        }
+
+        return $validated;
     }
 
     public function destroy(User $user)

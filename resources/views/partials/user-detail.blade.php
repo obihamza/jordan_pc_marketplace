@@ -10,6 +10,9 @@
         <div class="card h-100">
             <div class="card-header fw-semibold">Account</div>
             <div class="card-body">
+                <span class="jo-avatar jo-avatar-lg mb-3">
+                    @if($user->avatarUrl())<img src="{{ $user->avatarUrl() }}" alt="">@else{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}@endif
+                </span>
                 <dl class="row mb-0">
                     <dt class="col-sm-4">Name</dt><dd class="col-sm-8">{{ $user->name }}</dd>
                     <dt class="col-sm-4">Email</dt><dd class="col-sm-8">{{ $user->email }}</dd>

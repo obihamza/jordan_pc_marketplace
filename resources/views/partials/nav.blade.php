@@ -33,7 +33,7 @@
 
                     <div class="dropdown">
                         <a class="jo-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="jo-avatar">{{ mb_strtoupper(mb_substr($me->name, 0, 1)) }}</span>
+                            <span class="jo-avatar">@if($me->avatarUrl())<img src="{{ $me->avatarUrl() }}" alt="">@else{{ mb_strtoupper(mb_substr($me->name, 0, 1)) }}@endif</span>
                             <span class="d-none d-lg-block lh-sm text-start">
                                 <span class="d-block fw-semibold">{{ $me->name }}</span>
                                 <span class="d-block small text-muted">{{ $roleLabel }}</span>

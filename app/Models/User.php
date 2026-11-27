@@ -38,6 +38,16 @@ class User extends Authenticatable
         ];
     }
 
+    /** Profile photo address, or null when none (then the initial letter is shown). Old values that are full URLs still work. */
+    public function avatarUrl(): ?string
+    {
+        if (! $this->user_img) {
+            return null;
+        }
+
+        return str_starts_with($this->user_img, 'http') ? $this->user_img : route('users.avatar', $this);
+    }
+
     /**
      * The password column is `password_hash`, not `password`.
      */

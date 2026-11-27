@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
     Route::get('/notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
 
+    Route::get('users/{user}/avatar', [UserController::class, 'avatar'])->name('users.avatar');
     Route::resource('users', UserController::class);
 
     // Seller applications: admin approves / rejects; admin + owner can open the ID picture.
