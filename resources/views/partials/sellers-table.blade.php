@@ -1,4 +1,3 @@
-{{-- Params: sellers (paginator, with user, withCount products) --}}
 @php($isAdmin = auth()->user()?->isAdmin() ?? false)
 <div class="card">
     <div class="table-responsive">

@@ -45,7 +45,6 @@ class Coupon extends Model
         return $this->hasMany(Order::class);
     }
 
-    /** Active, within its date window, and not past its usage limit. */
     public function scopeValid(Builder $query): Builder
     {
         return $query->where('is_active', true)

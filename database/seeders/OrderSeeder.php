@@ -9,11 +9,6 @@ use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
 {
-    /**
-     * 10 orders, one per address (the order's user and shipping_address are
-     * derived from the address by OrderFactory). Totals are filled in by
-     * OrderItemSeeder once the items exist.
-     */
     public function run(): void
     {
         $addressIds = Address::orderBy('id')->pluck('id')->all();

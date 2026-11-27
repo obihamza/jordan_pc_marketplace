@@ -1,4 +1,3 @@
-{{-- Params: name, label, type (text), value, required, step, min --}}
 @php($type = $type ?? 'text')
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label">{{ $label }}</label>

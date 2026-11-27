@@ -1,4 +1,3 @@
-{{-- Params: title, url (optional), label (optional), back (optional), modal (optional: id of a pop-up to open instead of linking to url) --}}
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h1 class="h3 mb-0">{{ $title }}</h1>
 

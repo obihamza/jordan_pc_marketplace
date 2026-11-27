@@ -6,10 +6,6 @@ use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-/**
- * Coupons are managed by admins only. Buyers/sellers just type a coupon code
- * at checkout (see OrderController@store).
- */
 class CouponController extends Controller
 {
     public function index()

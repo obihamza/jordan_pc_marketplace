@@ -13,10 +13,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
-    // The schema has created_at / updated_at only (no remember_token).
     protected $fillable = [
         'name',
         'email',
@@ -38,7 +36,6 @@ class User extends Authenticatable
         ];
     }
 
-    /** Profile photo address, or null when none (then the initial letter is shown). Old values that are full URLs still work. */
     public function avatarUrl(): ?string
     {
         if (! $this->user_img) {
@@ -48,18 +45,11 @@ class User extends Authenticatable
         return str_starts_with($this->user_img, 'http') ? $this->user_img : route('users.avatar', $this);
     }
 
-    /**
-     * The password column is `password_hash`, not `password`.
-     */
     public function getAuthPasswordName(): string
     {
         return 'password_hash';
     }
 
-    /**
-     * The users table has no remember_token column. An empty name makes Laravel
-     * skip "remember me" instead of failing with an SQL error.
-     */
     public function getRememberTokenName(): string
     {
         return '';
@@ -70,9 +60,6 @@ class User extends Authenticatable
         return $this->password_hash;
     }
 
-    /* ----------------------------- Relations ----------------------------- */
-
-    /** Seller profile (only for users who sell). */
     public function seller(): HasOne
     {
         return $this->hasOne(Seller::class, 'user_id');
@@ -83,7 +70,6 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
-    /** A user has a single cart (carts.user_id is unique). */
     public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
@@ -99,36 +85,21 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
-    /* ------------------------------- Roles -------------------------------- */
-    /*
-     * There is no `role` column. Roles are derived:
-     *   admin  -> users.is_admin = 1
-     *   seller -> the user has a row in `sellers`
-     *   buyer  -> every non-admin user (so EVERY SELLER IS ALSO A BUYER,
-     *             but not every buyer is a seller)
-     * In controllers: isAdmin() / isSeller(); anything else is a plain buyer,
-     * and "can act as a buyer" simply means !isAdmin().
-     */
-
     public function isAdmin(): bool
     {
         return (bool) $this->is_admin;
     }
 
-    /** Uses the loaded relation, so repeated calls in one request cost one query. */
     public function isSeller(): bool
     {
-        // A seller profile only counts once an admin approved it.
         return $this->seller?->isApproved() ?? false;
     }
 
-    /** pending / approved / rejected, or null when the user never applied. */
     public function sellerStatus(): ?string
     {
         return $this->seller?->verification_status;
     }
 
-    /** Users that are only buyers (not admins, not sellers). Handy for seeding. */
     public function scopeBuyersOnly(Builder $query): Builder
     {
         return $query->where('is_admin', false)->doesntHave('seller');

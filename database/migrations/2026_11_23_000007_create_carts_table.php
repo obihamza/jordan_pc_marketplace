@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            // One cart per user (unique user_id)
+
             $table->foreignId('user_id')
                 ->unique()
                 ->constrained('users')

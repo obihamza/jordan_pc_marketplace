@@ -4,10 +4,6 @@ namespace App\Services;
 
 use App\Models\User;
 
-/**
- * What the AI knows about how JO-Marketplace works.
- * Edit the text here when the website changes; the assistant answers "how do I...?" from it.
- */
 class SiteGuide
 {
     public static function for(?User $user): string

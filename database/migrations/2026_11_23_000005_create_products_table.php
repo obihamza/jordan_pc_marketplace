@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            // seller_id references sellers.user_id
+
             $table->foreignId('seller_id')
                 ->constrained('sellers', 'user_id')
                 ->cascadeOnUpdate();

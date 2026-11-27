@@ -28,7 +28,7 @@ return new class extends Migration
             $table->enum('order_status', ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])
                 ->nullable()
                 ->default('pending');
-            // Snapshot of the address text at order time
+
             $table->string('shipping_address');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

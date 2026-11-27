@@ -14,7 +14,6 @@ class UserController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $users = User::with('seller')
                 ->latest()
                 ->paginate(15);
@@ -22,7 +21,6 @@ class UserController extends Controller
             return view('admin.users.index', compact('users'));
         }
 
-        // Sellers and buyers only manage their own profile (show / edit).
         abort(403);
     }
 
@@ -54,7 +52,6 @@ class UserController extends Controller
             'is_admin' => 'boolean',
         ]);
 
-        // The column is `password_hash` (hashed by the model cast).
         $validated['password_hash'] = $validated['password'];
         unset($validated['password']);
 
@@ -71,22 +68,16 @@ class UserController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $user = User::with(['seller', 'addresses'])
                 ->findOrFail($user->id);
 
             return view('admin.users.show', compact('user'));
-
         } elseif ($me->isSeller()) {
-
-            // Own profile only.
             $user = User::with(['seller', 'addresses'])
                 ->findOrFail($me->id);
 
             return view('seller.users.show', compact('user'));
-
         } else {
-
             $user = User::with('addresses')
                 ->findOrFail($me->id);
 
@@ -99,19 +90,14 @@ class UserController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $user = User::findOrFail($user->id);
 
             return view('admin.users.edit', compact('user'));
-
         } elseif ($me->isSeller()) {
-
             $user = User::findOrFail($me->id);
 
             return view('seller.users.edit', compact('user'));
-
         } else {
-
             $user = User::findOrFail($me->id);
 
             return view('buyer.users.edit', compact('user'));
@@ -125,7 +111,6 @@ class UserController extends Controller
         if ($me->isAdmin()) {
             $user = User::findOrFail($user->id);
         } else {
-            // Own profile only.
             $user = User::findOrFail($me->id);
         }
 
@@ -138,7 +123,6 @@ class UserController extends Controller
             'remove_avatar' => 'nullable|boolean',
         ];
 
-        // Only an admin can change the admin flag.
         if ($me->isAdmin()) {
             $rules['is_admin'] = 'boolean';
         }
@@ -158,7 +142,6 @@ class UserController extends Controller
             ->with('success', 'User updated successfully!');
     }
 
-    /** Streams a profile photo to logged-in users (the files live on the public disk, no storage:link needed). */
     public function avatar(User $user)
     {
         $disk = Storage::disk('public');
@@ -168,10 +151,6 @@ class UserController extends Controller
         return $disk->response($user->user_img, null, ['Cache-Control' => 'private, max-age=3600']);
     }
 
-    /**
-     * Turns the uploaded "avatar" file (or the "remove photo" tick) into the user_img column,
-     * and deletes the old stored photo when it is replaced or removed.
-     */
     private function withAvatar(Request $request, array $validated, ?User $user = null): array
     {
         unset($validated['avatar'], $validated['remove_avatar']);
@@ -201,7 +180,6 @@ class UserController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $user = User::findOrFail($user->id);
             $user->delete();
 
@@ -209,7 +187,6 @@ class UserController extends Controller
                 ->with('danger', 'User deleted successfully!');
         }
 
-        // Anyone else can only delete their own account.
         $user = User::findOrFail($me->id);
         $user->delete();
 

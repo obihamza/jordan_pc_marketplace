@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** Laravel's standard table for database notifications (the admin's bell). */
 return new class extends Migration
 {
     public function up(): void

@@ -5,11 +5,9 @@
 @section('content')
 @php($me = auth()->user())
 
-{{-- ============================== HERO + BEST SELLERS ============================== --}}
 <section class="jo-banner mb-5">
     <div class="row align-items-center g-4 g-lg-5">
 
-        {{-- Left: greeting --}}
         <div class="col-lg-7">
             <span class="badge rounded-pill jo-pill px-3 py-2 mb-3">Jordan's marketplace for new &amp; used</span>
 
@@ -51,7 +49,6 @@
             </div>
         </div>
 
-        {{-- Right: best sellers card --}}
         <div class="col-lg-5">
             <div class="card jo-bestsellers border-0 shadow-lg overflow-hidden text-body">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
@@ -92,7 +89,6 @@
     </div>
 </section>
 
-{{-- ============================== SHOP FROM TOP CATEGORIES ============================== --}}
 <section class="mb-5" id="categories">
     @include('partials.section-head', ['titleHtml' => 'Shop from <span class="text-orange">top categories</span>', 'url' => route('categories.index')])
 
@@ -109,7 +105,6 @@
     </div>
 </section>
 
-{{-- ============================== "GRAB THE BEST DEAL ON ..." ROWS ============================== --}}
 @foreach($categoryRows as $category)
     <section class="mb-5">
         @include('partials.section-head', [
@@ -124,7 +119,6 @@
     </section>
 @endforeach
 
-{{-- ============================== SELECTED ITEMS ============================== --}}
 <section class="mb-5">
     @include('partials.section-head', ['titleHtml' => 'Selected <span class="text-orange">items</span>', 'url' => route('products.index'), 'label' => 'See all products'])
 
@@ -139,7 +133,6 @@
     </div>
 </section>
 
-{{-- ============================== WHY US ============================== --}}
 <section class="mb-5">
     <div class="text-center mb-4">
         <h2 class="h3 fw-bold">Why <span class="text-orange">JO-Marketplace</span>?</h2>
@@ -186,7 +179,6 @@
     </div>
 </section>
 
-{{-- ============================== CALL TO ACTION (guests and buyers) ============================== --}}
 @if(! $me || (! $me->isAdmin() && ! $me->isSeller()))
     <section class="jo-cta rounded-4 p-4 p-lg-5 text-center">
         <h2 class="h3 fw-bold">Have something to sell?</h2>

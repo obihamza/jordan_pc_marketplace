@@ -1,8 +1,3 @@
-{{--
-    One pop-up that replaces the browser's confirm() box.
-    Any form with data-confirm="Question?" asks here first.
-    Optional: data-confirm-title, data-confirm-button.
---}}
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -33,14 +28,14 @@
             e.preventDefault();
 
             var modalEl = document.getElementById('confirmModal');
-            if (! window.bootstrap) {                       // Bootstrap not loaded: fall back to the browser box
+            if (! window.bootstrap) {
                 if (window.confirm(form.dataset.confirm)) { form.dataset.confirmed = '1'; form.submit(); }
                 return;
             }
 
             pending = form;
             document.getElementById('confirmModalHeading').textContent = form.dataset.confirmTitle || 'Please confirm';
-            document.getElementById('confirmModalText').textContent = form.dataset.confirm;   // textContent: no HTML
+            document.getElementById('confirmModalText').textContent = form.dataset.confirm;
             document.getElementById('confirmModalYes').textContent = form.dataset.confirmButton || 'Yes, continue';
             document.getElementById('confirmModalYes').disabled = false;
             bootstrap.Modal.getOrCreateInstance(modalEl).show();
@@ -48,7 +43,7 @@
 
         document.getElementById('confirmModalYes').addEventListener('click', function () {
             if (! pending) { return; }
-            this.disabled = true;                            // no double clicks
+            this.disabled = true;
             pending.dataset.confirmed = '1';
             pending.submit();
         });

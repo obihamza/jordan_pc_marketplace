@@ -10,7 +10,6 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    // Table only has created_at.
     const UPDATED_AT = null;
 
     protected $fillable = [

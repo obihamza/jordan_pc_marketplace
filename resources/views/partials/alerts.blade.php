@@ -1,4 +1,3 @@
-{{-- Flash messages appear as toasts (top right): green = success, red = danger action (delete, remove, cancel) --}}
 @php
     $toasts = array_filter([
         ['type' => 'success', 'icon' => 'bi-check-circle-fill', 'title' => 'Done', 'text' => session('success')],
@@ -23,17 +22,15 @@
     </div>
 
     <script>
-        // Bootstrap's JS is loaded with `defer`, so wait for it before showing the toasts.
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.jo-toast').forEach(function (el) {
                 if (window.bootstrap) { bootstrap.Toast.getOrCreateInstance(el).show(); }
                 else { el.classList.add('show'); }
             });
         });
-    </script>
+</script>
 @endif
 
-{{-- Validation errors stay inline above the page content --}}
 @if($errors->any() && ! old('_modal'))
     <div class="alert alert-danger">
         <strong>Please fix the following:</strong>

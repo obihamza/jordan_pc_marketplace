@@ -1,4 +1,3 @@
-{{-- Param: user (with seller, addresses) --}}
 @php
     $me = auth()->user();
     $isOwn = $user->id == $me->id;
@@ -35,9 +34,8 @@
         </div>
     </div>
 
-    {{-- Seller profile: only shown when this user really is a seller (or applied to be one) --}}
     @if($user->seller)
-        @php $seller = $user->seller; @endphp
+        @php $seller = $user->seller;@endphp
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">

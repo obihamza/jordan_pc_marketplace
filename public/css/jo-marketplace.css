@@ -1,15 +1,10 @@
-/*
- * JO-Marketplace theme: LIGHT storefront + dashboards with a black side bar,
- * orange accents, on top of Bootstrap 5.3 (data-bs-theme="light").
- * Loaded AFTER the Bootstrap CSS; it only tunes Bootstrap to the brand.
- */
 
 :root,
 [data-bs-theme="light"] {
     --jo-orange: #ff6a00;
     --jo-orange-light: #ff8a3d;
     --jo-orange-dark: #e05a00;
-    --jo-orange-text: #c24d00;          /* orange that is readable as text on white */
+    --jo-orange-text: #c24d00;
     --jo-orange-soft: #fff1e6;
     --jo-black: #0e0e10;
 
@@ -38,7 +33,6 @@ body { background-color: var(--jo-bg); }
 .min-w-0     { min-width: 0; }
 .jo-logo     { height: 36px; width: auto; }
 
-/* ---------- Buttons: orange with BLACK text (best contrast) ---------- */
 .btn-primary,
 .btn-warning {
     --bs-btn-color: #111;
@@ -79,7 +73,6 @@ body { background-color: var(--jo-bg); }
 
 .text-bg-primary { background-color: var(--jo-orange) !important; color: #111 !important; }
 
-/* ---------- Cards, lists, tables, dropdowns ---------- */
 .card {
     --bs-card-bg: var(--jo-surface);
     --bs-card-border-color: var(--jo-line);
@@ -116,7 +109,6 @@ body { background-color: var(--jo-bg); }
     box-shadow: 0 10px 30px rgba(20, 20, 20, .12);
 }
 
-/* ---------- Forms ---------- */
 .form-control,
 .form-select {
     background-color: #fff;
@@ -130,7 +122,6 @@ body { background-color: var(--jo-bg); }
 .form-check-input:checked { background-color: var(--jo-orange); border-color: var(--jo-orange); }
 .form-check-input:focus { border-color: var(--jo-orange); box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .2); }
 
-/* ---------- Pagination ---------- */
 .pagination {
     --bs-pagination-color: var(--jo-orange-text);
     --bs-pagination-hover-color: #962f00;
@@ -140,10 +131,8 @@ body { background-color: var(--jo-bg); }
     --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(255, 106, 0, .2);
 }
 
-/* ---------- Modals ---------- */
 .modal-content { border: 0; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, .25); }
 
-/* ---------- Headings ---------- */
 .jo-section-title { position: relative; padding-bottom: .55rem; font-weight: 700; }
 .jo-section-title::after {
     content: ""; position: absolute; left: 0; bottom: 0;
@@ -153,9 +142,6 @@ body { background-color: var(--jo-bg); }
 .jo-section-head .jo-section-title { width: auto; }
 .jo-section-head .jo-section-title::after { bottom: -1px; }
 
-/* =====================================================================
-   STOREFRONT HEADER: logo + search + account, then a row of pills
-   ===================================================================== */
 .jo-site-header { background: #fff; border-bottom: 1px solid var(--jo-line); z-index: 1030; }
 
 .jo-search {
@@ -193,9 +179,6 @@ body { background-color: var(--jo-bg); }
 .jo-pill-more { background: transparent; border-color: var(--jo-line); }
 .jo-pill-sep { flex: 0 0 1px; align-self: stretch; background: var(--jo-line); margin: .2rem .25rem; }
 
-/* =====================================================================
-   LANDING PAGE
-   ===================================================================== */
 .jo-banner {
     color: #fff; border-radius: 20px; padding: 2.5rem 2rem;
     background:
@@ -220,7 +203,6 @@ body { background-color: var(--jo-bg); }
 }
 .jo-thumb { flex: 0 0 auto; width: 56px; height: 56px; border-radius: .6rem; object-fit: cover; background: var(--jo-surface-2); }
 
-/* Round category icons */
 .jo-cat-row { display: flex; gap: 1.25rem; overflow-x: auto; padding: .5rem .25rem 1rem; scrollbar-width: thin; }
 .jo-cat-item { flex: 0 0 auto; width: 104px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: .3rem; color: var(--bs-body-color); }
 .jo-cat-circle {
@@ -231,7 +213,6 @@ body { background-color: var(--jo-bg); }
 .jo-cat-item:hover .jo-cat-circle, .jo-cat-circle.active { border-color: var(--jo-orange); background: var(--jo-orange-soft); transform: translateY(-3px); }
 .jo-cat-name { font-size: .88rem; font-weight: 600; line-height: 1.2; }
 
-/* Product cards */
 .jo-product { overflow: hidden; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
 .jo-product:hover { transform: translateY(-3px); border-color: var(--jo-orange); box-shadow: 0 10px 24px rgba(255, 106, 0, .15); }
 
@@ -241,7 +222,6 @@ body { background-color: var(--jo-bg); }
 }
 .jo-cta { background: var(--jo-orange); color: #111; }
 
-/* ---------- Footer (black block, orange top edge) ---------- */
 .jo-footer {
     background: var(--jo-black); color: rgba(255, 255, 255, .7);
     border-top: 4px solid var(--jo-orange); border-radius: 24px 24px 0 0;
@@ -251,9 +231,6 @@ body { background-color: var(--jo-bg); }
 .jo-footer a:hover { color: var(--jo-orange); }
 .jo-footer hr { border-color: rgba(255, 255, 255, .15); }
 
-/* =====================================================================
-   DASHBOARDS (admin + seller): black side bar, light content
-   ===================================================================== */
 .jo-dash-body { background: var(--jo-bg); }
 
 .jo-sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; z-index: 1030; }
@@ -279,7 +256,6 @@ body { background-color: var(--jo-bg); }
 .jo-dash-content { padding: .5rem 1.5rem 2.5rem; }
 @media (max-width: 991.98px) { .jo-dash-top { padding: .75rem 1rem; } .jo-dash-content { padding: .5rem 1rem 2rem; } }
 
-/* Side bar links (the side bar is dark) */
 .jo-side-nav { padding: .5rem 1rem; }
 .jo-side-title { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: #7d7d86; padding: 0 .85rem; margin: .75rem 0 .35rem; }
 .jo-side-link {
@@ -299,7 +275,6 @@ body { background-color: var(--jo-bg); }
 .jo-side-alert:hover { background: rgba(255, 193, 7, .2); color: #fff; }
 .jo-side-alert i:first-child { color: #ffc107; }
 
-/* Header: bell + account */
 .jo-bell {
     position: relative; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--jo-line); background: #fff;
     color: var(--bs-body-color); font-size: 1.15rem; display: inline-flex; align-items: center; justify-content: center;
@@ -319,7 +294,6 @@ body { background-color: var(--jo-bg); }
 .jo-bell-item.unread i { color: var(--jo-orange-text); }
 .jo-bell-time { font-size: .72rem; }
 
-/* Summary cards + charts */
 .jo-stat { height: 100%; }
 .jo-stat .jo-stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
 .jo-stat .jo-stat-label { color: var(--bs-secondary-color); font-size: .85rem; }
@@ -329,7 +303,6 @@ body { background-color: var(--jo-bg); }
 }
 .jo-chart-box { position: relative; height: 280px; }
 
-/* ---------- Icon buttons (view / edit / delete) + toasts ---------- */
 .jo-icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
     width: 32px; height: 32px; padding: 0; margin: 0 .1rem;
@@ -342,7 +315,6 @@ body { background-color: var(--jo-bg); }
 .jo-icon-btn.jo-icon-success:hover, .jo-icon-btn.jo-icon-success:focus-visible { background: #e8f6ee; border-color: #198754; color: #146c43; }
 .jo-toasts { z-index: 1100; }
 
-/* ---------- Chat widget (bottom right, every page) ---------- */
 .jo-chat-fab {
     position: fixed; right: 20px; bottom: 20px; width: 58px; height: 58px; border: 0; border-radius: 50%;
     background: var(--jo-orange); color: #111; display: flex; align-items: center; justify-content: center;
@@ -369,18 +341,15 @@ body { background-color: var(--jo-bg); }
 .jo-chat-form { display: flex; gap: .5rem; padding: .75rem; border-top: 1px solid var(--jo-line); background: #fff; }
 .jo-chat-note { padding: 0 .75rem .6rem; font-size: .72rem; color: #8a8a92; background: #fff; }
 
-/* ---------- Assistant page (dashboards) ---------- */
 .jo-assistant { display: flex; flex-direction: column; height: calc(100vh - 230px); min-height: 420px; }
 .jo-assistant-body { flex: 1 1 auto; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: .7rem; background: var(--jo-bg); }
 .jo-assistant-body .jo-chat-msg { max-width: min(75%, 640px); font-size: 1rem; }
 .jo-assistant-form { display: flex; gap: .6rem; padding: .85rem 1rem; border-top: 1px solid var(--jo-line); }
 
-/* Chatbot markdown replies */
 .jo-chat-msg.bot ul, .jo-chat-msg.bot ol { margin: .25rem 0; padding-left: 1.2rem; white-space: normal; }
 .jo-chat-msg.bot li { margin: .1rem 0; }
 .jo-chat-msg.bot code { background: #f3f3f5; padding: 0 .25rem; border-radius: .25rem; font-size: .85em; }
 
-/* Suggested questions */
 .jo-chat-chips { display: flex; gap: .4rem; overflow-x: auto; padding: .5rem .75rem; border-top: 1px solid var(--jo-line); scrollbar-width: thin; }
 .jo-chat-chips:empty { display: none; }
 .jo-chat-chip { flex: 0 0 auto; border: 1px solid var(--jo-line); background: #fff; color: #333; border-radius: 999px; padding: .3rem .75rem; font-size: .82rem; white-space: nowrap; transition: background .15s, border-color .15s; }
@@ -388,7 +357,6 @@ body { background-color: var(--jo-bg); }
 .jo-chat-msg.typing { animation: joPulse 1.2s ease-in-out infinite; }
 @keyframes joPulse { 50% { opacity: .45; } }
 
-/* Profile photos */
 .jo-avatar { overflow: hidden; flex: 0 0 auto; }
 .jo-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .jo-avatar-lg { width: 72px; height: 72px; font-size: 1.6rem; }

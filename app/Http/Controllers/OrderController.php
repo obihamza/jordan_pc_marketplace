@@ -22,16 +22,12 @@ class OrderController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $orders = Order::with(['user', 'payment'])
                 ->latest()
                 ->paginate(15);
 
             return view('admin.orders.index', compact('orders'));
-
         } elseif ($me->isSeller()) {
-
-            // Orders that contain this seller's products (sales)...
             $sales = Order::with(['user', 'payment'])
                 ->whereHas('items', function ($query) use ($me) {
                     $query->where('seller_id', $me->id);
@@ -39,16 +35,13 @@ class OrderController extends Controller
                 ->latest()
                 ->paginate(15, ['*'], 'sales_page');
 
-            // ...and, because a seller is also a buyer, their own purchases.
             $purchases = Order::with('payment')
                 ->where('user_id', $me->id)
                 ->latest()
                 ->paginate(15, ['*'], 'purchases_page');
 
             return view('seller.orders.index', compact('sales', 'purchases'));
-
         } else {
-
             $orders = Order::with('payment')
                 ->where('user_id', $me->id)
                 ->latest()
@@ -58,7 +51,6 @@ class OrderController extends Controller
         }
     }
 
-    /** Checkout page: pick an address (cash on delivery is the only payment method). */
     public function create()
     {
         $me = auth()->user();
@@ -76,7 +68,6 @@ class OrderController extends Controller
         return view('buyer.orders.create', compact('addresses', 'cart'));
     }
 
-    /** Turns the user's cart into an order (+ order items + COD payment). */
     public function store(Request $request)
     {
         $me = auth()->user();
@@ -102,13 +93,10 @@ class OrderController extends Controller
         }
 
         $order = DB::transaction(function () use ($me, $address, $cart, $validated) {
-
             $subtotal = 0;
             $lines = [];
 
             foreach ($cart->items as $item) {
-
-                // Lock the product row so stock can't be oversold.
                 $product = Product::lockForUpdate()->find($item->product_id);
 
                 if (! $product || $product->listing_status !== 'available' || $product->stock_quantity < $item->quantity) {
@@ -122,12 +110,10 @@ class OrderController extends Controller
                 $lines[] = [$product, $item->quantity, $lineTotal];
             }
 
-            // Optional coupon.
             $coupon = null;
             $discount = 0;
 
             if (! empty($validated['coupon_code'])) {
-
                 $coupon = Coupon::valid()
                     ->where('code', $validated['coupon_code'])
                     ->first();
@@ -155,17 +141,16 @@ class OrderController extends Controller
                 'shipping_cost' => $shipping,
                 'total_amount' => round($subtotal - $discount + $shipping, 2),
                 'order_status' => 'pending',
-                // Snapshot of the address at order time.
+
                 'shipping_address' => $address->address_line,
             ]);
 
             foreach ($lines as [$product, $quantity, $lineTotal]) {
-
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'seller_id' => $product->seller_id,
-                    // Snapshots, so later product edits don't change past orders.
+
                     'product_name' => $product->name,
                     'unit_price' => $product->price,
                     'quantity' => $quantity,
@@ -175,7 +160,6 @@ class OrderController extends Controller
 
                 $product->decrement('stock_quantity', $quantity);
 
-                // decrement() already updated the in-memory stock value.
                 if ($product->stock_quantity <= 0) {
                     $product->update(['listing_status' => 'sold']);
                 }
@@ -188,7 +172,6 @@ class OrderController extends Controller
                 'payment_status' => 'pending',
             ]);
 
-            // Empty the cart.
             $cart->items()->delete();
             $cart->update(['total' => 0]);
 
@@ -202,7 +185,6 @@ class OrderController extends Controller
             route('orders.show', $order, false)
         );
 
-        // Each seller whose products are in the order hears about it.
         $order->load('items.seller.user');
         $order->items->groupBy('seller_id')->each(function ($lines) use ($order, $me) {
             $sellerUser = $lines->first()->seller?->user;
@@ -227,15 +209,11 @@ class OrderController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $order = Order::with(['user', 'address', 'coupon', 'items.product', 'payment'])
                 ->findOrFail($order->id);
 
             return view('admin.orders.show', compact('order'));
-
         } elseif ($me->isSeller()) {
-
-            // An order I placed, or one that contains my products.
             $order = Order::with(['user', 'address', 'coupon', 'items.product', 'payment'])
                 ->where(function ($query) use ($me) {
                     $query->where('user_id', $me->id)
@@ -246,9 +224,7 @@ class OrderController extends Controller
                 ->findOrFail($order->id);
 
             return view('seller.orders.show', compact('order'));
-
         } else {
-
             $order = Order::with(['address', 'coupon', 'items.product', 'payment'])
                 ->where('user_id', $me->id)
                 ->findOrFail($order->id);
@@ -262,7 +238,6 @@ class OrderController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $order = Order::with('items')->findOrFail($order->id);
 
             $validated = $request->validate([
@@ -270,10 +245,7 @@ class OrderController extends Controller
             ]);
 
             $status = $validated['order_status'];
-
         } else {
-
-            // A buyer (or a seller as buyer) can only cancel their own pending order.
             $order = Order::with('items')
                 ->where('user_id', $me->id)
                 ->findOrFail($order->id);
@@ -286,8 +258,6 @@ class OrderController extends Controller
         }
 
         DB::transaction(function () use ($order, $status) {
-
-            // Cancelling puts the stock back.
             if ($status === 'cancelled' && $order->order_status !== 'cancelled') {
                 foreach ($order->items as $item) {
                     $product = Product::withTrashed()->find($item->product_id);

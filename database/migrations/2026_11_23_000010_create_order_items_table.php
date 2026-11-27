@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreignId('product_id')
                 ->constrained('products')
                 ->cascadeOnUpdate();
-            // seller_id references sellers.user_id
+
             $table->foreignId('seller_id')
                 ->constrained('sellers', 'user_id')
                 ->cascadeOnUpdate();
-            // Snapshots taken at purchase time
+
             $table->string('product_name', 180);
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->unsignedInteger('quantity');

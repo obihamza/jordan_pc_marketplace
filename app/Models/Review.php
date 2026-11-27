@@ -12,7 +12,6 @@ class Review extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // Table only has created_at.
     const UPDATED_AT = null;
 
     protected $fillable = [
@@ -32,7 +31,6 @@ class Review extends Model
         ];
     }
 
-    /** Only approved reviews are shown on the site and counted in ratings. */
     public function scopeApproved(Builder $query): Builder
     {
         return $query->where('status', 'approved');

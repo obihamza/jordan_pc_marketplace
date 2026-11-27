@@ -1,4 +1,3 @@
-{{-- Params: review (optional, edit), products (create only) --}}
 @php($review = $review ?? null)
 <form action="{{ $review ? route('reviews.update', $review) : route('reviews.store') }}" method="POST" class="card card-body">
     @csrf

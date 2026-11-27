@@ -1,4 +1,3 @@
-{{-- Params: action, label (optional), confirm (optional), class (optional), icon (optional: trash icon instead of a text button) --}}
 @php
     $label = $label ?? 'Delete';
     $confirmText = $confirm ?? 'Are you sure?';

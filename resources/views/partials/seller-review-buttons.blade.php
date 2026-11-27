@@ -1,5 +1,4 @@
-{{-- Admin only. Params: seller, icons (true = icon buttons for tables, false = labelled buttons) --}}
-@php $icons = $icons ?? false; @endphp
+@php $icons = $icons ?? false;@endphp
 @if(! $seller->isApproved())
     <form action="{{ route('sellers.approve', $seller) }}" method="POST" class="d-inline">
         @csrf @method('PATCH')

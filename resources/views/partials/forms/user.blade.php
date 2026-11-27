@@ -1,4 +1,3 @@
-{{-- Params: user (optional, edit) --}}
 @php($user = $user ?? null)
 <form action="{{ $user ? route('users.update', $user) : route('users.store') }}" method="POST" enctype="multipart/form-data" class="card card-body">
     @csrf
@@ -37,7 +36,6 @@
     @once
         @push('scripts')
         <script>
-            // Shows the chosen photo before saving.
             document.getElementById('avatar').addEventListener('change', function () {
                 var file = this.files[0], box = document.getElementById('avatarPreview');
                 if (! file || ! file.type.startsWith('image/')) { return; }
@@ -47,11 +45,10 @@
                 box.textContent = '';
                 box.appendChild(img);
             });
-        </script>
+</script>
         @endpush
     @endonce
 
-    {{-- Only admins can change the admin flag (the controller ignores it for everyone else). --}}
     @if(auth()->user()->isAdmin())
         @include('partials.forms.checkbox', ['name' => 'is_admin', 'label' => 'Administrator', 'checked' => $user?->is_admin ?? false])
     @endif

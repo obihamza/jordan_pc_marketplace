@@ -1,4 +1,3 @@
-{{-- Params: reviews (paginator, with product loaded), showUser (optional), showStatus (optional: approval status + admin approve/reject) --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -18,7 +17,7 @@
                     @php
                         $isMine = $review->user_id == auth()->id();
                         $isAdmin = auth()->user()->isAdmin();
-                    @endphp
+@endphp
                     <tr>
                         <td>
                             @if($review->product)

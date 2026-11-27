@@ -1,4 +1,3 @@
-{{-- Logo block at the top of the dashboard side bar. Param: closeable (small-screen pop-out gets a close button) --}}
 <div class="jo-sidebar-brand">
     <a href="{{ $panelHome }}" class="d-flex align-items-center gap-2 text-decoration-none">
         <img src="{{ asset('images/jo-logo-mark.svg') }}" alt="" style="height: 36px;">

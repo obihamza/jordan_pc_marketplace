@@ -6,9 +6,6 @@ use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Seller>
- */
 class SellerFactory extends Factory
 {
     public function definition(): array
@@ -23,7 +20,6 @@ class SellerFactory extends Factory
         ];
     }
 
-    /** An application waiting for the admin. */
     public function pending(): static
     {
         return $this->state(['verification_status' => 'pending', 'reviewed_at' => null]);

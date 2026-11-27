@@ -12,25 +12,17 @@ class CategoryController extends Controller
     {
         $me = auth()->user();
 
-        // Everyone can browse categories.
         $categories = Category::withCount('products')
             ->orderBy('name')
             ->paginate(15);
 
         if (! $me) {
-
             return view('guest.categories.index', compact('categories'));
-
         } elseif ($me->isAdmin()) {
-
             return view('admin.categories.index', compact('categories'));
-
         } elseif ($me->isSeller()) {
-
             return view('seller.categories.index', compact('categories'));
-
         } else {
-
             return view('buyer.categories.index', compact('categories'));
         }
     }
@@ -39,7 +31,6 @@ class CategoryController extends Controller
     {
         $me = auth()->user();
 
-        // "New category" is a pop-up on the categories page (partials/category-create-modal).
         if ($me->isAdmin() || $me->isSeller()) {
             return redirect()->route('categories.index')->with('open_category_modal', true);
         }
@@ -51,7 +42,6 @@ class CategoryController extends Controller
     {
         $me = auth()->user();
 
-        // Admins and approved sellers can add categories (a seller may need one for a new product).
         if (! $me->isAdmin() && ! $me->isSeller()) {
             abort(403);
         }
@@ -73,26 +63,18 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($category->id);
 
-        // Products in this category that can be bought.
         $products = $category->products()
             ->available()
             ->with('primaryImage')
             ->paginate(15);
 
         if (! $me) {
-
             return view('guest.categories.show', compact('category', 'products'));
-
         } elseif ($me->isAdmin()) {
-
             return view('admin.categories.show', compact('category', 'products'));
-
         } elseif ($me->isSeller()) {
-
             return view('seller.categories.show', compact('category', 'products'));
-
         } else {
-
             return view('buyer.categories.show', compact('category', 'products'));
         }
     }
@@ -102,7 +84,6 @@ class CategoryController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $category = Category::findOrFail($category->id);
 
             return view('admin.categories.edit', compact('category'));

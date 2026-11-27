@@ -1,4 +1,3 @@
-{{-- Params: product (optional, edit), categories, sellers (optional, admin create), modal (optional: inside the pop-up, no card/buttons) --}}
 @php
     $product = $product ?? null;
     $modal = $modal ?? false;
@@ -20,7 +19,6 @@
         'options' => $categories->pluck('name', 'id'), 'selected' => $product?->category_id,
     ])
 
-    {{-- Not in the list? Type a new category and it is created together with the product. --}}
     @if($modal)
         @include('partials.forms.input', ['name' => 'new_category', 'label' => 'Or create a new category'])
     @endif
@@ -53,7 +51,6 @@
         </div>
     </div>
 
-    {{-- The controller sets new products to "available"; the status can be changed when editing. --}}
     @if($product)
         @include('partials.forms.select', [
             'name' => 'listing_status', 'label' => 'Listing status', 'required' => true,

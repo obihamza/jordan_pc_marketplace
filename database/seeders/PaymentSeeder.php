@@ -9,7 +9,6 @@ use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
 {
-    /** 10 cash-on-delivery payments, one per order, status consistent with the order. */
     public function run(): void
     {
         $orders = Order::orderBy('id')->get();

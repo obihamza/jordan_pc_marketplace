@@ -6,10 +6,6 @@ use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-/**
- * Admin sees everything; any other user (buyer OR seller - a seller is also a
- * buyer) manages their own addresses with the buyer views.
- */
 class AddressController extends Controller
 {
     public function index()
@@ -17,15 +13,12 @@ class AddressController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $addresses = Address::with('user')
                 ->latest()
                 ->paginate(15);
 
             return view('admin.addresses.index', compact('addresses'));
-
         } else {
-
             $addresses = Address::where('user_id', $me->id)
                 ->latest()
                 ->paginate(15);
@@ -39,13 +32,10 @@ class AddressController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $users = User::all();
 
             return view('admin.addresses.create', compact('users'));
-
         } else {
-
             return view('buyer.addresses.create');
         }
     }
@@ -82,13 +72,10 @@ class AddressController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $address = Address::findOrFail($address->id);
 
             return view('admin.addresses.edit', compact('address'));
-
         } else {
-
             $address = Address::where('user_id', $me->id)
                 ->findOrFail($address->id);
 
@@ -101,11 +88,8 @@ class AddressController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $address = Address::findOrFail($address->id);
-
         } else {
-
             $address = Address::where('user_id', $me->id)
                 ->findOrFail($address->id);
         }
@@ -127,11 +111,8 @@ class AddressController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $address = Address::findOrFail($address->id);
-
         } else {
-
             $address = Address::where('user_id', $me->id)
                 ->findOrFail($address->id);
         }

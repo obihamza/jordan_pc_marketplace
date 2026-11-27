@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            // One payment per order (unique order_id)
+
             $table->foreignId('order_id')
                 ->unique()
                 ->constrained('orders')

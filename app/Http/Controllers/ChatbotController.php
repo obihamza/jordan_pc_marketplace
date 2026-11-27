@@ -6,13 +6,8 @@ use App\Services\ChatbotService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/**
- * Endpoint used by the chat widget (open to guests and logged-in users).
- * All the "thinking" lives in App\Services\ChatbotService.
- */
 class ChatbotController extends Controller
 {
-    /** Full-page assistant for the admin and seller dashboards (they have no floating chat button). */
     public function page()
     {
         abort_unless(auth()->user()->isAdmin() || auth()->user()->isSeller(), 403);

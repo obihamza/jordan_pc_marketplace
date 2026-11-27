@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-{{-- Dashboard shell shared by the admin and seller areas (Car Rent style):
-     full-height dark side bar with the logo and Logout, light header with the bell, content on the right.
-     Child layouts (layouts.admin / layouts.seller) fill the `sidebar` section. --}}
 @php
     $panelUser = auth()->user();
     $panelIsAdmin = $panelUser->isAdmin();
@@ -24,7 +21,6 @@
 </head>
 <body class="jo-dash-body">
 
-    {{-- ============ Side bar (large screens: fixed; small screens: slides in from the left) ============ --}}
     <aside class="jo-sidebar d-none d-lg-block" data-bs-theme="dark" aria-label="{{ $panelRole }} menu">
         <div class="jo-sidebar-inner">
             @include('partials.dashboard-brand')
@@ -41,7 +37,6 @@
         </div>
     </div>
 
-    {{-- ============ Main ============ --}}
     <div class="jo-dash-main">
         <header class="jo-dash-top">
             <div class="d-flex align-items-center gap-3">
@@ -56,7 +51,6 @@
             </div>
 
             <div class="d-flex align-items-center gap-2 gap-sm-3">
-                {{-- Notification bell: new events (red dot = something unread) --}}
                 <div class="dropdown">
                     <button class="jo-bell" type="button" id="joBell"
                             data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Notifications">
@@ -75,7 +69,6 @@
                     </div>
                 </div>
 
-                {{-- Account --}}
                 <div class="dropdown">
                     <a class="jo-user dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="jo-avatar">@if($panelUser->avatarUrl())<img src="{{ $panelUser->avatarUrl() }}" alt="">@else{{ $panelInitial }}@endif</span>
@@ -109,7 +102,6 @@
     @include('partials.confirm-modal')
 
     <script>
-        // Bell: draws the list and re-checks for new events every 30 seconds.
         (function () {
             var icons = { seller_application: 'bi-person-badge', order: 'bi-bag-check', user: 'bi-person-plus', seller_approved: 'bi-patch-check', review: 'bi-star' };
             var feedUrl = @json(route('notifications.feed'));
@@ -148,7 +140,7 @@
                     box.appendChild(t); box.appendChild(m); box.appendChild(w);
 
                     a.appendChild(i); a.appendChild(box);
-                    list.appendChild(a);   // textContent only: never inject HTML
+                    list.appendChild(a);
                 });
             }
 
@@ -162,7 +154,7 @@
                     .catch(function () {});
             }, 30000);
         })();
-    </script>
+</script>
     @stack('scripts')
 </body>
 </html>

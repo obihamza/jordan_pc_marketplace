@@ -7,7 +7,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-/* php artisan chatbot:test  -> checks the connection to Gemini and every model the chatbot may use. */
 Artisan::command('chatbot:test', function () {
     $key = config('chatbot.api_key');
     $this->line('Provider : '.config('chatbot.provider').(config('chatbot.provider') === 'gemini' ? '' : '   <-- should be "gemini" (check .env, then php artisan config:clear)'));
@@ -20,7 +19,6 @@ Artisan::command('chatbot:test', function () {
     $http = fn (int $seconds) => \Illuminate\Support\Facades\Http::withHeaders(['x-goog-api-key' => $key])->connectTimeout(8)->timeout($seconds);
     $base = 'https://generativelanguage.googleapis.com/v1beta/models';
 
-    // 1) Plain connection + which models this key can use.
     $this->line('');
     $this->line('1) Connection to Google...');
     try {
@@ -43,7 +41,6 @@ Artisan::command('chatbot:test', function () {
         return 1;
     }
 
-    // 2) One tiny question to each model.
     $models = array_values(array_unique(array_filter([
         config('chatbot.model') ?: 'gemini-3.6-flash',
         ...array_map('trim', explode(',', (string) config('chatbot.fallback_models'))),

@@ -35,7 +35,6 @@ class Product extends Model
         ];
     }
 
-    /** seller_id points at sellers.user_id */
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class, 'seller_id', 'user_id');
@@ -53,7 +52,6 @@ class Product extends Model
 
     public function primaryImage(): HasOne
     {
-        // The primary picture; when none is marked primary, the oldest picture is used.
         return $this->hasOne(ProductImage::class)->ofMany(['is_primary' => 'max', 'id' => 'min']);
     }
 
@@ -72,10 +70,6 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * Products this user may review: bought from someone else, the line is delivered,
-     * the order is paid, and they haven't reviewed it yet.
-     */
     public function scopeReviewableBy(Builder $query, User $user): Builder
     {
         return $query->where('seller_id', '!=', $user->id)

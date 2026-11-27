@@ -10,7 +10,6 @@ use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
 {
-    /** 10 reviews spread across buyers and products. */
     public function run(): void
     {
         $userIds = User::buyersOnly()->orderBy('id')->pluck('id')->all();

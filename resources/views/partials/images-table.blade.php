@@ -1,4 +1,3 @@
-{{-- Param: images (paginator, with product loaded) --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -10,9 +9,8 @@
                     <tr>
                         @php
                             $settingsData = 'data-image-settings data-action="'.e(route('product-images.update', $image)).'" data-src="'.e($image->url()).'" data-product="'.e($image->product?->name).'" data-primary="'.($image->is_primary ? '1' : '0').'"';
-                        @endphp
+@endphp
                         <td>
-                            {{-- Click the picture to open its settings --}}
                             <button type="button" class="btn p-0 border-0 bg-transparent" {!! $settingsData !!} title="Picture settings" aria-label="Open picture settings">
                                 <img src="{{ $image->url() }}" alt="" class="rounded border" loading="lazy" decoding="async" style="width: 64px; height: 64px; object-fit: cover;">
                             </button>

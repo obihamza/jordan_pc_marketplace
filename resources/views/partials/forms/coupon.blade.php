@@ -1,4 +1,3 @@
-{{-- Params: coupon (optional, edit) --}}
 @php($coupon = $coupon ?? null)
 <form action="{{ $coupon ? route('coupons.update', $coupon) : route('coupons.store') }}" method="POST" class="card card-body">
     @csrf

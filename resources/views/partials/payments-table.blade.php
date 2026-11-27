@@ -1,4 +1,3 @@
-{{-- Params: payments (paginator, with order loaded), canUpdate (optional; admin only) --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">

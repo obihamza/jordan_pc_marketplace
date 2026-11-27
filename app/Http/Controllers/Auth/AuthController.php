@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Login / register / logout for the `users` table (password is stored in
- * `password_hash`). Everyone who registers is a buyer; a buyer can later
- * become a seller (SellerController@create).
- */
 class AuthController extends Controller
 {
     public function showLogin()
@@ -28,7 +23,6 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Checked by hand because the password column is `password_hash`.
         $user = User::where('email', $validated['email'])->first();
 
         if (! $user || ! Hash::check($validated['password'], $user->password_hash)) {
@@ -40,7 +34,6 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Admins and approved sellers land on their dashboard; everyone else on the home page.
         $landing = $user->isAdmin() ? route('admin.dashboard') : ($user->isSeller() ? route('seller.dashboard') : route('home'));
 
         return redirect()->intended($landing)
@@ -65,7 +58,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
-            'password_hash' => $validated['password'], // hashed by the model cast
+            'password_hash' => $validated['password'],
         ]);
 
         AdminEvent::send('user', 'New user', $user->name.' just joined JO-Marketplace.', route('users.show', $user, false));

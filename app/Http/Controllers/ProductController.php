@@ -13,12 +13,9 @@ class ProductController extends Controller
     {
         $me = auth()->user();
 
-        // For the category dropdown in the filter bar.
         $categories = Category::orderBy('name')->get();
 
-        // Not logged in: the public product list.
         if (! $me) {
-
             $products = $this->applyFilters(
                 Product::with(['category', 'primaryImage'])->available(),
                 $request
@@ -28,24 +25,18 @@ class ProductController extends Controller
         }
 
         if ($me->isAdmin()) {
-
             $products = $this->applyFilters(
                 Product::with(['seller', 'category', 'primaryImage']),
                 $request
             )->paginate(15)->withQueryString();
 
             return view('admin.products.index', compact('products', 'categories'));
-
         } elseif ($me->isSeller()) {
-
-            // The seller's own listings...
             $products = $this->applyFilters(
                 Product::with(['category', 'primaryImage'])->where('seller_id', $me->id),
                 $request
             )->paginate(15)->withQueryString();
 
-            // ...and, because a seller is also a buyer, the marketplace
-            // (other sellers' available products). Same filters apply.
             $marketplace = $this->applyFilters(
                 Product::with(['category', 'primaryImage'])
                     ->available()
@@ -54,9 +45,7 @@ class ProductController extends Controller
             )->paginate(15, ['*'], 'market_page')->withQueryString();
 
             return view('seller.products.index', compact('products', 'marketplace', 'categories'));
-
         } else {
-
             $products = $this->applyFilters(
                 Product::with(['category', 'primaryImage'])->available(),
                 $request
@@ -66,23 +55,16 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * The product filter bar (?q=, ?category_id=, ?min_price=, ?max_price=, ?sort=).
-     * Used by every role's product list, so they all filter the same way.
-     */
     private function applyFilters($query, Request $request)
     {
-        // Search by name
         if ($request->filled('q')) {
             $query->where('name', 'like', '%'.trim($request->input('q')).'%');
         }
 
-        // Category
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
         }
 
-        // Price range (ignored when not a number; swapped if min > max)
         $min = is_numeric($request->input('min_price')) ? (float) $request->input('min_price') : null;
         $max = is_numeric($request->input('max_price')) ? (float) $request->input('max_price') : null;
 
@@ -96,16 +78,11 @@ class ProductController extends Controller
             $query->where('price', '<=', $max);
         }
 
-        // Newest (default) or oldest first
         $direction = $request->input('sort') === 'oldest' ? 'asc' : 'desc';
 
         return $query->orderBy('created_at', $direction)->orderBy('id', $direction);
     }
 
-    /**
-     * "New product" is a pop-up form (partials/product-create-modal), not a page.
-     * Old links to /products/create land on the screen that opens the pop-up.
-     */
     public function create()
     {
         $me = auth()->user();
@@ -118,7 +95,6 @@ class ProductController extends Controller
             return redirect()->route('seller.dashboard')->with('open_product_modal', true);
         }
 
-        // A plain buyer can't list products.
         abort(403);
     }
 
@@ -131,7 +107,6 @@ class ProductController extends Controller
         }
 
         $rules = [
-            // Pick a category from the list, or type the name of a new one.
             'category_id' => 'required_without:new_category|nullable|exists:categories,id',
             'new_category' => 'nullable|string|max:120',
             'name' => 'required|string|max:180',
@@ -149,7 +124,6 @@ class ProductController extends Controller
 
         $validated = $request->validate($rules);
 
-        // A typed category name wins; reuse it if it already exists (case does not matter).
         if (filled($validated['new_category'] ?? null)) {
             $name = trim($validated['new_category']);
 
@@ -173,9 +147,7 @@ class ProductController extends Controller
     {
         $me = auth()->user();
 
-        // Not logged in: only available products are visible.
         if (! $me) {
-
             $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->available()
                 ->findOrFail($product->id);
@@ -184,15 +156,11 @@ class ProductController extends Controller
         }
 
         if ($me->isAdmin()) {
-
             $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->findOrFail($product->id);
 
             return view('admin.products.show', compact('product'));
-
         } elseif ($me->isSeller()) {
-
-            // Own products (any status) or anyone's available product.
             $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->where(function ($query) use ($me) {
                     $query->where('seller_id', $me->id)
@@ -201,9 +169,7 @@ class ProductController extends Controller
                 ->findOrFail($product->id);
 
             return view('seller.products.show', compact('product'));
-
         } else {
-
             $product = Product::with(['seller', 'category', 'images', 'reviews' => fn ($q) => $q->approved()->with('user')])
                 ->available()
                 ->findOrFail($product->id);
@@ -217,14 +183,11 @@ class ProductController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $product = Product::findOrFail($product->id);
             $categories = Category::all();
 
             return view('admin.products.edit', compact('product', 'categories'));
-
         } elseif ($me->isSeller()) {
-
             $product = Product::where('seller_id', $me->id)
                 ->findOrFail($product->id);
             $categories = Category::all();
@@ -240,14 +203,10 @@ class ProductController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $product = Product::findOrFail($product->id);
-
         } elseif ($me->isSeller()) {
-
             $product = Product::where('seller_id', $me->id)
                 ->findOrFail($product->id);
-
         } else {
             abort(403);
         }
@@ -275,14 +234,10 @@ class ProductController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $product = Product::findOrFail($product->id);
-
         } elseif ($me->isSeller()) {
-
             $product = Product::where('seller_id', $me->id)
                 ->findOrFail($product->id);
-
         } else {
             abort(403);
         }

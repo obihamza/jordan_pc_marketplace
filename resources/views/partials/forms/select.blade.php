@@ -1,4 +1,3 @@
-{{-- Params: name, label, options (value => text), selected, required, placeholder --}}
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label">{{ $label }}</label>
     <select name="{{ $name }}" id="{{ $name }}"

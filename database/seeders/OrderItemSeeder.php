@@ -11,10 +11,6 @@ use Illuminate\Database\Seeder;
 
 class OrderItemSeeder extends Seeder
 {
-    /**
-     * 10 order items (one per order), then recalculates each order's
-     * subtotal / discount / total and applies a coupon where it is eligible.
-     */
     public function run(): void
     {
         $orderIds = Order::orderBy('id')->pluck('id')->all();
@@ -35,7 +31,6 @@ class OrderItemSeeder extends Seeder
             $discount = 0.0;
             $couponId = null;
 
-            // Give the first few orders a coupon, if the order meets its minimum.
             $coupon = $coupons->get($i);
             if ($coupon && $subtotal >= (float) $coupon->min_order_amount) {
                 $discount = $coupon->discount_type === Coupon::TYPE_PERCENT
@@ -52,7 +47,6 @@ class OrderItemSeeder extends Seeder
                 'total_amount' => round($subtotal - $discount + (float) $order->shipping_cost, 2),
             ]);
 
-            // Line status follows the order's status.
             $order->items()->update(['item_status' => $order->order_status]);
         });
     }

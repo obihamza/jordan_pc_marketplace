@@ -1,4 +1,3 @@
-{{-- Param: order (with user, address, coupon, items.product, payment) --}}
 @php
     $me = auth()->user();
     $isMyOrder = $order->user_id == $me->id;
@@ -25,7 +24,6 @@
                                 <td>
                                     @include('partials.status-badge', ['status' => $item->item_status])
 
-                                    {{-- A seller updates the lines that contain their own products --}}
                                     @if($me->isSeller() && $item->seller_id == $me->id)
                                         <form action="{{ route('order-items.update', $item) }}" method="POST" class="d-flex gap-1 mt-1">
                                             @csrf
@@ -77,7 +75,6 @@
             </div>
         </div>
 
-        {{-- Admin: change status / delete --}}
         @if($me->isAdmin())
             <div class="card mb-3">
                 <div class="card-header fw-semibold">Admin</div>
@@ -96,7 +93,6 @@
                 </div>
             </div>
 
-        {{-- Buyer (or seller as buyer): cancel their own pending order --}}
         @elseif($isMyOrder && $order->order_status === 'pending')
             <form action="{{ route('orders.update', $order) }}" method="POST"
                   data-confirm="Cancel this order? The items go back to stock." data-confirm-title="Cancel order" data-confirm-button="Yes, cancel order">

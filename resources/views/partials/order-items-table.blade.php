@@ -1,4 +1,3 @@
-{{-- Params: items (paginator, with order loaded), showSeller (optional), canUpdate (optional) --}}
 <div class="card">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">

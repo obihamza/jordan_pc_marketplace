@@ -1,5 +1,4 @@
-/* Shared chat logic for the website widget and the dashboard Assistant page.
-   Sends the question as JSON, shows the answer with a short typing effect (markdown rendered safely). */
+
 (function (w) {
     w.joChat = function (o) {
         var body = o.body, input = o.input, form = o.form, chips = o.chips;
@@ -26,7 +25,6 @@
             history.forEach(function (m) { addMessage(m.role, m.content); });
         }
 
-        // Reveals the answer quickly (about 1.5 s at most), then calls done().
         function reveal(el, full, done) {
             var i = 0, step = Math.max(3, Math.ceil(full.length / 90));
             timer = setInterval(function () {

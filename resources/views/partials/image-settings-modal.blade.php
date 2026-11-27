@@ -1,4 +1,3 @@
-{{-- Picture settings pop-up. Opened by any [data-image-settings] element (see images-table). --}}
 <div class="modal fade" id="imageSettingsModal" tabindex="-1" aria-labelledby="imageSettingsTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

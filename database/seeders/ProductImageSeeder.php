@@ -9,7 +9,6 @@ use Illuminate\Database\Seeder;
 
 class ProductImageSeeder extends Seeder
 {
-    /** 10 images: one primary image per product. */
     public function run(): void
     {
         $productIds = Product::orderBy('id')->pluck('id')->all();

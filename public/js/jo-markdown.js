@@ -1,5 +1,4 @@
-/* Tiny, safe markdown renderer for chatbot replies: **bold**, *italic*, `code`, lists, headings.
-   Builds DOM nodes (never innerHTML), so a reply can't inject HTML. */
+
 (function (w) {
     function inline(parent, text) {
         var re = /(\*\*[^*]+\*\*|`[^`]+`|\*[^*\s][^*]*\*)/g, last = 0, m;

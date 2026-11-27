@@ -1,4 +1,3 @@
-{{-- Logout button at the bottom of the dashboard side bar --}}
 <div class="jo-sidebar-foot">
     <form action="{{ route('logout') }}" method="POST">
         @csrf

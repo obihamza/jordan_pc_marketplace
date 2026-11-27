@@ -1,4 +1,3 @@
-{{-- Seller side bar: my shop, my shopping (a seller is also a buyer), and a link back to the website. --}}
 @php
     $pendingSales = $pendingSales ?? 0;
     $groups = [
@@ -33,7 +32,6 @@
 @endphp
 
 <nav class="jo-side-nav" aria-label="Seller menu">
-    {{-- Notice: order lines waiting for the seller --}}
     @if($pendingSales)
         <a href="{{ route('order-items.index') }}" class="jo-side-alert">
             <i class="bi bi-bag-check-fill fs-4" aria-hidden="true"></i>
@@ -49,7 +47,7 @@
         <div class="jo-side-title">{{ $title }}</div>
         <ul class="nav flex-column mb-3">
             @foreach($links as $link)
-                @php [$label, $route, $pattern, $icon] = $link; $modal = $link[4] ?? null; @endphp
+                @php [$label, $route, $pattern, $icon] = $link; $modal = $link[4] ?? null;@endphp
                 <li class="nav-item">
                     <a class="jo-side-link {{ request()->routeIs(...(array) $pattern) ? 'active' : '' }}" href="{{ $modal ? '#' : $routeFor($route) }}"
                        @if($modal) data-bs-toggle="modal" data-bs-target="{{ $modal }}" role="button" @endif>

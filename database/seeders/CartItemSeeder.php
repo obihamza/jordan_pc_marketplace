@@ -10,7 +10,6 @@ use Illuminate\Database\Seeder;
 
 class CartItemSeeder extends Seeder
 {
-    /** 10 cart items: one per cart, then each cart's total is recalculated. */
     public function run(): void
     {
         $cartIds = Cart::orderBy('id')->pluck('id')->all();
@@ -20,7 +19,7 @@ class CartItemSeeder extends Seeder
             ->count(10)
             ->state(new Sequence(fn (Sequence $s) => [
                 'cart_id' => $cartIds[$s->index % count($cartIds)],
-                // Offset so carts don't always hold the "same index" product.
+
                 'product_id' => $productIds[($s->index + 3) % count($productIds)],
             ]))
             ->create();

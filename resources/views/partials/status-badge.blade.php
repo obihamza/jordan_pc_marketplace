@@ -1,4 +1,3 @@
-{{-- Param: status --}}
 @php
     $badgeColors = [
         'pending' => 'warning', 'confirmed' => 'info', 'processing' => 'primary',

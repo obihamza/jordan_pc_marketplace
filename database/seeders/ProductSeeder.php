@@ -10,7 +10,6 @@ use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
 {
-    /** 10 products spread across the sellers and categories. */
     public function run(): void
     {
         $sellerIds = Seller::orderBy('user_id')->pluck('user_id')->all();

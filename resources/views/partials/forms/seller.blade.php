@@ -1,8 +1,7 @@
-{{-- Params: seller (optional, edit), users (optional, admin create) --}}
 @php
     $seller = $seller ?? null;
     $isAdminForm = isset($users) || (auth()->user()?->isAdmin() ?? false);
-    // Applicants must send a picture; an admin (or an old seller who never had one) may leave it empty.
+
     $imageRequired = ! $isAdminForm && (! $seller || $seller->isRejected());
 @endphp
 <form action="{{ $seller ? route('sellers.update', $seller) : route('sellers.store') }}" method="POST" enctype="multipart/form-data" class="card card-body">

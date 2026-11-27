@@ -1,4 +1,3 @@
-{{-- Params: category (optional, edit), modal (optional: inside the pop-up, no card/buttons) --}}
 @php
     $category = $category ?? null;
     $modal = $modal ?? false;

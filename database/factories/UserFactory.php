@@ -5,14 +5,8 @@ namespace Database\Factories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * Plain-text default password (hashed by the model's `hashed` cast).
-     */
     protected static ?string $password;
 
     public function definition(): array

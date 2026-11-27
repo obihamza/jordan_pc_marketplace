@@ -6,17 +6,11 @@ use App\Models\Address;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * Totals start at 0; OrderItemSeeder recalculates them from the order's items.
- *
- * @extends Factory<Order>
- */
 class OrderFactory extends Factory
 {
     public function definition(): array
     {
         return [
-            // Address owns the user, so the order's user and address always match.
             'address_id' => Address::factory(),
             'user_id' => fn (array $attributes) => Address::find($attributes['address_id'])->user_id,
             'coupon_id' => null,

@@ -1,4 +1,3 @@
-{{-- Admin only. Params: review. Approve / reject icon buttons. --}}
 @if(! $review->isApproved())
     <form action="{{ route('reviews.approve', $review) }}" method="POST" class="d-inline">
         @csrf @method('PATCH')

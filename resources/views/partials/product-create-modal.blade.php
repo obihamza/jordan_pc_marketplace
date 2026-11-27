@@ -1,4 +1,3 @@
-{{-- "New product" pop-up form (admin and approved sellers). Opened by any [data-bs-target="#productModal"] button. --}}
 @if(isset($modalCategories))
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -19,7 +18,6 @@
 </div>
 
 <script>
-    // Open the pop-up when asked (?add=product) or again after a validation error inside it.
     document.addEventListener('DOMContentLoaded', function () {
         var open = @json(request('add') === 'product' || session('open_product_modal') || ($errors->any() && old('_modal') === 'product'));
         if (open && window.bootstrap) {

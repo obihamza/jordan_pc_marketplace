@@ -1,4 +1,3 @@
-{{-- Admin side bar: lists of everything the admin manages + a link back to the website. --}}
 @php
     $groups = [
         'Overview' => [
@@ -29,7 +28,6 @@
 @endphp
 
 <nav class="jo-side-nav" aria-label="Admin menu">
-    {{-- Notice: seller applications are waiting for the admin --}}
     @if($pendingSellers)
         <a href="{{ route('sellers.index') }}" class="jo-side-alert">
             <i class="bi bi-person-badge-fill fs-4" aria-hidden="true"></i>
@@ -65,7 +63,7 @@
                                 'sellers.index' => $pendingSellers,
                                 default => 0,
                             };
-                        @endphp
+@endphp
                         @if($badge)
                             <span class="badge rounded-pill text-bg-warning ms-auto" title="Waiting for your approval">{{ $badge }}</span>
                         @endif

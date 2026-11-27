@@ -1,4 +1,3 @@
-{{-- Product filter bar. Param: categories --}}
 @php
     $hasFilters = request()->hasAny(['q', 'category_id', 'min_price', 'max_price']) || request('sort') === 'oldest';
 @endphp

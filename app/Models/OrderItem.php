@@ -10,7 +10,6 @@ class OrderItem extends Model
 {
     use HasFactory;
 
-    // Table only has created_at.
     const UPDATED_AT = null;
 
     protected $fillable = [
@@ -43,7 +42,6 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class)->withTrashed();
     }
 
-    /** seller_id points at sellers.user_id */
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class, 'seller_id', 'user_id')->withTrashed();

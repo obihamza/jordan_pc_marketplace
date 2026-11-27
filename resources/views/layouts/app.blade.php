@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{{-- Light storefront (white + orange accents, black footer) --}}
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
@@ -10,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-    {{-- JO-Marketplace theme (must come after Bootstrap) --}}
     <link href="{{ asset('css/jo-marketplace.css') }}" rel="stylesheet">
     @stack('styles')
 </head>
@@ -26,7 +24,6 @@
 
     @include('partials.footer')
 
-    {{-- Floating chat button (bottom right) on every page --}}
     @include('partials.confirm-modal')
     @include('partials.chatbot')
 

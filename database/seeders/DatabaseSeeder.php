@@ -9,10 +9,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database (10 rows per table).
-     * Order matters: parents before the tables that reference them.
-     */
     public function run(): void
     {
         $this->call([

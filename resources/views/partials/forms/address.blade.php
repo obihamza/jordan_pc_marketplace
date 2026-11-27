@@ -1,4 +1,3 @@
-{{-- Params: address (optional, edit), users (optional, admin create) --}}
 @php($address = $address ?? null)
 <form action="{{ $address ? route('addresses.update', $address) : route('addresses.store') }}" method="POST" class="card card-body">
     @csrf

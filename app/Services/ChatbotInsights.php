@@ -12,21 +12,8 @@ use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * Builds a short, plain-text snapshot of the numbers the logged-in person is
- * allowed to see, so the AI can give insight about selling and analysis.
- *
- *  - admin  -> whole website
- *  - seller -> ONLY their own shop
- *  - buyer  -> ONLY their own recent orders
- *  - guest  -> nothing
- *
- * No emails, phones, addresses or ID numbers are ever included.
- * Cached for 60 seconds per user so chatting does not hammer the database.
- */
 class ChatbotInsights
 {
-    /** Ready-made questions shown as tap-to-send chips in the chat. */
     public static function suggestions(?User $user): array
     {
         if (! $user) {
@@ -177,13 +164,11 @@ class ChatbotInsights
             .number_format((float) $o->total_amount, 2).', placed '.\Illuminate\Support\Carbon::parse($o->created_at)->toFormattedDateString())->implode("\n");
     }
 
-    /** "k1 3, k2 5" */
     private function pairs($collection): string
     {
         return $collection->isEmpty() ? 'none' : $collection->map(fn ($v, $k) => "{$k} {$v}")->implode(', ');
     }
 
-    /** Best sellers by units from a Product query. */
     private function topProducts($query): string
     {
         return $query
@@ -193,7 +178,6 @@ class ChatbotInsights
             ->map(fn ($p) => "{$p->name} ({$p->sold_count} sold)")->implode(', ');
     }
 
-    /** Sum of $column per month for the last 6 months, skipping rows whose $statusCol is cancelled. */
     private function monthly($query, string $column, string $statusCol): string
     {
         $start = now()->startOfMonth()->subMonths(5);

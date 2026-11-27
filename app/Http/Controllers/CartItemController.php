@@ -8,10 +8,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Buyers (and sellers acting as buyers) manage the items in their own cart.
- * Admins don't shop, so they get 403.
- */
 class CartItemController extends Controller
 {
     public function store(Request $request)
@@ -29,7 +25,6 @@ class CartItemController extends Controller
 
         $product = Product::available()->findOrFail($validated['product_id']);
 
-        // A seller can't buy their own product.
         if ($product->seller_id === $me->id) {
             throw ValidationException::withMessages(['product_id' => 'You cannot buy your own product.']);
         }
@@ -70,7 +65,6 @@ class CartItemController extends Controller
             abort(403);
         }
 
-        // Only items in my own cart.
         $cartItem = CartItem::whereHas('cart', function ($query) use ($me) {
             $query->where('user_id', $me->id);
         })->findOrFail($cartItem->id);

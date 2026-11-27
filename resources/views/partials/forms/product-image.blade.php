@@ -1,4 +1,3 @@
-{{-- Params: products --}}
 <form action="{{ route('product-images.store') }}" method="POST" enctype="multipart/form-data" class="card card-body">
     @csrf
 

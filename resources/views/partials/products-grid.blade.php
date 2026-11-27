@@ -1,6 +1,3 @@
-{{-- Params: products (paginator).
-     Lazy loading: the next page is fetched and appended when the visitor scrolls near the bottom
-     (script below, once per page). Without JavaScript the normal page links still work. --}}
 <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3" data-lazy-grid data-next="{{ $products->nextPageUrl() }}">
     @forelse($products as $product)
         <div class="col">
@@ -11,7 +8,6 @@
     @endforelse
 </div>
 
-{{-- Shown while the next page loads (only when there is a next page) --}}
 @if($products->hasMorePages())
     <div class="text-center text-muted py-4" data-lazy-status hidden>
         <div class="spinner-border spinner-border-sm text-warning me-2" role="status" aria-hidden="true"></div>
@@ -25,16 +21,15 @@
 @once
     @push('scripts')
     <script>
-        // Lazy loading of product grids (infinite scroll).
         (function () {
             var grids = document.querySelectorAll('[data-lazy-grid]');
-            if (! grids.length || ! ('IntersectionObserver' in window)) { return; }   // keep the page links
+            if (! grids.length || ! ('IntersectionObserver' in window)) { return; }
 
             grids.forEach(function (grid, index) {
                 if (! grid.dataset.next) { return; }
 
-                var status = grid.nextElementSibling;                   // the "loading" row
-                var pager = status ? status.nextElementSibling : null;  // the normal page links
+                var status = grid.nextElementSibling;
+                var pager = status ? status.nextElementSibling : null;
                 if (! status || ! status.hasAttribute('data-lazy-status')) { return; }
 
                 var text = status.querySelector('[data-lazy-text]');
@@ -42,7 +37,7 @@
                 var spinner = status.querySelector('.spinner-border');
                 var loading = false;
 
-                if (pager) { pager.hidden = true; }     // the scroll replaces the page links
+                if (pager) { pager.hidden = true; }
                 status.hidden = false;
 
                 function finish() {
@@ -89,6 +84,6 @@
                 retry.addEventListener('click', loadMore);
             });
         })();
-    </script>
+</script>
     @endpush
 @endonce

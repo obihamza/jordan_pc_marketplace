@@ -5,8 +5,6 @@
 @section('content')
 @include('partials.page-header', ['title' => 'Assistant'])
 
-{{-- Same assistant as the chat button on the website, as a full page for the dashboards.
-     It talks to chatbot.message -> ChatbotService (config/chatbot.php), where the AI model plugs in. --}}
 <div class="card jo-assistant">
     <div class="card-header d-flex align-items-center gap-2">
         <img src="{{ asset('images/jo-logo-mark.svg') }}" alt="" style="height: 28px;">
@@ -38,7 +36,7 @@
 
         var chat = joChat({
             endpoint: @json(route('chatbot.message')),
-            storageKey: 'jo_chat_history',              // same key as the website widget: one conversation
+            storageKey: 'jo_chat_history',
             maxHistory: {{ (int) config('chatbot.max_history', 10) }},
             greeting: 'Hi! I\'m the JO-Marketplace assistant. Ask me how the dashboard works, or about your sales and revenue.',
             suggestions: @json(\App\Services\ChatbotInsights::suggestions(auth()->user())),

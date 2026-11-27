@@ -1,4 +1,3 @@
-{{-- Param: product (ideally with primaryImage, category, seller loaded) --}}
 @php
     $me = auth()->user();
     $isOwn = $me && $product->seller_id == $me->id;

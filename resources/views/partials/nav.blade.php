@@ -6,14 +6,12 @@
     $navCategories = $navCategories ?? collect();
 @endphp
 
-{{-- Header: logo + search + account on top, a row of pills (pages and categories) underneath --}}
 <header class="jo-site-header sticky-top">
     <div class="container py-2">
         <div class="d-flex align-items-center gap-3">
 
             @include('partials.brand')
 
-            {{-- Search bar --}}
             <form action="{{ route('products.index') }}" method="GET" role="search" class="jo-search flex-grow-1 d-none d-md-flex">
                 <i class="bi bi-search" aria-hidden="true"></i>
                 <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search for products..." aria-label="Search products">
@@ -76,7 +74,6 @@
             </div>
         </div>
 
-        {{-- Search on small screens --}}
         <form action="{{ route('products.index') }}" method="GET" role="search" class="jo-search d-flex d-md-none mt-2">
             <i class="bi bi-search" aria-hidden="true"></i>
             <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search for products..." aria-label="Search products">
@@ -84,7 +81,6 @@
         </form>
     </div>
 
-    {{-- Pill bar: pages, then categories (scrolls sideways on small screens) --}}
     <div class="jo-pillbar">
         <div class="container">
             <nav class="d-flex align-items-center gap-2" aria-label="Main">

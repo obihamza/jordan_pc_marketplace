@@ -24,7 +24,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
 
-        // Keep ratings within 1-5 (MySQL 8+/MariaDB 10.2+ only; skipped on SQLite).
         if (in_array(DB::getDriverName(), ['mysql', 'mariadb'])) {
             DB::statement('ALTER TABLE reviews ADD CONSTRAINT chk_reviews_rating CHECK (rating BETWEEN 1 AND 5)');
         }

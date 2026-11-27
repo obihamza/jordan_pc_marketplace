@@ -11,7 +11,6 @@
     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productModal"><i class="bi bi-plus-lg"></i> Add a product</button>
 </div>
 
-{{-- ============ Summary cards ============ --}}
 @php
     $cards = [
         ['Revenue (JOD)', number_format($stats['revenue'], 2), 'Cancelled items excluded', 'JD'],
@@ -39,7 +38,6 @@
     @endforeach
 </div>
 
-{{-- ============ Charts ============ --}}
 <div class="row g-3 mb-3">
     <div class="col-lg-8">
         <div class="card h-100">
@@ -67,7 +65,6 @@
     </div>
 </div>
 
-{{-- ============ Lists ============ --}}
 <div class="row g-3">
     <div class="col-xl-7">
         <div class="card h-100">
@@ -142,7 +139,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
     (function () {
-        if (typeof Chart === 'undefined') { return; }   // CDN unreachable: the cards and lists still work
+        if (typeof Chart === 'undefined') { return; }
 
         var data = @json($charts);
         var orange = '#ff6a00', orangeSoft = 'rgba(255,106,0,.35)', grid = 'rgba(0,0,0,.07)';
@@ -151,7 +148,6 @@
         Chart.defaults.borderColor = grid;
         Chart.defaults.maintainAspectRatio = false;
 
-        // Revenue (bars, JOD) + items sold (line)
         new Chart(document.getElementById('chartSales'), {
             data: {
                 labels: data.months,
@@ -168,7 +164,6 @@
             }
         });
 
-        // Order items by status
         new Chart(document.getElementById('chartStatus'), {
             type: 'doughnut',
             data: {
@@ -182,14 +177,12 @@
             options: { plugins: { legend: { position: 'bottom' } } }
         });
 
-        // Best sellers
         new Chart(document.getElementById('chartTop'), {
             type: 'bar',
             data: { labels: data.top.labels, datasets: [{ label: 'Units sold', data: data.top.values, backgroundColor: orange }] },
             options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } } }
         });
 
-        // Ratings
         new Chart(document.getElementById('chartRatings'), {
             type: 'bar',
             data: { labels: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'], datasets: [{ label: 'Reviews', data: data.ratings, backgroundColor: '#ffc107' }] },

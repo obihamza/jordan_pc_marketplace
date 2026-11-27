@@ -12,7 +12,6 @@ use Illuminate\Validation\Rule;
 
 class SellerController extends Controller
 {
-    /** Where national-ID pictures live (private disk: never reachable by a public URL). */
     private const ID_DIR = 'national-ids';
 
     public function index()
@@ -20,8 +19,6 @@ class SellerController extends Controller
         $me = auth()->user();
 
         if ($me && $me->isAdmin()) {
-
-            // Admin sees every application, pending ones first.
             $sellers = Seller::with('user')
                 ->withCount('products')
                 ->orderByRaw("verification_status = 'pending' desc")
@@ -30,18 +27,14 @@ class SellerController extends Controller
             return view('admin.sellers.index', compact('sellers'));
         }
 
-        // Everyone else only sees approved sellers.
         $sellers = Seller::approved()
             ->with('user')
             ->withCount('products')
             ->paginate(15);
 
         if (! $me) {
-
             return view('guest.sellers.index', compact('sellers'));
-
         } elseif ($me->isSeller()) {
-
             return view('seller.sellers.index', compact('sellers'));
         }
 
@@ -53,16 +46,12 @@ class SellerController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
-            // Users who don't have a seller profile yet.
             $users = User::where('is_admin', false)->doesntHave('seller')->get();
 
             return view('admin.sellers.create', compact('users'));
         }
 
         if ($me->seller) {
-
-            // Already applied (or already a seller): never a second application.
             abort_if($me->isSeller(), 403);
 
             return $me->seller->isRejected()
@@ -71,7 +60,6 @@ class SellerController extends Controller
                 : redirect()->route('sellers.show', $me->seller);
         }
 
-        // A buyer applies to become a seller.
         return view('buyer.sellers.create');
     }
 
@@ -86,7 +74,7 @@ class SellerController extends Controller
         $rules = [
             'national_id' => 'required|string|max:30|unique:sellers,national_id',
             'official_name' => 'required|string|max:180|unique:sellers,official_name',
-            // Applicants MUST send the ID picture; an admin creating a seller on someone's behalf may skip it.
+
             'national_id_image' => [$me->isAdmin() ? 'nullable' : 'required', 'image', 'mimes:jpg,jpeg,png', 'max:4096'],
         ];
 
@@ -101,7 +89,7 @@ class SellerController extends Controller
             'national_id' => $validated['national_id'],
             'official_name' => $validated['official_name'],
             'national_id_image' => $request->file('national_id_image')?->store(self::ID_DIR, 'local'),
-            // An admin's own entry is trusted; an application waits for review.
+
             'verification_status' => $me->isAdmin() ? 'approved' : 'pending',
             'reviewed_at' => $me->isAdmin() ? now() : null,
         ]);
@@ -130,21 +118,15 @@ class SellerController extends Controller
         $seller = Seller::with(['user', 'products' => fn ($q) => $q->available()])
             ->findOrFail($seller->user_id);
 
-        // Not-yet-approved profiles are visible to the admin and to their owner only.
         if (! $seller->isApproved()) {
             abort_unless($me && ($me->isAdmin() || $me->id === $seller->user_id), 404);
         }
 
         if (! $me) {
-
             return view('guest.sellers.show', compact('seller'));
-
         } elseif ($me->isAdmin()) {
-
             return view('admin.sellers.show', compact('seller'));
-
         } elseif ($me->isSeller()) {
-
             return view('seller.sellers.show', compact('seller'));
         }
 
@@ -156,13 +138,11 @@ class SellerController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $seller = Seller::with('user')->findOrFail($seller->user_id);
 
             return view('admin.sellers.edit', compact('seller'));
         }
 
-        // Own profile only (an applicant can fix a pending/rejected application too).
         abort_unless($me->seller, 403);
 
         $seller = Seller::with('user')->findOrFail($me->id);
@@ -187,7 +167,6 @@ class SellerController extends Controller
             'national_id_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:4096'],
         ];
 
-        // A rejected seller has to send a new picture to apply again.
         if (! $me->isAdmin() && $seller->isRejected()) {
             $rules['national_id_image'] = ['required', 'image', 'mimes:jpg,jpeg,png', 'max:4096'];
         }
@@ -201,7 +180,6 @@ class SellerController extends Controller
 
         $idChanged = $validated['national_id'] !== $seller->national_id;
 
-        // Changing the ID number needs a matching new picture.
         if (! $me->isAdmin() && $idChanged && ! $request->hasFile('national_id_image')) {
             return back()->withInput()->withErrors(['national_id_image' => 'Upload a picture of the new national ID.']);
         }
@@ -213,7 +191,6 @@ class SellerController extends Controller
             $data['national_id_image'] = $request->file('national_id_image')->store(self::ID_DIR, 'local');
         }
 
-        // New ID details from the seller go back to the admin for review.
         $resubmitted = ! $me->isAdmin() && ($idChanged || $request->hasFile('national_id_image'));
 
         if ($resubmitted) {
@@ -233,7 +210,6 @@ class SellerController extends Controller
             );
         }
 
-        // Sellers manage their shop details from "My profile"; the admin returns to the seller's page.
         return redirect()->route($me->isAdmin() ? 'sellers.show' : 'users.show', $me->isAdmin() ? $seller : $me)
             ->with('success', $resubmitted
                 ? 'Sent for review. An admin will check your new ID details.'
@@ -256,7 +232,6 @@ class SellerController extends Controller
             ->with('danger', 'Seller profile deleted successfully!');
     }
 
-    /** Admin: accept the application. */
     public function approve(Seller $seller)
     {
         abort_unless(auth()->user()->isAdmin(), 403);
@@ -277,7 +252,6 @@ class SellerController extends Controller
         return back()->with('success', $seller->official_name.' is now an approved seller.');
     }
 
-    /** Admin: refuse the application (the user can fix it and apply again). */
     public function reject(Seller $seller)
     {
         abort_unless(auth()->user()->isAdmin(), 403);
@@ -288,7 +262,6 @@ class SellerController extends Controller
         return back()->with('danger', $seller->official_name.' was rejected.');
     }
 
-    /** Once reviewed, the bell stops showing this application as new (for every admin). */
     private function clearApplicationNotices(Seller $seller): void
     {
         DatabaseNotification::whereNull('read_at')
@@ -298,7 +271,6 @@ class SellerController extends Controller
             ->each->markAsRead();
     }
 
-    /** The ID picture: only the admin and the owner may open it. */
     public function nationalId(Seller $seller)
     {
         $me = auth()->user();

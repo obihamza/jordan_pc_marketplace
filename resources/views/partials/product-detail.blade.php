@@ -1,8 +1,7 @@
-{{-- Param: product (with seller, category, images, reviews.user) --}}
 @php
     $me = auth()->user();
     $canManage = $me && ($me->isAdmin() || $product->seller_id == $me->id);
-    $avgRating = $product->reviews->avg('rating');   // only approved reviews are loaded
+    $avgRating = $product->reviews->avg('rating');
     $canReview = $me && ! $me->isAdmin() && ! $canManage
         && \App\Models\Product::reviewableBy($me)->whereKey($product->id)->exists();
     $images = $product->images->sortByDesc('is_primary');
@@ -67,7 +66,6 @@
 
         <p style="white-space: pre-line;">{{ $product->description }}</p>
 
-        {{-- Buying: any logged-in non-admin, except on their own product --}}
         @if(! $me && $product->listing_status === 'available' && $product->stock_quantity > 0)
             <a href="{{ route('login') }}" class="btn btn-primary mb-3">Login to buy</a>
         @elseif($me && ! $me->isAdmin() && ! $canManage && $product->listing_status === 'available' && $product->stock_quantity > 0)

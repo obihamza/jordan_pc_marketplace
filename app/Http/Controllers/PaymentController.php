@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
-/**
- * Payments are created at checkout (cash on delivery). Here they are listed,
- * and only the admin can change their status.
- */
 class PaymentController extends Controller
 {
     public function index()
@@ -16,16 +12,12 @@ class PaymentController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $payments = Payment::with('order.user')
                 ->latest()
                 ->paginate(15);
 
             return view('admin.payments.index', compact('payments'));
-
         } elseif ($me->isSeller()) {
-
-            // Payments of orders that contain my products...
             $payments = Payment::with('order')
                 ->whereHas('order.items', function ($query) use ($me) {
                     $query->where('seller_id', $me->id);
@@ -33,7 +25,6 @@ class PaymentController extends Controller
                 ->latest()
                 ->paginate(15, ['*'], 'sales_page');
 
-            // ...and payments for orders I placed as a buyer.
             $myPayments = Payment::with('order')
                 ->whereHas('order', function ($query) use ($me) {
                     $query->where('user_id', $me->id);
@@ -42,9 +33,7 @@ class PaymentController extends Controller
                 ->paginate(15, ['*'], 'purchases_page');
 
             return view('seller.payments.index', compact('payments', 'myPayments'));
-
         } else {
-
             $payments = Payment::with('order')
                 ->whereHas('order', function ($query) use ($me) {
                     $query->where('user_id', $me->id);

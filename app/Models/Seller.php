@@ -13,7 +13,6 @@ class Seller extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // PK is the user's id (1:1 with users), not auto-incrementing, no timestamps.
     protected $primaryKey = 'user_id';
 
     public $incrementing = false;
@@ -36,7 +35,6 @@ class Seller extends Model
         return ['reviewed_at' => 'datetime'];
     }
 
-    /** Only approved sellers may sell and are listed publicly. */
     public function scopeApproved(Builder $query): Builder
     {
         return $query->where('verification_status', 'approved');
@@ -67,7 +65,6 @@ class Seller extends Model
         return $this->hasMany(Product::class, 'seller_id', 'user_id');
     }
 
-    /** Order lines that contain this seller's products. */
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'seller_id', 'user_id');

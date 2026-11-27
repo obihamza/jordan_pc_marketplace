@@ -1,4 +1,3 @@
-{{-- "New category" pop-up (admin and approved sellers). Opened by any [data-bs-target="#categoryModal"] button. --}}
 @if(isset($modalCategories))
 <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -19,7 +18,6 @@
 </div>
 
 <script>
-    // Open the pop-up when asked, or again after a validation error inside it.
     document.addEventListener('DOMContentLoaded', function () {
         var open = @json((bool) session('open_category_modal') || ($errors->any() && old('_modal') === 'category'));
         if (open && window.bootstrap) {

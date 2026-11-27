@@ -9,7 +9,6 @@ use Illuminate\Database\Seeder;
 
 class AddressSeeder extends Seeder
 {
-    /** 10 addresses: one per buyer. */
     public function run(): void
     {
         $userIds = User::buyersOnly()->orderBy('id')->pluck('id')->all();

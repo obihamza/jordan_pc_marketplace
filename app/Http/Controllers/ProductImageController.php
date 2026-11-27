@@ -14,15 +14,12 @@ class ProductImageController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $images = ProductImage::with('product')
                 ->latest()
                 ->paginate(15);
 
             return view('admin.product-images.index', compact('images'));
-
         } elseif ($me->isSeller()) {
-
             $images = ProductImage::with('product')
                 ->whereHas('product', function ($query) use ($me) {
                     $query->where('seller_id', $me->id);
@@ -33,7 +30,6 @@ class ProductImageController extends Controller
             return view('seller.product-images.index', compact('images'));
         }
 
-        // Buyers see images on the product page.
         abort(403);
     }
 
@@ -42,13 +38,10 @@ class ProductImageController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $products = Product::all();
 
             return view('admin.product-images.create', compact('products'));
-
         } elseif ($me->isSeller()) {
-
             $products = Product::where('seller_id', $me->id)->get();
 
             return view('seller.product-images.create', compact('products'));
@@ -73,14 +66,12 @@ class ProductImageController extends Controller
 
         $product = Product::findOrFail($validated['product_id']);
 
-        // A seller can only add images to their own products.
         if (! $me->isAdmin() && $product->seller_id !== $me->id) {
             abort(403);
         }
 
         $isPrimary = $request->boolean('is_primary');
 
-        // Only one primary image per product.
         if ($isPrimary) {
             $product->images()->update(['is_primary' => false]);
         }
@@ -95,7 +86,6 @@ class ProductImageController extends Controller
             ->with('success', 'Image uploaded successfully!');
     }
 
-    /** Streams the picture to anyone (guests included): product pictures are public. */
     public function file(ProductImage $productImage)
     {
         $disk = Storage::disk('public');
@@ -105,21 +95,16 @@ class ProductImageController extends Controller
         return $disk->response($productImage->image_path, null, ['Cache-Control' => 'public, max-age=86400']);
     }
 
-    /** Picture settings (the pop-up): primary or not. */
     public function update(Request $request, ProductImage $productImage)
     {
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $productImage = ProductImage::findOrFail($productImage->id);
-
         } elseif ($me->isSeller()) {
-
             $productImage = ProductImage::whereHas('product', function ($query) use ($me) {
                 $query->where('seller_id', $me->id);
             })->findOrFail($productImage->id);
-
         } else {
             abort(403);
         }
@@ -127,14 +112,9 @@ class ProductImageController extends Controller
         $makePrimary = $request->boolean('is_primary');
 
         if ($makePrimary) {
-
-            // Only one primary picture per product.
             $productImage->product->images()->update(['is_primary' => false]);
             $productImage->update(['is_primary' => true]);
-
         } elseif ($productImage->is_primary) {
-
-            // A product always keeps a primary picture: hand the role to another one.
             $other = $productImage->product->images()->where('id', '!=', $productImage->id)->orderBy('id')->first();
 
             if (! $other) {
@@ -153,15 +133,11 @@ class ProductImageController extends Controller
         $me = auth()->user();
 
         if ($me->isAdmin()) {
-
             $productImage = ProductImage::findOrFail($productImage->id);
-
         } elseif ($me->isSeller()) {
-
             $productImage = ProductImage::whereHas('product', function ($query) use ($me) {
                 $query->where('seller_id', $me->id);
             })->findOrFail($productImage->id);
-
         } else {
             abort(403);
         }

@@ -10,7 +10,6 @@ class ProductImage extends Model
 {
     use HasFactory;
 
-    // Table only has created_at.
     const UPDATED_AT = null;
 
     protected $fillable = [
@@ -26,10 +25,6 @@ class ProductImage extends Model
         ];
     }
 
-    /**
-     * Public address of the picture. It goes through a route (not public/storage), so it works
-     * even when `php artisan storage:link` was never run (for example on Windows/XAMPP).
-     */
     public function url(): string
     {
         return route('product-images.file', $this);

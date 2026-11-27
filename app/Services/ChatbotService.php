@@ -8,22 +8,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
 
-/**
- * The JO-Marketplace assistant, powered by Google Gemini.
- *
- * .env:  CHATBOT_PROVIDER=gemini
- *        CHATBOT_API_KEY=...            (https://aistudio.google.com/apikey)
- *        CHATBOT_MODEL=gemini-3.6-flash
- *
- * It only talks about this website: how it works, and (for sellers and admins)
- * insight about their own sales data. If Gemini fails, the built-in answers are
- * used, and with APP_DEBUG=true the real error is shown under the answer.
- */
 class ChatbotService
 {
-    /**
-     * @param  array<int, array{role: string, content: string}>  $history  Earlier messages ("user" / "assistant").
-     */
     public function reply(string $message, array $history = [], ?User $user = null): string
     {
         if (config('chatbot.provider') !== 'gemini') {
@@ -33,10 +19,8 @@ class ChatbotService
         try {
             return $this->askGemini($message, $history, $user);
         } catch (Throwable $e) {
-            // Details go to storage/logs/laravel.log (and `php artisan chatbot:test`), never to the visitor.
             Log::error('Chatbot (Gemini) failed: '.$e->getMessage());
 
-            // Sales questions from sellers/admins need real data, so a canned answer would mislead.
             $canned = ($user?->isAdmin() || $user?->isSeller()) ? null : $this->placeholderReply($message, $user, false);
 
             return $canned
@@ -57,12 +41,10 @@ class ChatbotService
             'generationConfig' => ['maxOutputTokens' => 4096],
         ];
 
-        // Less "thinking" = a much faster answer. Removed automatically if a model rejects it.
         if ($level = config('chatbot.thinking')) {
             $payload['generationConfig']['thinkingConfig'] = ['thinkingLevel' => $level];
         }
 
-        // Main model first; if it is busy or slow, the next one answers instead.
         $models = array_values(array_unique(array_filter([
             config('chatbot.model') ?: 'gemini-3.6-flash',
             ...array_map('trim', explode(',', (string) config('chatbot.fallback_models'))),
@@ -86,7 +68,7 @@ class ChatbotService
                     unset($payload['generationConfig']['thinkingConfig']);
                     $response = $send($payload);
                 }
-            } catch (\Illuminate\Http\Client\ConnectionException $e) {   // timeout / network
+            } catch (\Illuminate\Http\Client\ConnectionException $e) {
                 $lastError = "{$model}: ".$e->getMessage();
                 Log::warning("Gemini {$model} did not answer in time, trying the next model.");
 
@@ -100,7 +82,7 @@ class ChatbotService
             $lastError = "{$model}: HTTP {$response->status()} ".($response->json('error.message') ?? Str::limit($response->body(), 300));
 
             if (! in_array($response->status(), [404, 429, 500, 503], true)) {
-                break;   // e.g. 400/403: another model won't help (bad key, bad request)
+                break;
             }
 
             Log::warning("Gemini {$lastError}; trying the next model.");
@@ -122,7 +104,6 @@ class ChatbotService
         return trim($text);
     }
 
-    /** Conversation in Gemini's format: roles "user"/"model", starting with "user", alternating. */
     private function contents(string $message, array $history): array
     {
         $contents = [];
@@ -144,7 +125,6 @@ class ChatbotService
         return $contents;
     }
 
-    /** Instructions + who is asking + website guide + live numbers that person may see. */
     protected function systemPrompt(?User $user): string
     {
         $who = 'The visitor is not logged in.';
@@ -156,7 +136,6 @@ class ChatbotService
 
         $parts = [config('chatbot.system_prompt'), $who, SiteGuide::for($user)];
 
-        // Insight is a bonus: if reading the numbers fails, the assistant still works.
         try {
             $data = app(ChatbotInsights::class)->for($user);
         } catch (Throwable $e) {
@@ -175,7 +154,6 @@ class ChatbotService
         return implode("\n\n", $parts);
     }
 
-    /** Built-in answers, used when Gemini is off or unreachable. */
     protected function placeholderReply(string $message, ?User $user, bool $withDefault = true): ?string
     {
         $text = mb_strtolower($message);
